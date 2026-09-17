@@ -80,3 +80,19 @@ Estos campos definen qué se va a generar.
 | 2	| Seleccionar Checkpoint IA |	Selector de Archivo |	Carga el modelo (checkpoint) generado en la Fase 1.	| Obligatorio en esta versión del software. |
 | 3	| Título de la canción | Texto | Nombre que se le asignará a tu pieza musical. Se usa para renombrar los archivos. | Sugerencia: Mantenerlo conciso. |
 | 4	| Renombrar archivos | Checkbox/Campo Op. |	Permite forzar el nombre del archivo de pasos con el título proporcionado. | Útil para organizar el pack final. |
+
+### B. Control Temporal y Estructura (Timing)
+
+Definen la duración, velocidad base y ajustes temporales de la canción.
+
+| Nº | Campo | Tipo | Descripción | Notas Clave |
+| :---: | :---: | :---: | :---: | :---: |
+| 5 |	Duración Máxima | Texto | Define el tiempo máximo que debe tener el archivo de pasos generado. |	Útil para recortar o limitar la extensión. |
+| 6 |	Configuración BPM |	Control Numérico | Establece los pulsos por minuto (BPM) deseados. Se pueden ajustar con botones incrementales (1 en 1). | Define el ritmo base de la canción. |
+| 7 |	Doble BPM | Checkbox | Si el resultado automático o manual no es satisfactorio, puedes duplicar el BPM aquí antes de generar pasos. | Ajuste avanzado de ritmo. |
+| 8 |	Aplicar BPM Dinámico | Checkbox/Restrictivo | Activa un ajuste que varía el BPM a lo largo de la canción según las fluctuaciones rítmicas del audio. | 🛑 Si activas esto, desactiva "Aplicar Velocidad Visual". |
+| 9 |	Aplicar Velocidad Visual | Checkbox/Restrictivo |	Aplica efectos visuales basados en los niveles de ritmo (velocidad) detectados en la canción. |	🛑 Si activas esto, desactiva "Aplicar BPM Dinámico". |
+| 15 | Offset de Inicio | Selector | Permite definir manualmente el punto exacto donde debe comenzar la generación de pasos, distinto a la duración total. | Útil si el inicio es silencioso o no rítmico. |
+| 16 | Detectar Offset Automáticamente | Checkbox | Si está desactivado, debes especificar un offset manual (punto 15). | Se recomienda deshabilitar si se conoce el punto de inicio preciso. |
+| 17 | Extensión Final Estética | Control Numérico | Permite extender el audio sin generar pasos rítmicos adicionales. | Ideal para escuchar la "desvanencia" final del track. |
+
