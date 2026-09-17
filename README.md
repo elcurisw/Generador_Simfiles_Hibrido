@@ -16,18 +16,22 @@ Este programa está diseñado para generar archivos de pasos (*.sm y *.ssc) din�
 Se recomienda utilizar un entorno virtual (venv) para aislar las dependencias del proyecto, ya sea para probar el código o entrenar modelos.
 El entorno base de prueba es Python 3.12 en WINDOWS 11, pero se espera compatibilidad con otras versiones de Python o Windows. 
 
-La versión ejecutable (.exe) con un checkpoint aparte se encuentra disponible si solo desea utilizar el generador.
+**La versión ejecutable (.exe) con un checkpoint aparte se encuentra disponible si solo desea utilizar el generador.**
 
 #### A. Dependencias Principales (Instalación vía pip)
 
 Instalar dependencias esenciales
+
 `py -3.12 -m pip install librosa customtkinter`
 
 Para generar archivos ejecutables (.exe), instala pyinstaller:
+
 `py -3.12 -m pip install pyinstaller`
 
 ⚡ ¡ATENCIÓN! VERSIONES CRÍTICAS DE TORCH (Para evitar conflictos con DLL en Windows)
+
 `py -3.12 -m pip install torch==2.8.0 torchvision==0.23.0`
 
 Para el creador de checkpoints, instalar tqdm:
+
 `py -3.12 -m pip install tqdm`
