@@ -34,11 +34,15 @@ py -3.12 -m pip install pyinstaller
 
 ⚡ ¡ATENCIÓN! VERSIONES CRÍTICAS DE TORCH (Para evitar conflictos con DLL en Windows)
 
-`py -3.12 -m pip install torch==2.8.0 torchvision==0.23.0`
+```bash
+py -3.12 -m pip install torch==2.8.0 torchvision==0.23.0
+```
 
 Para el creador de checkpoints, instalar tqdm:
 
-`py -3.12 -m pip install tqdm`
+```bash
+py -3.12 -m pip install tqdm
+```
 
 ### B. Flujo de Trabajo (Dos Etapas)
 
@@ -48,6 +52,31 @@ El proceso consta de dos fases obligatorias: 1) Crear los Checkpoints del modelo
 
 Antes de usar el generador, debes crear el modelo base utilizando la siguiente ruta. Recuerda cargar tus archivos .sm con música en carpetas dentro del directorio StepMania_Songs_Pack.
 
-`py -3.12 stepmania_pipeline.py`
+```bash
+py -3.12 stepmania_pipeline.py
+```
 
+El archivo generado será guardado en una nueva carpeta llamada checkpoints, renombralo como step_transformer_model si deseas usar la función automática del generador.
 
+#### Fase 2: Ejecución del Generador de Pasos
+
+Una vez generados los checkpoints, puedes correr el generador principal. Por defecto, buscará un modelo llamado step_transformer_model.pt en la carpeta checkpoints, es opcional.
+
+```bash
+py -3.12 generador_simfiles_hibrido.py
+```
+
+## ⚙️ II. Interfaz y Parámetros de Configuración (Los 45 Controles)
+
+La interfaz está dividida lógicamente para facilitar la generación, desde las entradas principales hasta los ajustes más detallados de ritmo y IA.
+
+### A. Inputs Esenciales y Meta-Datos
+
+Estos campos definen qué se va a generar.
+
+| Nº | Campo | Tipo | Descripción | Notas | Clave |
+| :---: | :---: | :---: | :---: | :---: | :---: |
+1	Seleccionar Canción	Selector de Audio	Carga el archivo de audio que servirá como base para la creación de pasos.	Obligatorio.
+2	Seleccionar Checkpoint IA	Selector de Archivo	Carga el modelo (checkpoint) generado en la Fase 1.	Obligatorio en esta versión del software.
+3	Título de la canción	Texto	Nombre que se le asignará a tu pieza musical. Se usa para renombrar los archivos.	Sugerencia: Mantenerlo conciso.
+4	Renombrar archivos	Checkbox/Campo Op.	Permite forzar el nombre del archivo de pasos con el título proporcionado.	Útil para organizar el pack final.
