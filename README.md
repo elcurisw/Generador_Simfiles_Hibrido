@@ -21,13 +21,13 @@ La versión ejecutable (.exe) con un checkpoint aparte se encuentra disponible s
 #### A. Dependencias Principales (Instalación vía pip)
 
 Instalar dependencias esenciales
-' py -3.12 -m pip install librosa customtkinter 
+'py -3.12 -m pip install librosa customtkinter'
 
 Para generar archivos ejecutables (.exe), instala pyinstaller:
-' py -3.12 -m pip install pyinstaller
+'py -3.12 -m pip install pyinstaller'
 
 ⚡ ¡ATENCIÓN! VERSIONES CRÍTICAS DE TORCH (Para evitar conflictos con DLL en Windows)
-' py -3.12 -m pip install torch==2.8.0 torchvision==0.23.0
+'py -3.12 -m pip install torch==2.8.0 torchvision==0.23.0'
 
 Para el creador de checkpoints, instalar tqdm:
-' py -3.12 -m pip install tqdm
+'py -3.12 -m pip install tqdm'
