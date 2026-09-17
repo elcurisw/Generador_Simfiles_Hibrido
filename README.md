@@ -22,7 +22,9 @@ El entorno base de prueba es Python 3.12 en WINDOWS 11, pero se espera compatibi
 
 Instalar dependencias esenciales
 
-`py -3.12 -m pip install librosa customtkinter`
+\`\`\`bash
+py -3.12 -m pip install librosa customtkinter
+\`\`\`
 
 Para generar archivos ejecutables (.exe), instala pyinstaller:
 
@@ -35,3 +37,15 @@ Para generar archivos ejecutables (.exe), instala pyinstaller:
 Para el creador de checkpoints, instalar tqdm:
 
 `py -3.12 -m pip install tqdm`
+
+### B. Flujo de Trabajo (Dos Etapas)
+
+El proceso consta de dos fases obligatorias: 1) Crear los Checkpoints del modelo y 2) Generar los pasos con el generador principal.
+
+#### Fase 1: Creación de Checkpoints IA (Obligatorio)
+
+Antes de usar el generador, debes crear el modelo base utilizando la siguiente ruta. Recuerda cargar tus archivos .sm con música en carpetas dentro del directorio StepMania_Songs_Pack.
+
+`py -3.12 stepmania_pipeline.py`
+
+
