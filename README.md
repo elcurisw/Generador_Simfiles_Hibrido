@@ -23,14 +23,14 @@ El entorno base de prueba es Python 3.12 en WINDOWS 11, pero se espera compatibi
 Instalar dependencias esenciales
 
 ```bash
-
 py -3.12 -m pip install librosa customtkinter
-
 ```
 
 Para generar archivos ejecutables (.exe), instala pyinstaller:
 
-`py -3.12 -m pip install pyinstaller`
+```bash
+py -3.12 -m pip install pyinstaller
+```
 
 ⚡ ¡ATENCIÓN! VERSIONES CRÍTICAS DE TORCH (Para evitar conflictos con DLL en Windows)
 
