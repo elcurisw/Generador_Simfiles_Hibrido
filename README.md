@@ -74,9 +74,9 @@ La interfaz está dividida lógicamente para facilitar la generación, desde las
 
 Estos campos definen qué se va a generar.
 
-| Nº | Campo | Tipo | Descripción | Notas | Clave |
-| :---: | :---: | :---: | :---: | :---: | :---: |
-1	Seleccionar Canción	Selector de Audio	Carga el archivo de audio que servirá como base para la creación de pasos.	Obligatorio.
-2	Seleccionar Checkpoint IA	Selector de Archivo	Carga el modelo (checkpoint) generado en la Fase 1.	Obligatorio en esta versión del software.
-3	Título de la canción	Texto	Nombre que se le asignará a tu pieza musical. Se usa para renombrar los archivos.	Sugerencia: Mantenerlo conciso.
-4	Renombrar archivos	Checkbox/Campo Op.	Permite forzar el nombre del archivo de pasos con el título proporcionado.	Útil para organizar el pack final.
+| Nº | Campo | Tipo | Descripción | Notas Clave |
+| :---: | :---: | :---: | :---: | :---: |
+| 1 |	Seleccionar Canción | Selector de Audio |	Carga el archivo de audio que servirá como base para la creación de pasos. | Obligatorio. |
+| 2	| Seleccionar Checkpoint IA |	Selector de Archivo |	Carga el modelo (checkpoint) generado en la Fase 1.	| Obligatorio en esta versión del software. |
+| 3	| Título de la canción | Texto | Nombre que se le asignará a tu pieza musical. Se usa para renombrar los archivos. | Sugerencia: Mantenerlo conciso. |
+| 4	| Renombrar archivos | Checkbox/Campo Op. |	Permite forzar el nombre del archivo de pasos con el título proporcionado. | Útil para organizar el pack final. |
