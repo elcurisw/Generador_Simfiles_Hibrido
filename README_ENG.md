@@ -80,21 +80,22 @@ These fields define what will be generated.
 | 2	| Seleccionar Checkpoint IA | File Selector | Loads the model (checkpoint) generated in Phase 1. | Mandatory in this version of the software. |
 | 3	| Título de la canción | Text | The name assigned to your musical piece. Used to rename files. | Suggestion: Keep it concise. |
 | 4	| Renombrar archivos | Checkbox/Opt Field |	Allows forcing the step file name with the provided title. | Useful for organizing the final pack. |
-
+| 5 | Nombre del artista | Text | The name assigned to your artist musician | Optional |
+  
 ### B. Temporal and Structure Control (Timing)
 
 Define the duration, base speed, and temporal adjustments of the song.
 
 | Nº | Field | Type | Description | Key Notes |
 | :---: | :---: | :---: | :---: | :---: |
-| 5 |	Duración Máxima | Text | Defines the maximum time the generated step file should have. |	Useful for trimming or limiting the length. |
-| 6 |	Configuración BPM |	Numeric Control | Sets the desired beats per minute (BPM). Can be adjusted with incremental buttons (by 1). | Defines the song's base rhythm. |
-| 7 |	Doble BPM | Checkbox | If the automatic or manual result is not satisfactory, you can double the BPM here before generating steps. | Advanced rhythm adjustment. |
-| 8 |	Aplicar BPM Dinámico | Checkbox/Restrictive | Activates an adjustment that varies the BPM throughout the song according to rhythmic fluctuations in the audio. | 🛑 If you activate this, disable "Aplicar Velocidad Visual". |
-| 9 |	Aplicar Velocidad Visual | Checkbox/Restrictive	| Applies visual effects based on rhythm levels (speed) detected in the song. |	🛑 If you activate this, disable "Aplicar BPM Dinámico". |
-| 15 | Offset de Inicio | Selector | Allows manually defining the exact point where step generation must start, separate from the total duration. | Useful if the beginning is silent or non-rhythmic. |
-| 16 | Detectar Offset Automáticamente | Checkbox | If disabled, you must specify a manual offset (point 15). | Recommended to disable if the precise starting point is known. |
-| 17 | Extensión Final Estética | Numeric Control | Allows extending the audio without generating additional rhythmic steps. | Ideal for listening to the final "fade-out" of the track. |
+| 6 |	Duración Máxima | Text | Defines the maximum time the generated step file should have. |	Useful for trimming or limiting the length. |
+| 7 |	Configuración BPM |	Numeric Control | Sets the desired beats per minute (BPM). Can be adjusted with incremental buttons (by 1). | Defines the song's base rhythm. |
+| 8 |	Doble BPM | Checkbox | If the automatic or manual result is not satisfactory, you can double the BPM here before generating steps. | Advanced rhythm adjustment. |
+| 9 |	Aplicar BPM Dinámico | Checkbox/Restrictive | Activates an adjustment that varies the BPM throughout the song according to rhythmic fluctuations in the audio. | 🛑 If you activate this, disable "Aplicar Velocidad Visual". |
+| 10 |	Aplicar Velocidad Visual | Checkbox/Restrictive	| Applies visual effects based on rhythm levels (speed) detected in the song. |	🛑 If you activate this, disable "Aplicar BPM Dinámico". |
+| 11 | Offset de Inicio | Selector | Allows manually defining the exact point where step generation must start, separate from the total duration. | Useful if the beginning is silent or non-rhythmic. |
+| 17 | Detectar Offset Automáticamente | Checkbox | If disabled, you must specify a manual offset (point 15). | Recommended to disable if the precise starting point is known. |
+| 18 | Extensión Final Estética | Numeric Control | Allows extending the audio without generating additional rhythmic steps. | Ideal for listening to the final "fade-out" of the track. |
 
 ### C. Advanced Rhythm Analysis (Sensitivity and Rhythm)
 
@@ -102,11 +103,11 @@ These parameters refine how the system interprets the pulse and energy of the so
 
 | Nº | Field | Type | Description | Key Notes |
 | :---: | :---: | :---: | :---: | :---: |
-| 10 | Scroll mínimo (Low Sensitivity) | Numeric Control |	Defines what level or rhythm is considered a slow or "calm" section. Fewer notes will appear in these areas. | Adjusts sensitivity for softer parts. |
-| 11 | Scroll Máximo (High Sensitivity) | Numeric Control | Defines what level or rhythm is considered a fast or intense section. A higher density of notes will appear. | Adjusts the threshold for strong rhythmic peaks. |
-| 12 | Duración transición | Numeric Control | Determines how long the tool will take to readjust speed when using "Apply Visual Speed." | Controls the smoothness of rhythm changes. |
-| 39 | Sensibilidad RMS Mínimo | Numeric Control |	Establishes the minimum parameter (RMS) that a section must have to be considered rhythmically notable by the AI. |	Advanced. Impact on soft sections. |
-| 40 | Sensibilidad RMS Máximo | Numeric Control |	Establishes the maximum parameter (RMS) defining the strongest rhythmic impact peak of the song.	| Advanced. Impact on intense peaks. |
+| 11 | Scroll mínimo (Low Sensitivity) | Numeric Control |	Defines what level or rhythm is considered a slow or "calm" section. Fewer notes will appear in these areas. | Adjusts sensitivity for softer parts. |
+| 12 | Scroll Máximo (High Sensitivity) | Numeric Control | Defines what level or rhythm is considered a fast or intense section. A higher density of notes will appear. | Adjusts the threshold for strong rhythmic peaks. |
+| 13 | Duración transición | Numeric Control | Determines how long the tool will take to readjust speed when using "Apply Visual Speed." | Controls the smoothness of rhythm changes. |
+| 40 | Sensibilidad RMS Mínimo | Numeric Control |	Establishes the minimum parameter (RMS) that a section must have to be considered rhythmically notable by the AI. |	Advanced. Impact on soft sections. |
+| 41 | Sensibilidad RMS Máximo | Numeric Control |	Establishes the maximum parameter (RMS) defining the strongest rhythmic impact peak of the song.	| Advanced. Impact on intense peaks. |
 
 ### D. Stylistic Adjustments and AI Processing
 
@@ -114,11 +115,11 @@ Controls to improve, modify, or control the "personality" of the rhythm generate
 
 | Nº | Field | Type | Description | Key Notes |
 | :---: | :---: | :---: | :---: | :---: |
-| 13 | Aplicar Posprocesamiento rítmico | Checkbox/Opt. | Improves the raw output from the AI using additional effects. Disabling it produces a "raw" result. | Recommended to activate for better quality. |
-| 14 | Recalcular Dificultad Dinámicamente | Checkbox/Opt. | Allows recalculating difficulty based on user's manual choices (e.g., BPM, Scroll Min/Max). | If disabled, uses a fixed configuration. |
-| 20 | Temperatura IA |	Numeric Control | Determines how "free" or creative the Artificial Intelligence can be when generating steps. |	High value = more experimentation; low = more conservative and predictable. |
-| 41 | Dificultad Techo del Pack | Numeric Control | Defines the general desired difficulty level for the entire step pack. Used in difficulty recalculation (Point 14). | Establishes the artistic intent of the final result. |
-| 37 | Potenciar Efectos y Trampas | Checkbox/Opt. |	Activating this field applies advanced special effects to the steps generated by AI. | Advanced usage, improves rhythmic realism. |
+| 14 | Aplicar Posprocesamiento rítmico | Checkbox/Opt. | Improves the raw output from the AI using additional effects. Disabling it produces a "raw" result. | Recommended to activate for better quality. |
+| 15 | Recalcular Dificultad Dinámicamente | Checkbox/Opt. | Allows recalculating difficulty based on user's manual choices (e.g., BPM, Scroll Min/Max). | If disabled, uses a fixed configuration. |
+| 21 | Temperatura IA |	Numeric Control | Determines how "free" or creative the Artificial Intelligence can be when generating steps. |	High value = more experimentation; low = more conservative and predictable. |
+| 42 | Dificultad Techo del Pack | Numeric Control | Defines the general desired difficulty level for the entire step pack. Used in difficulty recalculation (Point 14). | Establishes the artistic intent of the final result. |
+| 38 | Potenciar Efectos y Trampas | Checkbox/Opt. |	Activating this field applies advanced special effects to the steps generated by AI. | Advanced usage, improves rhythmic realism. |
 
 ### E. Control of Special Rhythm Elements (Minas, Fakes, etc.)
 
@@ -126,9 +127,9 @@ Allow adding specific elements from the rhythm game genre to increase complexity
 
 | Nº | Field | Type | Description | Key Notes |
 | :---: | :---: | :---: | :---: | :---: |
-| 21 | Duración Máxima de Holds | Numeric Control | Defines the maximum time a sustained step (Hold) can be held.	| Controls the duration of long notes. |
-| 22 | Máximo de Holds Simultáneos | Numeric Control |	Determines how many held steps can occur at the same time. | Ideal for removing or increasing complexity in specific areas. |
-| 23 - 36 |	(Minas, Fakes, Lifts, Potions, Shields, Rayos, Hiddens) | Probability / Max Numerical Control | Each of these groups controls the probability and maximum number of a specific effect per generated measure. | These are very fine adjustments to create specific patterns (e.g., if you want many traps/minas). |
+| 22 | Duración Máxima de Holds | Numeric Control | Defines the maximum time a sustained step (Hold) can be held.	| Controls the duration of long notes. |
+| 23 | Máximo de Holds Simultáneos | Numeric Control |	Determines how many held steps can occur at the same time. | Ideal for removing or increasing complexity in specific areas. |
+| 24 - 37 |	(Minas, Fakes, Lifts, Potions, Shields, Rayos, Hiddens) | Probability / Max Numerical Control | Each of these groups controls the probability and maximum number of a specific effect per generated measure. | These are very fine adjustments to create specific patterns (e.g., if you want many traps/minas). |
 
 ### F. Final Controls and Output
 
@@ -136,8 +137,8 @@ Final adjustments before running the generation.
 
 | Nº | Field | Type | Description | Key Notes |
 | :---: | :---: | :---: | :---: | :---: |
-| 42 | Semilla de Generación (Seed)	| Number | If you enter a number, the generator will attempt to create exactly the same steps. | Saving the seed is useful for reproducing perfect or desired results. |
-| 43 | Restablecer Parámetros |	Button | Clears all fields and returns them to their default values (by default). | RRecommended if starting from scratch. |
-| 18, 19 | Banner Graphic / Video de Fondo | Multimedia Selector | Optional elements for the visual presentation of the track. | Do not affect step generation, only the multimedia output. |
-| 44 | Procesar y Exportar Dual Pack | Execution Button | Executes all established configurations to generate the final step file (.sm, .ssc). | AMain action upon finalizing configuration. |
-| 45 | Monitor de Densidad en Tiempo Real | Console | Provides an approximate and immediate interpretation of the generated rhythmic result as it is being created. | Serves as visual feedback while adjusting parameters. |
+| 43 | Semilla de Generación (Seed)	| Number | If you enter a number, the generator will attempt to create exactly the same steps. | Saving the seed is useful for reproducing perfect or desired results. |
+| 44 | Restablecer Parámetros |	Button | Clears all fields and returns them to their default values (by default). | RRecommended if starting from scratch. |
+| 19, 20 | Banner Graphic / Video de Fondo | Multimedia Selector | Optional elements for the visual presentation of the track. | Do not affect step generation, only the multimedia output. |
+| 45 | Procesar y Exportar Dual Pack | Execution Button | Executes all established configurations to generate the final step file (.sm, .ssc). | AMain action upon finalizing configuration. |
+| 46 | Monitor de Densidad en Tiempo Real | Console | Provides an approximate and immediate interpretation of the generated rhythmic result as it is being created. | Serves as visual feedback while adjusting parameters. |
