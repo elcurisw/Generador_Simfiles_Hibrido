@@ -16,14 +16,14 @@ This program is designed to generate dynamic and detailed step files (*.sm and *
 It is recommended to use a virtual environment (venv) to isolate project dependencies, whether testing code or training models.
 The base test environment is Python 3.12 on WINDOWS 11, but compatibility with other versions of Python or Windows is expected.
 
-**The executable version (.exe) with a separate checkpoint is available if you only wish to use the generator.**
+**The executable version (.exe) with a separate checkpoint is available if you only wish to use the generator. [Link] (https://github.com/elcurisw/Generador_Simfiles_Hibrido/releases/download/v1.1/simfiles_generator.zip)**
 
 #### A. Main Dependencies (Installation via pip)
 
 Install essential dependencies
 
 ```bash
-py -3.12 -m pip install librosa customtkinter
+py -3.12 -m pip install librosa customtkinter matplotlib
 ```
 
 To generate executables (.exe), install pyinstaller:
@@ -88,7 +88,7 @@ Define the duration, base speed, and temporal adjustments of the song.
 
 | Nº | Field | Type | Description | Key Notes |
 | :---: | :---: | :---: | :---: | :---: |
-| 6 |	Duración Máxima | Text | Defines the maximum time the generated step file should have. |	Useful for trimming or limiting the length. |
+| 6 |	Duración Máxima | Text + Button | Defines the maximum time the generated step file should have. Add new interface. |	Useful for trimming or limiting the length. |
 | 7 |	Configuración BPM |	Numeric Control | Sets the desired beats per minute (BPM). Can be adjusted with incremental buttons (by 1). | Defines the song's base rhythm. |
 | 8 |	Doble BPM | Checkbox | If the automatic or manual result is not satisfactory, you can double the BPM here before generating steps. | Advanced rhythm adjustment. |
 | 9 |	Aplicar BPM Dinámico | Checkbox/Restrictive | Activates an adjustment that varies the BPM throughout the song according to rhythmic fluctuations in the audio. | 🛑 If you activate this, disable "Aplicar Velocidad Visual". |
