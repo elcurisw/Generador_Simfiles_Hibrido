@@ -23,7 +23,7 @@ El entorno base de prueba es Python 3.12 en WINDOWS 11, pero se espera compatibi
 Instalar dependencias esenciales
 
 ```bash
-py -3.12 -m pip install librosa customtkinter
+py -3.12 -m pip install librosa customtkinter matplotlib
 ```
 
 Para generar archivos ejecutables (.exe), instala pyinstaller:
@@ -88,7 +88,7 @@ Definen la duración, velocidad base y ajustes temporales de la canción.
 
 | Nº | Campo | Tipo | Descripción | Notas Clave |
 | :---: | :---: | :---: | :---: | :---: |
-| 6 |	Duración Máxima | Texto | Define el tiempo máximo que debe tener el archivo de pasos generado. |	Útil para recortar o limitar la extensión. |
+| 6 |	Duración Máxima + Ajustar Límites en Gráfica Interactiva | Texto + Botón | Define el tiempo máximo que debe tener el archivo de pasos generado. El botón te abre una interfaz para colocar las zonas de duración, offset y extensión. |	Útil para recortar o limitar la extensión. |
 | 7 |	Configuración BPM |	Control Numérico | Establece los pulsos por minuto (BPM) deseados. Se pueden ajustar con botones incrementales (1 en 1). | Define el ritmo base de la canción. |
 | 8 |	Doble BPM | Checkbox | Si el resultado automático o manual no es satisfactorio, puedes duplicar el BPM aquí antes de generar pasos. | Ajuste avanzado de ritmo. |
 | 9 |	Aplicar BPM Dinámico | Checkbox/Restrictivo | Activa un ajuste que varía el BPM a lo largo de la canción según las fluctuaciones rítmicas del audio. | 🛑 Si activas esto, desactiva "Aplicar Velocidad Visual". |
