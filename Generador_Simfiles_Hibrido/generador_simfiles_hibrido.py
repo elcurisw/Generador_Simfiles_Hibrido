@@ -12,6 +12,10 @@ import numpy as np
 from torch.utils.data import Dataset, DataLoader
 import customtkinter as ctk
 from tkinter import filedialog, messagebox
+# --- NUEVAS IMPORTACIONES PARA EL MOTOR GRÁFICO INTERACTIVO ---
+import time
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 MAX_LEVEL = 30
 checkpoint_dir="./checkpoints"
@@ -888,7 +892,157 @@ def generar_simfiles_hibridos(audio_path, checkpoint_path, song_title, max_level
     return bpm, duracion, log_metricas_diff
 
 # =====================================================================
-# 4. INTERFAZ GRÁFICA COMPATIBLE ADAPTATIVA CON SCROLL
+# 4. SUBVENTANA DEL VISUALIZADOR DE AUDIO INTERACTIVO (MATPLOTLIB)
+# =====================================================================
+class AudioVisualizerSubWindow(ctk.CTkToplevel):
+    def __init__(self, master, audio_path, current_duration):
+        super().__init__(master)
+        self.master_app = master
+        self.title("Límites de Audio Asimétricos")
+        self.geometry("900x550")
+        self.transient(master)  
+        self.grab_set()  # Bloquea la interacción con la ventana base hasta cerrar
+        
+        self.markers_data = {}
+        self.active_dragging_id = None
+        self.background = None  
+        self.last_update_time = 0
+
+        # Cargar espectro rápido de audio
+        self.y, self.sr = librosa.load(audio_path, sr=11025, mono=True)
+        self.duration = float(current_duration if current_duration > 0 else librosa.get_duration(y=self.y, sr=self.sr))
+        self.time_axis = np.linspace(0, self.duration, num=len(self.y))
+
+        self.downsample_factor = max(1, len(self.y) // 8000)
+        self.y_search = self.y[::self.downsample_factor]
+        self.time_search = self.time_axis[::self.downsample_factor]
+
+        lbl_info = ctk.CTkLabel(self, text="Arrastra las líneas: Offset (Izq) y Duración (Centro) frenan en el límite. Extensión (Der) puede expandirse.", font=ctk.CTkFont(size=12, slant="italic"))
+        lbl_info.pack(pady=5)
+
+        # Integrar Lienzo de Matplotlib
+        self.fig = Figure(figsize=(7, 3.5), tight_layout=True, facecolor="#1e1e1e")
+        self.canvas = FigureCanvasTkAgg(self.fig, master=self)
+        self.canvas.get_tk_widget().pack(fill=ctk.BOTH, expand=True, padx=10, pady=5)
+
+        self.ax = self.fig.add_subplot(111)
+        self.ax.set_facecolor("#151515")
+        self.ax.plot(self.time_search, self.y_search, color='#2b5c8f', linewidth=1)
+        self.ax.set_xlabel("Tiempo (s)", color="white")
+        self.ax.set_ylabel("Amplitud", color="white")
+        self.ax.tick_params(colors="white")
+        
+        self.ax.set_xlim(-5, self.duration + 20)
+        self.ax.grid(True, alpha=0.2, color="gray")
+
+        # Inicializar Marcadores Inteligentes
+        init_pos = [self.duration * 0.15, self.duration * 0.80, self.duration * 0.95]
+        self.create_full_marker("Offset", init_pos[0])
+        self.create_full_marker("Duracion", init_pos[1])
+        self.create_full_marker("Extension", init_pos[2])
+
+        # Botón de sincronización
+        btn_sync = ctk.CTkButton(self, text="Calcular y Sincronizar Valores", fg_color="#1abc9c", hover_color="#16a085", font=ctk.CTkFont(weight="bold"), command=self.procesar_y_enviar)
+        btn_sync.pack(pady=10)
+
+        # Conectar eventos de Matplotlib
+        self.canvas.mpl_connect('button_press_event', self.on_click)
+        self.canvas.mpl_connect('motion_notify_event', self.on_drag)
+        self.canvas.mpl_connect('button_release_event', self.on_release)
+        self.canvas.mpl_connect('draw_event', self.on_draw_event)
+
+    def create_full_marker(self, m_id, time_pos):
+        line = self.ax.axvline(x=time_pos, color='red', linestyle='--', linewidth=1.5)
+        point, = self.ax.plot(time_pos, 0.0, 'ro', markersize=8, markeredgecolor='white')
+        
+        bbox_props = dict(boxstyle="round,pad=0.2", fc="red", ec="white", lw=1, alpha=0.8)
+        text = self.ax.text(time_pos, 0.0, f"{m_id}: {time_pos:.2f}s", color="white", ha="center", va="bottom", bbox=bbox_props)
+
+        line.set_animated(True)
+        point.set_animated(True)
+        text.set_animated(True)
+        self.markers_data[m_id] = {'line': line, 'point': point, 'text': text}
+
+    def on_draw_event(self, event):
+        if event is not None and event.canvas != self.canvas:
+            return
+        self.background = self.canvas.copy_from_bbox(self.ax.bbox)
+        self.draw_markers_manually()
+
+    def draw_markers_manually(self):
+        for marker in self.markers_data.values():
+            self.ax.draw_artist(marker['line'])
+            self.ax.draw_artist(marker['point'])
+            self.ax.draw_artist(marker['text'])
+
+    def on_click(self, event):
+        if event.inaxes != self.ax or event.button != 1:
+            return
+        click_threshold = (self.duration + 25) * 0.02
+        for m_id, marker in self.markers_data.items():
+            line_x = float(marker['line'].get_xdata()[0])
+            if abs(event.xdata - line_x) < click_threshold:
+                self.active_dragging_id = m_id
+                break
+
+    def on_drag(self, event):
+        if self.active_dragging_id is None or event.inaxes != self.ax:
+            return
+
+        current_time = time.time()
+        if current_time - self.last_update_time < 0.016: 
+            return
+        self.last_update_time = current_time
+
+        max_limit = self.duration + 15 if self.active_dragging_id == "Extension" else self.duration
+        new_x = max(0.0, min(event.xdata, max_limit))
+
+        marker = self.markers_data[self.active_dragging_id]
+        marker['line'].set_xdata([new_x, new_x])
+        marker['point'].set_data([new_x], [0.0])
+        marker['text'].set_position((new_x, 0.0))
+        marker['text'].set_text(f"{self.active_dragging_id}: {new_x:.2f}s")
+
+        if self.background is not None:
+            self.canvas.restore_region(self.background)
+            self.draw_markers_manually()
+            self.canvas.blit(self.ax.bbox)
+
+    def on_release(self, event):
+        self.active_dragging_id = None
+
+    def procesar_y_enviar(self):
+        offset = float(self.markers_data["Offset"]['line'].get_xdata()[0])
+        duracion = float(self.markers_data["Duracion"]['line'].get_xdata()[0])
+        extension = float(self.markers_data["Extension"]['line'].get_xdata()[0])
+
+        # Lógicas de filtrado condicional solicitadas
+        val_offset = offset if offset < duracion else 0.0
+        val_extension = (extension - duracion) if (extension - duracion) > 0 else 0.0
+
+        # Aplicar límites máximos exigidos por los sliders nativos de CustomTkinter
+        final_offset = min(16.0, val_offset)
+        final_extension = min(15.0, val_extension)
+
+        # Inyectar de regreso al panel maestro de CustomTkinter
+        self.master_app.slider_offset.set(final_offset)
+        self.master_app.actualizar_texto_offset(final_offset)
+        
+        self.master_app.entry_duracion.delete(0, "end")
+        self.master_app.entry_duracion.insert(0, f"{duracion:.3f}")
+        
+        self.master_app.slider_extension.set(final_extension)
+        self.master_app.actualizar_texto_extension(final_extension)
+
+        messagebox.showinfo("Sincronización Exitosa", 
+                            f"Valores ajustados con límites del motor:\n"
+                            f"• Offset: {final_offset:.3f}s (Límite Máx 16s)\n"
+                            f"• Duración: {duracion:.3f}s\n"
+                            f"• Extensión: {final_extension:.1f}s (Límite Máx 15s)")
+        self.destroy()
+
+# =====================================================================
+# 5. INTERFAZ GRÁFICA COMPATIBLE ADAPTATIVA CON SCROLL
 # =====================================================================
 ctk.set_appearance_mode("Dark")
 ctk.set_default_color_theme("blue")
@@ -948,6 +1102,8 @@ class StepHybridUI(ctk.CTk):
 
         self.label_duracion = ctk.CTkLabel(self.contenedor_vertical, text="Duración Máxima (Segundos / 0=Full):", font=ctk.CTkFont(weight="bold"))
         self.entry_duracion = ctk.CTkEntry(self.contenedor_vertical, placeholder_text="Ej: 90", width=340)
+
+        self.btn_visualizar_grafico = ctk.CTkButton(self.contenedor_vertical, text="Ajustar Límites en Gráfica Interactiva 📊", fg_color="#8e44ad", hover_color="#9b59b6", font=ctk.CTkFont(weight="bold"), command=self.abrir_visualizador_audio)
 
         self.label_seed = ctk.CTkLabel(self.contenedor_vertical, text="Semilla de Generación (Vacío = Aleatorio):", font=ctk.CTkFont(weight="bold"))
         self.entry_seed = ctk.CTkEntry(self.contenedor_vertical, placeholder_text="Ej: 12345 o texto_libre", width=340)
@@ -1141,9 +1297,9 @@ class StepHybridUI(ctk.CTk):
 
         # Empaquetado lineal descendente y ordenado para scroll seguro
         componentes_ui = [
-            self.btn_audio, self.label_audio_path, self.btn_checkpoint, self.label_checkpoint_path,
+            self.btn_audio, self.label_audio_path, self.btn_checkpoint, self.label_checkpoint_path, 
             self.label_name, self.entry_title, self.checkbox_rename, self.label_artist_name, self.entry_artist_name,
-            self.label_duracion, self.entry_duracion, 
+            self.label_duracion, self.entry_duracion, self.btn_visualizar_grafico,
             self.label_bpm, self.slider_bpm, self.frame_bpm_botones, self.checkbox_bpm, self.checkbox_bpm_dinamico, 
             self.checkbox_speeds_dinamico,
             self.label_speed_min, self.slider_speed_min,  
@@ -1385,6 +1541,24 @@ class StepHybridUI(ctk.CTk):
             self.label_audio_path.configure(text=os.path.basename(file_path), text_color="#1abc9c")
             self.entry_title.delete(0, "end")
             self.entry_title.insert(0, os.path.splitext(os.path.basename(file_path))[0])
+
+    def abrir_visualizador_audio(self):
+        """Abre la subventana gráfica interactiva de Matplotlib usando Blitting estático."""
+        if not self.audio_file_path:
+            messagebox.showwarning("Falta Archivo", "Por favor selecciona primero un archivo de audio válido en el paso 1.")
+            return
+            
+        duracion_manual = 0.0
+        dur_raw = self.entry_duracion.get().strip()
+        if dur_raw:
+            try:
+                duracion_manual = float(dur_raw)
+            except ValueError:
+                pass
+                
+        # Crear subventana pasándole la app maestra (self)
+        AudioVisualizerSubWindow(self, self.audio_file_path, duracion_manual)
+
 
     def buscar_checkpoint(self):
         file_path = filedialog.askopenfilename(filetypes=[("PyTorch Checkpoints", "*.pt")])
