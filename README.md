@@ -16,7 +16,7 @@ Este programa está diseñado para generar archivos de pasos (*.sm y *.ssc) din�
 Se recomienda utilizar un entorno virtual (venv) para aislar las dependencias del proyecto, ya sea para probar el código o entrenar modelos.
 El entorno base de prueba es Python 3.12 en WINDOWS 11, pero se espera compatibilidad con otras versiones de Python o Windows. 
 
-**La versión ejecutable (.exe) con un checkpoint aparte se encuentra disponible si solo desea utilizar el generador.**
+**La versión ejecutable (.exe) con un checkpoint aparte se encuentra disponible si solo desea utilizar el generador. [Enlace] (https://github.com/elcurisw/Generador_Simfiles_Hibrido/releases/download/v1.1/simfiles_generator.zip)**
 
 #### A. Dependencias Principales (Instalación vía pip)
 
