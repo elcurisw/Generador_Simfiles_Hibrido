@@ -72,6 +72,9 @@ The interface has been logically divided into sections—from primary inputs dow
 
 #### A. Basic Controls and Metadata
 
+![Interfaz](./Imagenes/img1.jpg)
+![Interfaz](./Imagenes/img2.jpg)
+
 These fields define what will be generated in terms of file names, artist, and basic settings.
 
 | # | Field | Type | Description | Key Notes |
@@ -93,6 +96,9 @@ These fields define what will be generated in terms of file names, artist, and b
 
 #### B. Temporal and Structure Control (Timing Settings)
 
+![Interfaz](./Imagenes/img5.jpg)
+![Interfaz](./Imagenes/img6.jpg)
+
 These controls determine the duration of the step map and exactly where the generation should begin.
 
 | # | Field | Type | Description | Key Notes |
@@ -105,6 +111,10 @@ These controls determine the duration of the step map and exactly where the gene
 | 21 | **Aesthetic Final Extension** | Number Control | Allows extending the audio file *without* generating additional rhythmic steps. | Ideal for creating a smooth "fade out" effect at the end of the track. |
 
 #### C. Master Rhythm and Speed Analysis (BPM & Flow Configuration)
+
+![Interfaz](./Imagenes/img7.jpg)
+![Interfaz](./Imagenes/img8.jpg)
+![Interfaz](./Imagenes/img9.jpg)
 
 This is the most advanced section, controlling the pulse and responsiveness of the generator based on the audio spectrum (RMS). Understanding **Root Mean Square (RMS)** here means understanding how the software detects changes in volume/energy to match rhythm shifts.
 
@@ -130,6 +140,9 @@ This is the most advanced section, controlling the pulse and responsiveness of t
 
 #### D. Special Elements and Complexity (Effects, Traps, Mines)
 
+![Interfaz](./Imagenes/img10.jpg)
+![Interfaz](./Imagenes/img11.jpg)
+
 These controls allow adding specific elements typical of rhythm game genres to increase complexity and variation.
 
 | # | Field | Type | Description | Key Notes |
@@ -140,6 +153,9 @@ These controls allow adding specific elements typical of rhythm game genres to i
 | 56 | **Max RMS Sensitivity Traps** | Number Control | Sets the maximum peak impact energy (RMS) that defines the strongest rhythmic peak of the song when generating traps. | Specialized for traps during intense peaks. |
 
 #### E. Difficulty and Note Density (Spectral Filters & Complexity)
+
+![Interfaz](./Imagenes/img12.jpg)
+![Interfaz](./Imagenes/img13.jpg)
 
 These controls govern the quality and severity of the generated rhythm pattern, focusing on individual notes and simulated movement.
 
