@@ -161,6 +161,8 @@ Permiten añadir elementos específicos del género de juegos de ritmo para aume
 
 Controla la calidad y severidad del patrón rítmico generado. Se centra en las notas individuales y los movimientos corporales simulados.
 
+| Nº | Campo | Tipo | Descripción | Notas Clave |
+| :---: | :---: | :---: | :---: | :---: |
 | 57 | **Duración Máxima de Holds** | Control Numérico | Define el tiempo máximo que puede mantener un paso sostenido (Hold). | Controla la duración de las notas largas. |
 | 58 | **Máximo de Holds Simultáneos** | Control Numérico |	Determina cuántos pasos sostenidos pueden ocurrir al mismo tiempo. | Ideal para quitar o aumentar complejidad en zonas específicas. |
 | 59 | **Aplicar Posprocesamiento rítmico** | Checkbox | Mejora el resultado bruto de la IA mediante efectos adicionales. Desactivarlo produce un resultado "en crudo" en los holds. | Recomendado activarlo para mejor calidad. |
