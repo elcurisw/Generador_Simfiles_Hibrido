@@ -72,6 +72,8 @@ La interfaz está dividida lógicamente para facilitar la generación, desde las
 
 Actualización. Se mejoro la interfaz para hacerla más intuitiva y se agregaron opciones adicionales.
 
+![Interfaz](./Imagenes/img1.jpg)
+
 ### A. Controles Básicos y Meta-Datos
 
 Estos campos definen qué se va a generar.
