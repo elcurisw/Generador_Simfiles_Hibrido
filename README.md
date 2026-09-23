@@ -98,6 +98,8 @@ Estos campos definen qué se va a generar.
 
 ### B. Control Temporal y de Estructura  (Settings de Tiempo)
 
+![Interfaz](./Imagenes/img5.jpg)
+
 Determina cuánto va a durar el mapa de pasos y dónde debe empezar exactamente.
 
 | Nº | Campo | Tipo | Descripción | Notas Clave |
