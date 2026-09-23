@@ -99,6 +99,7 @@ Estos campos definen qué se va a generar.
 ### B. Control Temporal y de Estructura  (Settings de Tiempo)
 
 ![Interfaz](./Imagenes/img5.jpg)
+![Interfaz](./Imagenes/img6.jpg)
 
 Determina cuánto va a durar el mapa de pasos y dónde debe empezar exactamente.
 
@@ -112,6 +113,10 @@ Determina cuánto va a durar el mapa de pasos y dónde debe empezar exactamente.
 | 21 | **Extensión Final Estética** | Control Numérico | Permite extender el audio sin generar pasos rítmicos adicionales. | Ideal para escuchar la "desvanencia" final del track. |
 
 ### C. Análisis Rítmico y Velocidad Maestra (Configuración de BPM y Ritmo)
+
+![Interfaz](./Imagenes/img7.jpg)
+![Interfaz](./Imagenes/img8.jpg)
+![Interfaz](./Imagenes/img9.jpg)
 
 Controla el pulso y la velocidad de respuesta del generador basándose en el sonido. Es la sección más avanzada, ya que requiere entender cómo funciona un espectro de audio (RMS).
 
@@ -137,6 +142,9 @@ Controla el pulso y la velocidad de respuesta del generador basándose en el son
 
 ### D. Elementos Especiales y Complejidad (Efectos, Minas y Trampas)
 
+![Interfaz](./Imagenes/img10.jpg)
+![Interfaz](./Imagenes/img11.jpg)
+
 Permiten añadir elementos específicos del género de juegos de ritmo para aumentar la complejidad y la variación.
 
 | Nº | Campo | Tipo | Descripción | Notas Clave |
@@ -147,6 +155,9 @@ Permiten añadir elementos específicos del género de juegos de ritmo para aume
 | 56 | **Sensibilidad RMS Máximo Trampas** | Control Numérico |	Establece el parámetro mínimo (RMS) que define el pico de impacto rítmico más fuerte de la canción. | Avanzado. Impacto en picos intensos. Especializado para las trampas. |
 
 ### E. Ajustes de Dificultad y Densidad de Notas (Filtros Espectrales y Dificultad)
+
+![Interfaz](./Imagenes/img12.jpg)
+![Interfaz](./Imagenes/img13.jpg)
 
 Controla la calidad y severidad del patrón rítmico generado. Se centra en las notas individuales y los movimientos corporales simulados.
 
