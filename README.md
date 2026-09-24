@@ -156,7 +156,8 @@ Permiten añadir elementos específicos del género de juegos de ritmo para aume
 
 ### E. Ajustes de Dificultad y Densidad de Notas (Filtros Espectrales y Dificultad)
 
-![Interfaz](./Imagenes/img12.jpg)
+![Interfaz](./Imagenes/img12.png)
+![Interfaz](./Imagenes/img14.jpg)
 ![Interfaz](./Imagenes/img13.jpg)
 
 Controla la calidad y severidad del patrón rítmico generado. Se centra en las notas individuales y los movimientos corporales simulados.
