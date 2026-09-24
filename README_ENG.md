@@ -154,23 +154,27 @@ These controls allow adding specific elements typical of rhythm game genres to i
 
 #### E. Difficulty and Note Density (Spectral Filters & Complexity)
 
-![Interfaz](./Imagenes/img12.jpg)
+![Interfaz](./Imagenes/img14.jpg)
+![Interfaz](./Imagenes/img12.png)
 ![Interfaz](./Imagenes/img13.jpg)
 
 These controls govern the quality and severity of the generated rhythm pattern, focusing on individual notes and simulated movement.
 
 | # | Field | Type | Description | Key Notes |
 | :---: | :---: | :---: | :---: | :---: |
-| 57 | **Maximum Hold Duration** | Number Control | Defines the maximum time a sustained step (Hold) can last. | Controls the length of long-held notes. |
-| 58 | **Max Simultaneous Holds** | Number Control | Determines how many held steps can occur at the same time. | Useful for controlling complexity in specific areas (e.g., removing or adding density). |
-| 59 | **Apply Rhythmic Post-Processing** | Checkbox | Improves the raw output of the AI using additional effects. Disabling this results in a "raw" feeling on holds. | Recommended to activate for higher quality output. |
-| 60 | **Generate Jump Sections** | Checkbox | Enables the option of adding more dedicated jump sections into the map. | Use if you are unsatisfied with the current jump frequency. *Reminder: Lowering hold duration is recommended.* |
-| 61 | **Min RMS Sensitivity Jumps** | Number Control | Sets the minimum required audio energy (RMS) needed for a section to be considered rhythmically notable by the AI when generating jumps. | Specialized for jumps in quiet sections. |
-| 62 | **Max RMS Sensitivity Jumps** | Number Control | Sets the maximum peak impact energy (RMS) that defines the strongest rhythmic peak of the song when generating jumps. | Specialized for jumps during intense peaks. |
-| 63 | **Pack Ceiling Difficulty** | Number Control | Defines the general desired difficulty level for the entire step pack. This is used in calculating the final difficulty rating (point 64). | Sets the artistic intention for the final result. |
-| 64 | **Recalculate Difficulty Dynamically** | Checkbox/Opt. | Allows recalculating the difficulty based on user's manual choices (e.g., BPM, Scroll Min/Max settings). | If disabled, a fixed default configuration is used for difficulty calculation. |
-| 65 | **Min RMS Sensitivity (Note Density)** | Number Control | Sets the minimum required audio energy (RMS) needed for a section to be considered rhythmically notable by the AI when calculating note density. | Specialized for controlling notes in quiet sections. |
-| 66 | **Max RMS Sensitivity (Note Density)** | Number Control | Sets the maximum peak impact energy (RMS) that defines the strongest rhythmic peak of the song when calculating note density. | Specialized for controlling notes during intense peaks. |
-| 67 | **Lines per Measure** | Buttons | Increases the number of divisions used when drawing notes in a measure. | Advanced: Impacts both complexity and the final difficulty level. |
-| 68 | **MIN Notes per Measure** | Buttons | The minimum number of notes considered based on low RMS energy levels. | Highly advanced, high impact on difficulty. Experimental feature. |
-| 69 | **MAX Notes per Measure** | Buttons | The maximum number of notes considered based on high RMS energy levels. | Highly advanced, high impact on difficulty. Experimental feature. |
+| 57 | **Enable Multi-Layer Sample Generation** | Allows the creation of multiple files by taking a percentage of the total steps. | Use this to fine-tune the map if you prefer not to use the Stepmania editor, or to accelerate the process of adjusting the required settings. |
+| 58 | **Minimum Initial Sampling** | The percentage of total steps from which the sampling process begins. | It is recommended to set this value between 90% and 95%, which covers the final portion of the song's duration. |
+| 59 | **Total Intermediate Samples** | Defines the number of samples to be generated, starting from the minimum percentage up to 100% of the total duration. | Set this value between 5 and 10 for greater precision. |
+| 60 | **Maximum Hold Duration** | Number Control | Defines the maximum time a sustained step (Hold) can last. | Controls the length of long-held notes. |
+| 61 | **Max Simultaneous Holds** | Number Control | Determines how many held steps can occur at the same time. | Useful for controlling complexity in specific areas (e.g., removing or adding density). |
+| 62 | **Apply Rhythmic Post-Processing** | Checkbox | Improves the raw output of the AI using additional effects. Disabling this results in a "raw" feeling on holds. | Recommended to activate for higher quality output. |
+| 63 | **Generate Jump Sections** | Checkbox | Enables the option of adding more dedicated jump sections into the map. | Use if you are unsatisfied with the current jump frequency. *Reminder: Lowering hold duration is recommended.* |
+| 64 | **Min RMS Sensitivity Jumps** | Number Control | Sets the minimum required audio energy (RMS) needed for a section to be considered rhythmically notable by the AI when generating jumps. | Specialized for jumps in quiet sections. |
+| 65 | **Max RMS Sensitivity Jumps** | Number Control | Sets the maximum peak impact energy (RMS) that defines the strongest rhythmic peak of the song when generating jumps. | Specialized for jumps during intense peaks. |
+| 66 | **Pack Ceiling Difficulty** | Number Control | Defines the general desired difficulty level for the entire step pack. This is used in calculating the final difficulty rating (point 64). | Sets the artistic intention for the final result. |
+| 67 | **Recalculate Difficulty Dynamically** | Checkbox/Opt. | Allows recalculating the difficulty based on user's manual choices (e.g., BPM, Scroll Min/Max settings). | If disabled, a fixed default configuration is used for difficulty calculation. |
+| 68 | **Min RMS Sensitivity (Note Density)** | Number Control | Sets the minimum required audio energy (RMS) needed for a section to be considered rhythmically notable by the AI when calculating note density. | Specialized for controlling notes in quiet sections. |
+| 69 | **Max RMS Sensitivity (Note Density)** | Number Control | Sets the maximum peak impact energy (RMS) that defines the strongest rhythmic peak of the song when calculating note density. | Specialized for controlling notes during intense peaks. |
+| 70 | **Lines per Measure** | Buttons | Increases the number of divisions used when drawing notes in a measure. | Advanced: Impacts both complexity and the final difficulty level. |
+| 71 | **MIN Notes per Measure** | Buttons | The minimum number of notes considered based on low RMS energy levels. | Highly advanced, high impact on difficulty. Experimental feature. |
+| 72 | **MAX Notes per Measure** | Buttons | The maximum number of notes considered based on high RMS energy levels. | Highly advanced, high impact on difficulty. Experimental feature. |
