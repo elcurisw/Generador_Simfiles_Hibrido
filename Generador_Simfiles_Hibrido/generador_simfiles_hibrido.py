@@ -184,10 +184,11 @@ class PostProcesadorStepMania:
 
     @staticmethod
     def recalcular_meter_real(secuencia_pasos, duracion_segundos, dificultad_tag, max_level_chosen, 
-                              max_notas_compas=12, extension_final=0.0, custom_params=None, lineas_por_compas=12, bpm=120.0):
+                              max_notas_compas=12, extension_final=0.0, custom_params=None, lineas_por_compas=12, bpm=120.0,
+                              factor_escala_muestreo=1.0):
         """
         Calcula el METER real basado en el PICO MÁXIMO de densidad (NPS Local) mediante ventanas móviles de 8 compases.
-        CORREGIDO: Elimina errores de variables locales mal nombradas y calibra el estrés de modificadores.
+        CORREGIDO: Escala lineal y exponencialmente el NPS resultante basándose en la capa de muestreo extraída.
         """
         duracion_efectiva = max(1.0, duracion_segundos - extension_final)
         if not secuencia_pasos or duracion_efectiva <= 0:
@@ -196,7 +197,6 @@ class PostProcesadorStepMania:
         total_impactos_global = 0
         total_modificadores_global = 0
         
-        # Conteo exacto de lo que realmente quedó escrito en el mapa final
         for paso in secuencia_pasos:
             total_impactos_global += sum(1 for char in paso if char in ['1', '2', '4'])
             total_modificadores_global += sum(1 for char in paso if char in ['M', 'F', 'L', 'S', 'H', 'D', 'P'])
@@ -207,13 +207,12 @@ class PostProcesadorStepMania:
         # ESCANEO DE VENTANAS LOCALES (Picos de Densidad Rítmica)
         # ---------------------------------------------------------------------
         segundos_por_compas = (60.0 / bpm) * 4.0
-        lineas_por_bloque = lineas_por_compas * 8  # Ventanas móviles de 8 compases
+        lineas_por_bloque = lineas_por_compas * 8
         segundos_por_bloque = segundos_por_compas * 8
         
         nps_maximo_local = 0.0
         total_lineas = len(secuencia_pasos)
         
-        # CORREGIDO: Escaneo por ventanas deslizantes fluido sin variables fantasma en locals()
         for i in range(0, total_lineas, lineas_por_compas):
             fin_bloque = min(i + lineas_por_bloque, total_lineas)
             sub_secuencia = secuencia_pasos[i:fin_bloque]
@@ -222,8 +221,6 @@ class PostProcesadorStepMania:
                 continue
                 
             impactos_locales = sum(sum(1 for char in paso if char in ['1', '2', '4']) for paso in sub_secuencia)
-            
-            # Calcular duración exacta del bloque actual controlando el final de la canción
             proporcion_bloque = len(sub_secuencia) / lineas_por_bloque
             tiempo_bloque_real = segundos_por_bloque * proporcion_bloque
             
@@ -235,38 +232,40 @@ class PostProcesadorStepMania:
         if nps_maximo_local == 0.0:
             nps_maximo_local = nps_promedio_global
 
-        # ---------------------------------------------------------------------
-        # MULTIPLICADOR DE ESTRÉS COEXISTENTE (BPM + SCROLL SPEEDS + TRAMPAS)
-        # ---------------------------------------------------------------------
+        # Multiplicador de estrés coexistente
         factor_estres_dinamico = 1.0
         if custom_params:
             if custom_params.get("aplicar_bpm_dinamico", False):
-                factor_estres_dinamico += 0.12  # +12% por desorientación rítmica de marea
+                factor_estres_dinamico += 0.12
                 
             if custom_params.get("aplicar_speeds_dinamicos", False):
                 speed_max = custom_params.get("speed_max_custom", 1.40)
                 if speed_max > 1.20:
-                    factor_estres_dinamico += (speed_max - 1.20) * 0.45  # Escala el estrés visual
+                    factor_estres_dinamico += (speed_max - 1.20) * 0.45
 
-        # Ponderación final de NPS: 70% del pico local de la ventana + 30% del promedio global
+        # Ponderación base de NPS
         nps_ponderado = (nps_maximo_local * 0.70) + (nps_promedio_global * 0.30)
+        
+        # --- CONTROL ADAPTATIVO DEL PRECIO DE DIFICULTAD (MUESTREO) ---
+        # Multiplicamos el NPS por el factor de muestreo. Al usar la potencia (1.2)
+        # los mapas muy recortados bajan más agresivamente su nivel (Garantiza escalabilidad jugable)
+        nps_ponderado = nps_ponderado * (factor_escala_muestreo ** 1.2)
+
         nps_ajustado_base = nps_ponderado * factor_estres_dinamico
 
-        # Escalado exponencial basado en la subdivisión métrica elegida en la interfaz
         PROMEDIO_BASE = 12.0
         factor_exponencial_notas = (max_notas_compas / PROMEDIO_BASE) ** 2
         nps_ajustado = nps_ajustado_base * factor_exponencial_notas
 
-        # Techos de dificultad dinámicos configurados desde la GUI
-        techo_easy = max(1, int(max_level_chosen * 0.25))
-        techo_med  = max(3, int(max_level_chosen * 0.50))
-        techo_hard = max(6, int(max_level_chosen * 0.75))
-        techo_chal = max(12, max_level_chosen)
+        # Techos de dificultad dinámicos mitigados proporcionalmente según la capa de muestreo
+        techo_easy = max(1, int((max_level_chosen * 0.25) * factor_escala_muestreo))
+        techo_med  = max(3, int((max_level_chosen * 0.50) * factor_escala_muestreo))
+        techo_hard = max(6, int((max_level_chosen * 0.75) * factor_escala_muestreo))
+        techo_chal = max(12, int(max_level_chosen * factor_escala_muestreo))
 
-        # Factor de peligro por la cantidad de trampas inyectadas por compás paso a paso
         factor_peligro_trampas = min(2.5, (total_modificadores_global / (total_impactos_global + 1)) * 6.0)
 
-        # Asignación final del METER escalado por dificultad
+        # Asignación final con límites dinámicos escalados
         if dificultad_tag == "Easy":
             meter_estimado = int(nps_ajustado * 2.3) + 1
             meter_real = max(1, min(meter_estimado, techo_easy))
@@ -284,10 +283,8 @@ class PostProcesadorStepMania:
         espacios_barra = "░" * max(0, (30 - meter_real))
         
         reporte = (
-            f"📊 [{dificultad_tag.upper()}] NPS Glob: {nps_promedio_global:.2f} | PICO Local (8c): {nps_maximo_local:.2f}\n"
-            f"📈 NPS Ponderado Final: {nps_ponderado:.2f} -> Ajustado (Estrés/Exp): {nps_ajustado:.2f}\n"
-            f"⚡ Multiplicador por Coexistencia DSP: x{factor_estres_dinamico:.2f}\n"
-            f"🎯 METER DINÁMICO: Nivel {meter_real} (Techo Máx de Escala: {techo_chal})\n"
+            f"📊 [{dificultad_tag.upper()}] (Capa {int(factor_escala_muestreo*100)}%) NPS Glob: {nps_promedio_global*factor_escala_muestreo:.2f}\n"
+            f"🎯 METER DINÁMICO ESCALADO: Nivel {meter_real} (Techo Máx Capa: {techo_chal})\n"
             f"└─ [{bloques_barra}{espacios_barra}]\n"
             f"{'-'*45}\n"
         )
@@ -636,7 +633,10 @@ def ejecutar_bucle_sincrono(config_dificultad, compases_totales, bpm, val_offset
     for diff, cfg in config_dificultad.items():
         pasos_finales_ia = []
         lineas_objetivo = cfg["lineas_por_compas"]
-        total_pasos_dificultad = compases_totales * lineas_objetivo
+
+        porcentaje = custom_params.get("porcentaje_tamano", 1.0)
+
+        total_pasos_dificultad = int((compases_totales * lineas_objetivo) * porcentaje)
         
         segundo_actual = val_offset 
         beat_actual = 0.0
@@ -800,12 +800,16 @@ def ejecutar_bucle_sincrono(config_dificultad, compases_totales, bpm, val_offset
 
         mapa_pasos_por_dificultad[diff] = bloque_pasos_texto
 
-        # Recálculo dinámico del METER real
+        # Recálculo dinámico del METER real adaptado al tamaño de la muestra
         if custom_params.get("recalcular_dificultad", False):
+            # Extraemos el porcentaje actual para castigar el NPS proporcionalmente
+            pct_actual = custom_params.get("porcentaje_tamano", 1.0)
+            
             meter_real, texto_reporte = PostProcesadorStepMania.recalcular_meter_real(
                 secuencia_pasos=pasos_finales_ia, duracion_segundos=duracion, dificultad_tag=diff,
                 max_level_chosen=max_level_chosen, max_notas_compas=cfg.get("max_notas_compas", 12),
-                extension_final=extension_final, custom_params=custom_params, lineas_por_compas=lineas_objetivo, bpm=bpm
+                extension_final=extension_final, custom_params=custom_params, lineas_por_compas=lineas_objetivo, bpm=bpm,
+                factor_escala_muestreo=pct_actual 
             )
             config_dificultad[diff]["meter"] = meter_real
             log_metricas_diff += texto_reporte
@@ -932,11 +936,18 @@ def generar_simfiles_hibridos(audio_path, checkpoint_path, song_title, max_level
     
     # Si utilizamos la duración dada por el usuario > 0
     if duracion_limite > 0.0:
-        speed_offset_time = 0.1 * percent_speed_offset_time * duracion_limite
-        duracion = duracion_limite + speed_offset_time
+        #Verificamos si se están utilizando scrolls speeds
+        if speeds_activo:
+            speed_offset_time = 0.1 * percent_speed_offset_time * duracion_limite
+            duracion = duracion_limite + speed_offset_time
+        else:
+            duracion = duracion_limite
     else: # En caso contrario aumentamos la duración del audio más el aumento por pérdida
-        speed_offset_time = 0.1 * percent_speed_offset_time * duracion
-        duracion = duracion + speed_offset_time
+        if speeds_activo:
+            speed_offset_time = 0.1 * percent_speed_offset_time * duracion
+            duracion = duracion + speed_offset_time
+        else: #Redundante pero se entiende que sino existen scrolls se toma la duración auto
+            duracion = duracion
     
     double_bpm_factor = 2.0 if (custom_params and custom_params.get("double_bpm") == True) else 1.0
 
@@ -981,32 +992,27 @@ def generar_simfiles_hibridos(audio_path, checkpoint_path, song_title, max_level
 
     post = PostProcesadorStepMania()
 
-    mapa_pasos_por_dificultad, bpms_string_line, speeds_string_line, log_metricas_diff = ejecutar_bucle_sincrono(config_dificultad=config_dificultad, compases_totales=compases_totales,
-        bpm=bpm, val_offset=val_offset, duracion=duracion, total_frames=total_frames, dinamico_activo=dinamico_activo, speeds_activo=speeds_activo, custom_params=custom_params,
-        aplicar_post=aplicar_post, max_level_chosen=max_level_chosen, rms_bpm=rms_bpm, rms_medio_bpm=rms_medio_bpm, hop_bpm=hop_bpm, rms_speed=rms_speed, rms_medio_speed=rms_medio_speed,
-        hop_speed=hop_speed, rms_saltos=rms_saltos, rms_medio_saltos=rms_medio_saltos, hop_saltos=hop_saltos, lista_rms=lista_rms, rms_medio=rms_medio, lista_centroide=lista_centroide,
-        centroide_medio=centroide_medio, mel_db=mel_db, modelo=modelo, dispositivo=dispositivo, tokenizer=tokenizer, PostProcesadorStepMania=post)
+    #----------------------------------------------------
+    # Procesamiento de archivos multimedia
+    #----------------------------------------------------
 
-    # =====================================================================
-    # 📁 PLANTILLA DE EMPAQUETADO AUTOMÁTICO PARA STEPMANIA / OUTFOX
-    # =====================================================================
     nombre_audio = os.path.basename(audio_path)
+    #Verificacion de seguridad para el banner y video
     nombre_banner = os.path.basename(banner_path) if banner_path else ""
     nombre_video = os.path.basename(video_path) if video_path else ""
-    
-    # 1. Definir la jerarquía de carpetas estándar: Raíz -> Nombre del Pack -> Nombre de la Canción
+
+    # Definir la jerarquía de carpetas estándar: Raíz -> Nombre del Pack -> Nombre de la Canción
     nombre_grupo = custom_params.get("pack_name", "AI_Generated_Charts")
-    # Sanitizar nombres para evitar caracteres inválidos en directorios del sistema operativo
     folder_song_sanitizada = "".join([c for c in song_title if c.isalnum() or c in [' ', '_', '-']]).strip()
     folder_group_sanitizada = "".join([c for c in nombre_grupo if c.isalnum() or c in [' ', '_', '-']]).strip()
-    
+        
     carpeta_raiz_packs = os.path.join(carpeta_salida, "AI_Generated_Packs")
     carpeta_pack_final = os.path.join(carpeta_raiz_packs, folder_group_sanitizada, folder_song_sanitizada)
-    
+
     # Crear de forma segura todo el árbol de directorios requerido
     os.makedirs(carpeta_pack_final, exist_ok=True)
 
-    # 2. Procesamiento y renombrado seguro del archivo de Audio (.mp3/.wav)
+    # Procesamiento y renombrado seguro del archivo de Audio (.mp3/.wav)
     if custom_params.get("renombrar_archivos", False):
         _, extension = os.path.splitext(nombre_audio)
         new_audio_name = f"{folder_song_sanitizada}{extension}"
@@ -1015,49 +1021,34 @@ def generar_simfiles_hibridos(audio_path, checkpoint_path, song_title, max_level
         
     ruta_final_audio = os.path.join(carpeta_pack_final, new_audio_name)
     if os.path.abspath(audio_path) != os.path.abspath(ruta_final_audio):
-        # PARCHE DE SEGURIDAD: Siempre copiar el audio hacia la carpeta del programa para evitar errores de permisos
         shutil.copy(audio_path, ruta_final_audio)
-        #if os.path.dirname(audio_path) != carpeta_pack_final:
-            #try: os.remove(audio_path)
-            #except: pass
 
-    # 3. Procesamiento y empaquetado seguro del Banner gráfico (.png/.jpg)
-    new_banner_name = ""
+    # Copiar Banner y Video únicamente verificando copias
     if banner_path and os.path.exists(banner_path):
         if custom_params.get("renombrar_archivos", False):
             _, extension = os.path.splitext(nombre_banner)
-            new_banner_name = f"{folder_song_sanitizada}_banner{extension}"
+            new_banner_name = f"{folder_song_sanitizada}{extension}"
         else:
             new_banner_name = nombre_banner
-            
         ruta_final_banner = os.path.join(carpeta_pack_final, new_banner_name)
         if os.path.abspath(banner_path) != os.path.abspath(ruta_final_banner):
             shutil.copy(banner_path, ruta_final_banner)
     else:
-        new_banner_name = nombre_banner
+        new_banner_name = ""
 
-    # 4. Procesamiento y empaquetado seguro del Video de Fondo (.mp4)
-    new_video_name = ""
     if video_path and os.path.exists(video_path):
         if custom_params.get("renombrar_archivos", False):
             _, extension = os.path.splitext(nombre_video)
-            new_video_name = f"{folder_song_sanitizada}_video{extension}"
+            new_video_name = f"{folder_song_sanitizada}{extension}"
         else:
             new_video_name = nombre_video
-            
         ruta_final_video = os.path.join(carpeta_pack_final, new_video_name)
         if os.path.abspath(video_path) != os.path.abspath(ruta_final_video):
             shutil.copy(video_path, ruta_final_video)
     else:
-        new_video_name = nombre_video
+        new_video_name = ""
 
-    # 5. Redireccionar la escritura de los Simfiles (.sm y .ssc) a la carpeta del Pack
     bg_changes_line = f"0.000={new_video_name}=1.000=1=0=0=crossfade=," if new_video_name else ""
-    val_offset = custom_params["offset_manual"] if custom_params else 0.000
-
-    name_output = f"{folder_song_sanitizada}_{seed_actual}"
-    output_sm = os.path.join(carpeta_pack_final, f"{name_output}.sm")
-    output_ssc = os.path.join(carpeta_pack_final, f"{name_output}.ssc")
 
     if seed_actual < 100000:
         emoji = "👌" 
@@ -1081,74 +1072,108 @@ def generar_simfiles_hibridos(audio_path, checkpoint_path, song_title, max_level
         emoji = "🎲​"
 
     #Indicador adicional de dificultad
-    subtitulo = f"{emoji}​ DIFICULTAD ÓPTIMA"
+    subtitulo_dev = f"{emoji}​ DIFICULTAD ÓPTIMA"
 
     if custom_params["max_notas_compas"] > 16 and custom_params["max_notas_compas"] <= 32:
-        subtitulo = "⚠️ HARD DIFFICULT, EXPONENTIAL DENSITY" 
+        subtitulo_dev = "⚠️ HARD DIFFICULT, EXPONENTIAL DENSITY" 
     elif custom_params["max_notas_compas"] > 32:
-        subtitulo = "💀​ HARDCORE DIFFICULT, MAXIMUM DENSITY"
+        subtitulo_dev = "💀​ HARDCORE DIFFICULT, MAXIMUM DENSITY"
+
+    # ---------------------------------------------------------------------
+    # SISTEMA DE MUESTREO MULTI-ARCHIVO ADAPTATIVO CON LINSPACE
+    # ---------------------------------------------------------------------
+    activar_muestreo = custom_params.get("activar_muestreo_multicapa", False)
     
-
-    # --- ESCRITURA DEL ARCHIVO .SM CLÁSICO ---
-    with open(output_sm, "w", encoding="utf-8") as f:
-        f.write(f"#TITLE:{song_title};\n#SUBTITLE:{subtitulo};\n")
-        f.write(f"#ARTIST:{artist_name};\n#MUSIC:{new_audio_name};\n#BANNER:{new_banner_name};\n")
-        f.write(f"#VIDEO:{new_video_name};\n") # Vinculación directa en formato antiguo
-        f.write(f"#OFFSET:-{val_offset:.3f};\n") 
-        f.write(f"#BPMS:{bpms_string_line};\n")
-        f.write(f"#BGCHANGES:{bg_changes_line};\n\n") # Inyección del script de animación
-        
-        for diff, bloque in mapa_pasos_por_dificultad.items():
-            f.write(f"#NOTES:\n dance-single:\n AI_DSP_Hybrid_Engine:\n {diff}:\n {config_dificultad[diff]['meter']}:\n 0.1,0.1,0.1,0.1,0.1:\n")
-            f.write(bloque)
-            f.write("\n")
-
-    #Indicador adicional de dificultad
-    chart_name = "DEATHSTREAM" if custom_params.get("max_notas_compas", 0) > 20 else "AI_Engine"
-
-    # --- ESCRITURA DEL ARCHIVO .SSC MODERNO ---
-    with open(output_ssc, "w", encoding="utf-8") as f:
-        f.write(f"#VERSION:0.83;\n#TITLE:{song_title};\n#SUBTITLE:{subtitulo};\n")
-        f.write(f"#ARTIST:{artist_name};\n#MUSIC:{new_audio_name};\n#BANNER:{new_banner_name};\n")
-        f.write(f"#VIDEO:{new_video_name};\n")
-        f.write(f"#OFFSET:-{val_offset:.3f};\n") 
-        f.write(f"#BPMS:{bpms_string_line};\n#COMBOLINK:1;\n")
-
-        # Se escribe la etiqueta de velocidades solo si fue la opción activa elegida
-        if speeds_activo and speeds_string_line:
-            f.write(f"#SPEEDS:{speeds_string_line};\n")
-
-        f.write(f"#BGCHANGES:{bg_changes_line};\n\n")
-        
-        for diff, bloque in mapa_pasos_por_dificultad.items():
-            f.write(f"//dance-single - AI_DSP_Hybrid_Engine\n#NOTEDATA:;\n#CHARTNAME:{chart_name};\n#STEPSTYPE:dance-single;\n")
-            f.write(f"#DESCRIPTION:AI_DSP_Hybrid_Engine;\n#DIFFICULTY:{diff};\n#METER:{config_dificultad[diff]['meter']};\n")
-            f.write(f"#RADARVALUES:0.1,0.1,0.1,0.1,0.1;\n#CREDIT:AI_Engine;\n#NOTES:\n")
-            f.write(bloque)
-            f.write("\n")
-
-    # Modificamos el reporte de métricas:
-    log_metricas_diff += f"⏱️ OFFSET DETECTADO/APLICADO: {val_offset:.3f} s\n"
-    log_metricas_diff += f"💓 BPM DETECTADO/APLICADO: {bpm:.3f} \n"
-
-    if custom_params.get("recalcular_dificultad", False):
-        # Añadimos la huella digital al bloque de texto que va para la consola
-        reporte_con_huella = (
-            f"{log_metricas_diff}"
-            f"🔑 HUELLA DIGITAL (SEED): {seed_actual}\n"
-            f"💡 Guarda este número si deseas replicar exactamente este mismo patrón.\n"
-            f"{'-'*45}\n"
-        )
-        log_metricas_diff = reporte_con_huella
+    if activar_muestreo:
+        porcentaje_min = custom_params.get("muestreo_pct_min", 0.95)
+        num_muestras = custom_params.get("muestreo_num_muestras", 7)
+        # Genera puntos de muestreo distribuidos de manera equidistante hasta el 1.00 (100%)
+        porcentajes_muestreo = np.linspace(porcentaje_min, 1.00, num=num_muestras).tolist()
     else:
-        # En caso de que tengan el cálculo dinámico apagado, igual les mostramos la semilla
-        log_metricas_diff = (
-            f"🔑 HUELLA DIGITAL (SEED): {seed_actual}\n"
-            f"└─ (Cálculo dinámico de dificultad desactivado)\n"
-            f"{'-'*45}\n"
-        )
+        # Caída por defecto si el checkbox está desactivado: solo genera el archivo estándar al 100%
+        porcentajes_muestreo = [1.00]
+
+    log_metricas_acumulado = ""
+    
+    for idx_m, pct in enumerate(porcentajes_muestreo):
+        custom_params["porcentaje_tamano"] = pct
+        # Generar las matrices de pasos reducidas/completas de forma síncrona
+        mapa_pasos_por_dificultad, bpms_string_line, speeds_string_line, log_metricas_diff = ejecutar_bucle_sincrono(config_dificultad=config_dificultad, compases_totales=compases_totales,
+            bpm=bpm, val_offset=val_offset, duracion=duracion, total_frames=total_frames, dinamico_activo=dinamico_activo, speeds_activo=speeds_activo, custom_params=custom_params,
+            aplicar_post=aplicar_post, max_level_chosen=max_level_chosen, rms_bpm=rms_bpm, rms_medio_bpm=rms_medio_bpm, hop_bpm=hop_bpm, rms_speed=rms_speed, rms_medio_speed=rms_medio_speed,
+            hop_speed=hop_speed, rms_saltos=rms_saltos, rms_medio_saltos=rms_medio_saltos, hop_saltos=hop_saltos, lista_rms=lista_rms, rms_medio=rms_medio, lista_centroide=lista_centroide,
+            centroide_medio=centroide_medio, mel_db=mel_db, modelo=modelo, dispositivo=dispositivo, tokenizer=tokenizer, PostProcesadorStepMania=post)
+
+    # =====================================================================
+    # 📁 PLANTILLA DE EMPAQUETADO AUTOMÁTICO PARA STEPMANIA / OUTFOX
+    # =====================================================================
+        # --- ASIGNACIÓN DE SUFIJOS DE SALIDA SEGÚN CONFIGURACIÓN ---
+        if activar_muestreo:
+            sufijo_tamano = f"size_{int(round(pct*100))}"
+            titulo_simfile = f"{song_title} ({int(round(pct*100))}% Size)"
+            subtitulo_muestra = f"🎲 CAPA DE MUESTREO: {int(round(pct*100))}%"
+            subtitulo = f"{subtitulo_muestra} {subtitulo_dev}"
+        else:
+            sufijo_tamano = "original"
+            titulo_simfile = song_title
+            subtitulo = subtitulo_dev
+
+        name_output = f"{folder_song_sanitizada}_{seed_actual}_{sufijo_tamano}"
+        output_sm = os.path.join(carpeta_pack_final, f"{name_output}.sm")
+        output_ssc = os.path.join(carpeta_pack_final, f"{name_output}.ssc")
+
+        # --- ESCRITURA DEL ARCHIVO .SM INDIVIDUAL ---
+        with open(output_sm, "w", encoding="utf-8") as f:
+            f.write(f"#TITLE:{titulo_simfile};\n#SUBTITLE:{subtitulo};\n")
+            f.write(f"#ARTIST:{artist_name};\n#MUSIC:{new_audio_name};\n#BANNER:{new_banner_name};\n")
+            f.write(f"#VIDEO:{new_video_name};\n")
+            f.write(f"#OFFSET:-{val_offset:.3f};\n") 
+            f.write(f"#BPMS:{bpms_string_line};\n")
+            f.write(f"#BGCHANGES:{bg_changes_line};\n\n")
             
-    return bpm, duracion, log_metricas_diff
+            for diff, bloque in mapa_pasos_por_dificultad.items():
+                f.write(f"#NOTES:\n dance-single:\n AI_DSP_Hybrid_Engine:\n {diff}:\n {config_dificultad[diff]['meter']}:\n 0.1,0.1,0.1,0.1,0.1:\n")
+                f.write(bloque)
+                f.write("\n")
+
+        chart_name = "DEATHSTREAM" if custom_params.get("max_notas_compas", 0) > 20 else "AI_Engine"
+
+        # --- ESCRITURA DEL ARCHIVO .SSC INDIVIDUAL ---
+        with open(output_ssc, "w", encoding="utf-8") as f:
+            f.write(f"#VERSION:0.83;\n#TITLE:{titulo_simfile};\n#SUBTITLE:{subtitulo};\n")
+            f.write(f"#ARTIST:{artist_name};\n#MUSIC:{new_audio_name};\n#BANNER:{new_banner_name};\n")
+            f.write(f"#VIDEO:{new_video_name};\n")
+            f.write(f"#OFFSET:-{val_offset:.3f};\n") 
+            f.write(f"#BPMS:{bpms_string_line};\n#COMBOLINK:1;\n")
+
+            if speeds_activo and speeds_string_line:
+                f.write(f"#SPEEDS:{speeds_string_line};\n")
+
+            f.write(f"#BGCHANGES:{bg_changes_line};\n\n")
+            
+            for diff, bloque in mapa_pasos_por_dificultad.items():
+                f.write(f"//dance-single - AI_DSP_Hybrid_Engine\n#NOTEDATA:;\n#CHARTNAME:{chart_name};\n#STEPSTYPE:dance-single;\n")
+                f.write(f"#DESCRIPTION:AI_DSP_Hybrid_Engine_Size_{int(round(pct*100))};\n#DIFFICULTY:{diff};\n#METER:{config_dificultad[diff]['meter']};\n")
+                f.write(f"#RADARVALUES:0.1,0.1,0.1,0.1,0.1;\n#CREDIT:AI_Engine;\n#NOTES:\n")
+                f.write(bloque)
+                f.write("\n")
+
+        if activar_muestreo:
+            log_metricas_acumulado += f"📌 [VERSIÓN {int(round(pct*100))}%] Pasos procesados con éxito.\n"
+        else:
+            log_metricas_acumulado += log_metricas_diff
+
+    # Estructura del log de cierre para la consola
+    log_metricas_acumulado += f"\n⏱️ OFFSET GENERAL: {val_offset:.3f} s\n"
+    log_metricas_acumulado += f"💓 BPM BASE GENERAL: {bpm:.3f} \n"
+    log_metricas_acumulado += f"🔑 HUELLA DIGITAL (SEED): {seed_actual}\n"
+    if activar_muestreo:
+        log_metricas_acumulado += f"🚀 Proceso Multi-Capa completado: se exportaron {len(porcentajes_muestreo) * 2} archivos simfiles.\n"
+    else:
+        log_metricas_acumulado += f"🚀 Proceso Estándar completado: se exportaron 2 archivos simfiles.\n"
+    log_metricas_acumulado += f"{'-'*45}\n"
+        
+    return bpm, duracion, log_metricas_acumulado
 
 # =====================================================================
 # 4. SUBVENTANA DEL VISUALIZADOR DE AUDIO INTERACTIVO (MATPLOTLIB)
@@ -1372,7 +1397,7 @@ class StepHybridUI(ctk.CTk):
         self.btn_video = ctk.CTkButton(self.contenedor_vertical, text="Seleccionar Video de Fondo (Opcional)", fg_color="#8e44ad", command=self.buscar_video)
         self.label_video_path = ctk.CTkLabel(self.contenedor_vertical, text="Ningún video seleccionado", text_color="gray", wraplength=350)
 
-        self.checkbox_rename = ctk.CTkCheckBox(self.contenedor_vertical, text="Renombrar archivos (nombre_cancion_(banner/video))") 
+        self.checkbox_rename = ctk.CTkCheckBox(self.contenedor_vertical, text="Renombrar archivos (Título de la Canción))") 
 
         # Separador visual lógico
         self.label_seccion_adv = ctk.CTkLabel(self.contenedor_vertical, text="--- Parámetros del Motor de Pasos (Originalidad) ---", font=ctk.CTkFont(size=13, weight="bold", slant="italic"), text_color="#95a5a6")
@@ -1849,6 +1874,37 @@ class StepHybridUI(ctk.CTk):
         self.btn_max_notas_mas_10 = ctk.CTkButton(self.frame_max_notas_botones, text="+ 10", width=80, fg_color="#7f8c8d", hover_color="#95a5a6", command=self.incrementar_max_notas_compas_ten)
         self.btn_max_notas_mas_10.pack(side="left", padx=10)
 
+         # --- NUEVA SUBSECCIÓN: SISTEMA PARAMÉTRICO DE MUESTREO MULTI-ARCHIVO ---
+        self.label_seccion_muestreo_adv = ctk.CTkLabel(self.apartado_filtros, text="--- Reducción Adaptativa de Mapas (Muestreo) ---", font=ctk.CTkFont(size=13, weight="bold", slant="italic"), text_color="#00FFCC")
+        self.label_seccion_muestreo_adv.pack(pady=6, padx=20)
+
+        # Checkbox muestreo por defecto DESACTIVADO
+        self.checkbox_muestreo = ctk.CTkCheckBox(
+            self.apartado_filtros, 
+            text="Habilitar Generación de Muestras Multi-Capa", 
+            text_color="#00FFCC",
+            command=self.gestionar_exclusividad_muestreo
+        )
+        self.checkbox_muestreo.pack(pady=4, padx=20)
+        self.checkbox_muestreo.deselect()
+
+        # Contenedor dinámico secundario de Sliders
+        self.frame_sub_muestreo = ctk.CTkFrame(self.apartado_filtros, fg_color="transparent")
+        
+        # Selección de porcentaje base (De 50% a 95%)
+        self.label_muestreo_min = ctk.CTkLabel(self.frame_sub_muestreo, text="Muestreo Inicial Mínimo: 95%", font=ctk.CTkFont(weight="bold"))
+        self.label_muestreo_min.pack(pady=2, padx=5)
+        self.slider_muestreo_min = ctk.CTkSlider(self.frame_sub_muestreo, from_=0.50, to=0.95, number_of_steps=45, width=340, command=self.actualizar_texto_muestreo_min)
+        self.slider_muestreo_min.pack(pady=2, padx=5)
+        self.slider_muestreo_min.set(0.95)
+
+        # Selección de muestras discretas (De 2 a 10)
+        self.label_muestreo_num = ctk.CTkLabel(self.frame_sub_muestreo, text="Muestras Intermedias Totales: 6 (Hasta el 100%)", font=ctk.CTkFont(weight="bold"))
+        self.label_muestreo_num.pack(pady=2, padx=5)
+        self.slider_muestreo_num = ctk.CTkSlider(self.frame_sub_muestreo, from_=2, to=10, number_of_steps=8, width=340, command=self.actualizar_texto_muestreo_num)
+        self.slider_muestreo_num.pack(pady=2, padx=5)
+        self.slider_muestreo_num.set(6)
+
         widgets_filtros = [
             self.label_seccion_adv_holders,
             self.label_max_hold, self.slider_max_hold, self.label_holds_sim, self.slider_holds_sim, self.checkbox_postprocesar,
@@ -1900,185 +1956,7 @@ class StepHybridUI(ctk.CTk):
             self.apartado_efectos.pack(fill="x", expand=True, before=self.btn_resetear)
         elif seleccion == "Filtros Espectrales y Dificultad":
             self.apartado_filtros.pack(fill="x", expand=True, before=self.btn_resetear)
-    '''
-    #PRUEBAS DE TESTEO
-    def aplicar_preset_config(self, seleccion):
-        """
-        Carga configuraciones automáticas calibradas con valores reales estables
-        para evaluar el sistema actual de inyección de saltos paso a paso.
-        """
-        if seleccion == "Seleccionar Preset (Manual)":
-            return
 
-        # Limpieza obligatoria de buffers rítmicos dinámicos
-        self.entry_min_bpm_dinamico.delete(0, "end")
-        self.entry_max_bpm_dinamico.delete(0, "end")
-
-        if seleccion == "1. Visualmente dinámico.":
-            # --- PRIORIDAD ORIGINAL A: Coexistencia de alteraciones rítmicas estables ---
-            self.checkbox_bpm_dinamico.select()
-            self.checkbox_speeds_dinamico.select()
-            self.checkbox_postprocesar.select()
-            self.checkbox_secciones_saltos.deselect()
-            self.checkbox_efectos_rms.select()
-            
-            self.slider_temp.set(1.30)
-            self.slider_bpm_amortiguador.set(0.20)         # Reactivo progresivo
-            self.slider_speed_trans.set(2.0)               # Rampa suave de 2 compases
-            self.slider_speed_umbral.set(0.50)              # Filtro anti-mareo óptimo
-            self.slider_speed_min.set(0.80)
-            self.slider_speed_max.set(1.35)
-            
-            # Trampas moderadas para no saturar el fondo dinámico
-            self.slider_prob_minas.set(25)
-            self.slider_max_minas.set(2)
-
-        elif seleccion == "2. Más Saltos":
-            # --- PRIORIDAD ORIGINAL B: Liberación de saltos reduciendo la interferencia de holds ---
-            self.checkbox_bpm_dinamico.deselect()
-            self.checkbox_speeds_dinamico.deselect()
-            self.checkbox_postprocesar.select()
-            self.checkbox_secciones_saltos.select()
-            self.checkbox_efectos_rms.deselect()
-            
-            self.slider_temp.set(1.30)
-            self.slider_rms_min_saltos.set(0.50)           # Sensibilidad estándar de la GUI
-            self.slider_rms_max_saltos.set(1.50)
-            
-            # SOLUCIÓN REDUCTORA: Holds muy cortos para liberar las columnas y dejar manifestar los saltos
-            self.slider_max_hold.set(2)                    # Límite bajo de líneas por hold
-            self.slider_holds_sim.set(2)
-            
-            # Anular catálogo visual para evaluar puramente el flujo físico de flechas
-            self.slider_max_minas.set(0)
-            self.slider_max_fakes.set(0)
-            self.slider_max_lifts.set(0)
-            self.slider_max_hiddens.set(0)
-
-        elif seleccion == "3. Velocidad caótica.":
-            # --- PRIORIDAD ORIGINAL C: Gimmicks de scroll agresivos y cortes rígidos ---
-            self.checkbox_bpm_dinamico.deselect()
-            self.checkbox_speeds_dinamico.select()
-            self.checkbox_postprocesar.select()
-            self.checkbox_secciones_saltos.deselect()
-            self.checkbox_efectos_rms.select()
-            
-            self.slider_temp.set(1.30)
-            self.slider_speed_trans.set(0.0)               # Transiciones inmediatas (Cortes rígidos)
-            self.slider_speed_umbral.set(0.50)              # Umbral estable de disparo
-            self.slider_speed_min.set(0.40)                # Frenados severos
-            self.slider_speed_max.set(1.80)                # Aceleraciones súbitas
-            
-            # Minas estéticas espaciadas para marcar el peligro visual
-            self.slider_prob_minas.set(30)
-            self.slider_max_minas.set(1)
-
-        elif seleccion == "4. Marea Flotante (Flujo de Olas y Smooth Scroll)":
-            # --- ENFOQUE: Flujo continuo profesional y atenuado ---
-            self.checkbox_bpm_dinamico.select()
-            self.checkbox_speeds_dinamico.select()
-            self.checkbox_postprocesar.select()
-            self.checkbox_secciones_saltos.deselect()
-            self.checkbox_efectos_rms.select()
-            
-            self.slider_temp.set(1.00)                     # Menos caos, más estructura de la IA
-            self.slider_bpm_amortiguador.set(0.12)         # Atenuado recomendado
-            self.slider_speed_trans.set(3.0)               # Transición visual de 3 Beats (Muy suave)
-            self.slider_speed_umbral.set(0.50)              # Estable óptimo
-            self.slider_speed_min.set(0.85)
-            self.slider_speed_max.set(1.25)
-            
-            self.slider_prob_minas.set(15)
-            self.slider_max_minas.set(1)
-            self.slider_max_hold.set(8)
-            self.slider_holds_sim.set(2)
-
-        elif seleccion == "5. Gimmick Caótico (Cortes Abruptos y Trampas de Impacto)":
-            # --- ENFOQUE: Gráfica técnica con densidad equilibrada de FX ---
-            self.checkbox_bpm_dinamico.select()
-            self.checkbox_speeds_dinamico.select()
-            self.checkbox_postprocesar.select()
-            self.checkbox_secciones_saltos.select()
-            self.checkbox_efectos_rms.select()
-            
-            self.slider_temp.set(1.35)
-            self.slider_bpm_amortiguador.set(0.40)         # Reactivo progresivo
-            self.slider_speed_trans.set(0.5)               # Transición rápida (Snap)
-            self.slider_speed_umbral.set(0.30)              # Sensible
-            self.slider_speed_min.set(0.50)
-            self.slider_speed_max.set(1.50)
-            
-            # Configuración de presupuesto balanceado por compás
-            self.slider_prob_minas.set(35)
-            self.slider_max_minas.set(2)
-            self.slider_prob_fakes.set(20)
-            self.slider_max_fakes.set(1)
-            self.slider_max_hold.set(4)                    # Holds cortos para no asfixiar los saltos
-            self.slider_holds_sim.set(2)
-
-        elif seleccion == "6. Inferencia de Densidad Pura (Filtros Espectrales sin Modificadores)":
-            # --- ENFOQUE: Red Neuronal pura sin distracciones en pantalla ---
-            self.checkbox_bpm_dinamico.deselect()
-            self.checkbox_speeds_dinamico.deselect()
-            self.checkbox_postprocesar.select()
-            self.checkbox_secciones_saltos.select()
-            self.checkbox_efectos_rms.deselect()
-            
-            self.slider_temp.set(1.25)
-            self.slider_max_hold.set(3)                    # Liberación armónica de columnas
-            self.slider_holds_sim.set(2)
-            
-            # Desactivar todo el catálogo visual
-            self.slider_max_minas.set(0)
-            self.slider_max_fakes.set(0)
-            self.slider_max_lifts.set(0)
-            self.slider_max_hiddens.set(0)
-
-        elif seleccion == "7. Tormenta Hardcore (Deathstream Máximo y Modificadores Coexistentes)":
-            # --- ENFOQUE: Máxima subdivisión rítmica competitiva ---
-            self.checkbox_bpm_dinamico.deselect()
-            self.checkbox_speeds_dinamico.select()
-            self.checkbox_postprocesar.select()
-            self.checkbox_secciones_saltos.select()
-            self.checkbox_efectos_rms.select()
-            
-            self.slider_temp.set(1.30)
-            self.slider_speed_trans.set(1.5)               # Transición rápida legible
-            self.slider_speed_umbral.set(0.50)              # Estable óptimo
-            self.slider_speed_min.set(0.90)
-            self.slider_speed_max.set(1.45)
-            
-            # Forzar la subdivisión métrica pesada a nivel de interfaz de usuario
-            self.lineas_por_compas = 16
-            self.max_notas_compas = 16
-            self.min_notas_compas = 8
-            
-            self.slider_prob_minas.set(20)
-            self.slider_max_minas.set(2)
-            self.slider_max_hold.set(2)                    # Holds mínimos para maximizar streams de saltos
-            self.slider_holds_sim.set(2)
-
-        # --- REFRESCO INMEDIATO DE LOS TEXTOS DE LA INTERFAZ ---
-        self.actualizar_texto_amortiguador_bpm(self.slider_bpm_amortiguador.get())
-        self.label_speed_trans.configure(text=f"Duración de Transición: {self.slider_speed_trans.get():.1f} Beats" if self.slider_speed_trans.get() > 0 else "Duración de Transición: Inmediata (0.0)")
-        self.actualizar_texto_umbral_speed(self.slider_speed_umbral.get())
-        
-        self.label_temp.configure(text=f"Temperatura IA (Caos): {self.slider_temp.get():.2f}")
-        self.label_max_hold.configure(text=f"Duración Máxima de Hold: {int(self.slider_max_hold.get())} líneas")
-        self.label_holds_sim.configure(text=f"Máximo de Holds simultáneos: {int(self.slider_holds_sim.get())}")
-        self.label_prob_minas.configure(text=f"Probabilidad de Minas por compás: {int(self.slider_prob_minas.get())}%")
-        self.label_max_minas.configure(text=f"Máximo Minas por Compás: {int(self.slider_max_minas.get())}")
-        self.label_prob_fakes.configure(text=f"Probabilidad de Fakes por compás: {int(self.slider_prob_fakes.get())}%")
-        self.label_max_fakes.configure(text=f"Máximo Fakes por Compás: {int(self.slider_max_fakes.get())}")
-        
-        # Sincronizar estados de visibilidad y contenedores de la UI
-        self.gestionar_exclusividad_ritmo()
-        self.gestionar_exclusividad_saltos()
-        self.actualizar_valores_compas()
-        
-        self.label_status.configure(text=f"Preset Cargado: {seleccion[3:]}", text_color="#1abc9c")
-
-    '''   
     def aplicar_preset_config(self, seleccion):
         """
         Carga configuraciones automáticas calibradas con valores reales estables
@@ -2111,6 +1989,8 @@ class StepHybridUI(ctk.CTk):
             self.slider_max_minas.set(2)
             self.slider_prob_fakes.set(15)
             self.slider_max_fakes.set(1)
+
+            self.slider_max_hold.set(4)
 
         elif seleccion == "2. Más Saltos":
             # --- PRIORIDAD: Liberación espectral de ráfagas (Jumpstreams) ---
@@ -2426,6 +2306,15 @@ class StepHybridUI(ctk.CTk):
         self.label_rms_max_fx.configure(text="Sensibilidad RMS Máximo Trampas: 1.50")
         self.slider_rms_max_fx.set(1.50)
 
+        self.checkbox_muestreo.deselect()
+        self.slider_muestreo_min.set(0.95)
+        self.slider_muestreo_min.configure(state="disabled")
+        self.label_muestreo_min.configure(text="Muestreo Inicial Mínimo: 95%")
+        self.slider_muestreo_num.set(6)
+        self.slider_muestreo_num.configure(state="disabled")
+        self.label_muestreo_num.configure(text="Muestras Intermedias Totales: 6 (Hasta el 100%)")
+        self.frame_sub_muestreo.pack_forget()
+
     def actualizar_texto_bpm(self, valor):
         # Redondeamos al 0.5 más cercano
         bpm = round(float(valor) * 2) / 2
@@ -2538,6 +2427,25 @@ class StepHybridUI(ctk.CTk):
             self.btn_offset_menos.configure(state="normal")
             self.btn_offset_mas.configure(state="normal")
             self.actualizar_texto_offset(self.slider_offset.get())
+    
+    #-----------------Muestreo-------------------------
+    def gestionar_exclusividad_muestreo(self):
+        """Muestra u oculta los sub-controles de muestreo de acuerdo al estado del checkbox principal."""
+        if self.checkbox_muestreo.get():
+            self.frame_sub_muestreo.pack(pady=5, fill="x", padx=20, after=self.checkbox_muestreo)
+            self.slider_muestreo_min.configure(state="normal")
+            self.slider_muestreo_num.configure(state="normal")
+        else:
+            self.frame_sub_muestreo.pack_forget()
+
+    def actualizar_texto_muestreo_min(self, valor):
+        pct = int(float(valor) * 100)
+        self.label_muestreo_min.configure(text=f"Muestreo Inicial Mínimo: {pct}%")
+
+    def actualizar_texto_muestreo_num(self, valor):
+        muestras = int(valor)
+        self.label_muestreo_num.configure(text=f"Muestras Intermedias Totales: {muestras} (Hasta el 100%)")
+    #----------------------------------------------------
     
     def actualizar_texto_extension(self, valor):
         self.label_extension.configure(text=f"Extensión Final Estética: {valor:.1f} s")
@@ -2789,6 +2697,9 @@ class StepHybridUI(ctk.CTk):
             "max_notas_compas": int(self.max_notas_compas),
             "min_notas_compas": int(self.min_notas_compas),
             "pack_name": self.entry_pack_name.get().strip() if self.entry_pack_name.get().strip() else "AI_Generated_Charts",
+            "activar_muestreo_multicapa": bool(self.checkbox_muestreo.get()),
+            "muestreo_pct_min": float(self.slider_muestreo_min.get()),
+            "muestreo_num_muestras": int(self.slider_muestreo_num.get()),
             "seed_value": seed_final
         }
 
