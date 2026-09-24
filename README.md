@@ -163,16 +163,19 @@ Controla la calidad y severidad del patrón rítmico generado. Se centra en las 
 
 | Nº | Campo | Tipo | Descripción | Notas Clave |
 | :---: | :---: | :---: | :---: | :---: |
-| 57 | **Duración Máxima de Holds** | Control Numérico | Define el tiempo máximo que puede mantener un paso sostenido (Hold). | Controla la duración de las notas largas. |
-| 58 | **Máximo de Holds Simultáneos** | Control Numérico |	Determina cuántos pasos sostenidos pueden ocurrir al mismo tiempo. | Ideal para quitar o aumentar complejidad en zonas específicas. |
-| 59 | **Aplicar Posprocesamiento rítmico** | Checkbox | Mejora el resultado bruto de la IA mediante efectos adicionales. Desactivarlo produce un resultado "en crudo" en los holds. | Recomendado activarlo para mejor calidad. |
-| 60 | **Generar Secciones de Saltos** | Checkbox | Habilita la opción de agregar más secciones de saltos. | Usalo si no estas conforme con los saltos. Recordatorio, bajar la duración de los holds. |
-| 61 | **Sensibilidad RMS Mínimo Saltos** | Control Numérico | Establece el parámetro mínimo (RMS) que debe tener una sección para ser considerada rítmicamente notable por la IA. | Avanzado. Impacto en secciones suaves. Especializado para los saltos. |
-| 62 | **Sensibilidad RMS Máximo Saltos** | Control Numérico | Establece el parámetro mínimo (RMS) que define el pico de impacto rítmico más fuerte de la canción. | Avanzado. Impacto en picos intensos. Especializado para los saltos. |
-| 63 | **Dificultad Techo del Pack** | Control Numérico | Define el nivel general de dificultad deseado para todo el pack de pasos. Se usa en el recálculo de dificultad (Punto 64). | Establece la intención artística del resultado final. |
-| 64 | **Recalcular Dificultad Dinámicamente** | Checkbox/Op. | Permite recalcular la dificultad basándose en las elecciones manuales de usuario (ej: BPM, Scroll Min/Max). | Si se desactiva, se usa una configuración fija. |
-| 65 | **Sensibilidad RMS Mínimo (Densidad de Notas)** | Control Numérico |	Establece el parámetro mínimo (RMS) que debe tener una sección para ser considerada rítmicamente notable por la IA. | Avanzado. Impacto en secciones suaves. Especializado para las notas. |
-| 66 | **Sensibilidad RMS Máximo (Densidad de Notas)** | Control Numérico |	Establece el parámetro mínimo (RMS) que define el pico de impacto rítmico más fuerte de la canción. | Avanzado. Impacto en picos intensos. Especializado para las notas. |
-| 67 | **Lineas por compas** | Botones | Aumenta las divisiones al momento de dibujar la notas. | Avanzado. Impacto en la complejidad y dificultad del resultado final. |
-| 68 | **MIN notas por compas** | Botones | Número mínimo de notas que se dibujaran considerado en RMS bajo. | Avanzado. Impacto alto en dificultad. Función experimental. |
-| 69 | **MAX notas por compas** | Botones | Número máximo de notas que se dibujaran considerado en RMS alto. | Avanzado. Impacto alto en dificultad. Función experimental. |
+| 57 | **Habilitar Generación de Muestras Multi-Capa** | Permite crear multiples archivos tomando un porcentaje del total de pasos. | Usalo para afinar el mapa si no quieres usar el editor de Stepmania o acelerar el proceso para ajustar las configuraciones que estas buscando. |
+| 58 | **Muestreo Inicial Mínimo** | Porcentaje de los pasos totales donde comienza el proceso de muestreo | Recomendado utilizarlo entre el 90 a 95% que es la parte final de la duración de la canción. |
+| 59 | **Muestras Intermedias Totales** | Define la cantidad de muestras a realizar desde el porcentaje mínimo hasta el 100% de la duración total | Establecer este valor entre 5 a 10 para más precisión. |
+| 60 | **Duración Máxima de Holds** | Control Numérico | Define el tiempo máximo que puede mantener un paso sostenido (Hold). | Controla la duración de las notas largas. |
+| 61 | **Máximo de Holds Simultáneos** | Control Numérico |	Determina cuántos pasos sostenidos pueden ocurrir al mismo tiempo. | Ideal para quitar o aumentar complejidad en zonas específicas. |
+| 62 | **Aplicar Posprocesamiento rítmico** | Checkbox | Mejora el resultado bruto de la IA mediante efectos adicionales. Desactivarlo produce un resultado "en crudo" en los holds. | Recomendado activarlo para mejor calidad. |
+| 63 | **Generar Secciones de Saltos** | Checkbox | Habilita la opción de agregar más secciones de saltos. | Usalo si no estas conforme con los saltos. Recordatorio, bajar la duración de los holds. |
+| 64 | **Sensibilidad RMS Mínimo Saltos** | Control Numérico | Establece el parámetro mínimo (RMS) que debe tener una sección para ser considerada rítmicamente notable por la IA. | Avanzado. Impacto en secciones suaves. Especializado para los saltos. |
+| 65 | **Sensibilidad RMS Máximo Saltos** | Control Numérico | Establece el parámetro mínimo (RMS) que define el pico de impacto rítmico más fuerte de la canción. | Avanzado. Impacto en picos intensos. Especializado para los saltos. |
+| 66 | **Dificultad Techo del Pack** | Control Numérico | Define el nivel general de dificultad deseado para todo el pack de pasos. Se usa en el recálculo de dificultad (Punto 64). | Establece la intención artística del resultado final. |
+| 67 | **Recalcular Dificultad Dinámicamente** | Checkbox/Op. | Permite recalcular la dificultad basándose en las elecciones manuales de usuario (ej: BPM, Scroll Min/Max). | Si se desactiva, se usa una configuración fija. |
+| 68 | **Sensibilidad RMS Mínimo (Densidad de Notas)** | Control Numérico |	Establece el parámetro mínimo (RMS) que debe tener una sección para ser considerada rítmicamente notable por la IA. | Avanzado. Impacto en secciones suaves. Especializado para las notas. |
+| 69 | **Sensibilidad RMS Máximo (Densidad de Notas)** | Control Numérico |	Establece el parámetro mínimo (RMS) que define el pico de impacto rítmico más fuerte de la canción. | Avanzado. Impacto en picos intensos. Especializado para las notas. |
+| 70 | **Lineas por compas** | Botones | Aumenta las divisiones al momento de dibujar la notas. | Avanzado. Impacto en la complejidad y dificultad del resultado final. |
+| 71 | **MIN notas por compas** | Botones | Número mínimo de notas que se dibujaran considerado en RMS bajo. | Avanzado. Impacto alto en dificultad. Función experimental. |
+| 72 | **MAX notas por compas** | Botones | Número máximo de notas que se dibujaran considerado en RMS alto. | Avanzado. Impacto alto en dificultad. Función experimental. |
