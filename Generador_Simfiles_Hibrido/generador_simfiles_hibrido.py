@@ -82,7 +82,7 @@ TEXTOS = {
         "lbl_sec_time": "--- Parámetros Adicionales de la Canción ---",
         "lbl_offset": "Offset de Inicio:",
         "chk_offset_auto": "Detectar Offset Automáticamente (DSP Vol)",
-        "lbl_extension": "Extensión Final Estética:",
+        "lbl_extension": "Extensión Final Estética (Relativa):",
         "lbl_offset_auto_active": "Offset de Inicio: [Automático Activo]",
         "lbl_synchronize_values_graph": "Calcular y Sincronizar Valores",
         # Sub-Apartado BPM
@@ -246,7 +246,7 @@ TEXTOS = {
         "lbl_sec_time": "--- Additional Song Parameters ---",
         "lbl_offset": "Starting Offset:",
         "chk_offset_auto": "Auto-Detect Offset (DSP Vol)",
-        "lbl_extension": "Aesthetic Final Extension:",
+        "lbl_extension": "Aesthetic Final Extension (Relative):",
         "lbl_offset_auto_active": "Starting Offset: [Automatic Active]",
         "lbl_synchronize_values_graph": "Calculate and Synchronize Values",
         # BPM Sub-Apartado
@@ -1116,9 +1116,9 @@ def ejecutar_bucle_sincrono(config_dificultad, compases_totales, bpm, val_offset
             compases_extras = math.ceil(extension_final / ((60.0 / ultimo_bpm_aplicado) * 4.0))
             for l_idx in range(compases_extras * lineas_objetivo):
                 if l_idx == (compases_extras * lineas_objetivo) - 1:
-                    pasos_finales_ia.append("V000")
+                    pasos_finales_ia.append("M00M")
                 else:
-                    pasos_finales_ia.append("D00D")
+                    pasos_finales_ia.append("0000")
 
         if aplicar_post:
             pasos_finales_ia = PostProcesadorStepMania.corregir_sintaxis_holds(
@@ -1849,7 +1849,7 @@ class StepHybridUI(ctk.CTk):
 
         # === Extensión final de la canción ===
         self.label_extension = ctk.CTkLabel(self.apartado_tiempo, text=f"{get_translation("lbl_extension")} 0.0 s", font=ctk.CTkFont(weight="bold"))
-        self.slider_extension = ctk.CTkSlider(self.apartado_tiempo, from_=0.0, to=15.0, number_of_steps=30, width=340, command=self.actualizar_texto_extension)
+        self.slider_extension = ctk.CTkSlider(self.apartado_tiempo, from_=0.0, to=30.0, number_of_steps=60, width=340, command=self.actualizar_texto_extension)
         self.slider_extension.set(0.0)
 
         widgets_tiempo = [
