@@ -33,6 +33,346 @@ def fijar_semilla_determinista(seed_value):
         torch.backends.cudnn.benchmark = False
 
 # =====================================================================
+# SISTEMA INTERNACIONAL DE IDIOMAS (LOCALIZACIÓN COMPLETA)
+# =====================================================================
+IDIOMA_ACTUAL = "es"  # Idioma inicial por defecto
+
+TEXTOS = {
+    "es": {
+        "window_title": "Generador de Simfiles Dual StepMania AI + DSP",
+        "main_title": "Generador de Gráficas AI + DSP (Dual SM/SSC)",
+        "select_lang": "Idioma / Language:",
+        "btn_audio": "1. Seleccionar Canción (.mp3, .wav)",
+        "lbl_audio_selection": "Archivo de Audio",
+        "lbl_no_audio": "Ningún archivo seleccionado",
+        "btn_checkpoint": "2. Seleccionar Checkpoint IA (.pt)",
+        "lbl_checkpoint_default": "📦 Cargando pesos desde checkpoint histórico:",
+        "lbl_no_model": "Ningún modelo cargado",
+        "lbl_title": "Título de la Canción:",
+        "lbl_artist": "Nombre del artista:",
+        "btn_banner": "Seleccionar Banner Graphic (Opcional)",
+        "lbl_banner_selection": "Imagen de Banner",
+        "lbl_no_banner": "Ningún banner seleccionado",
+        "btn_video": "Seleccionar Video de Fondo (Opcional)",
+        "lbl_video_selection": "Archivo de Video",
+        "lbl_no_video": "Ningún video seleccionado",
+        "chk_rename": "Renombrar archivos (Título de la Canción)",
+        "lbl_sec_adv": "--- Parámetros del Motor de Pasos (Originalidad) ---",
+        "lbl_temp": "Temperatura IA (Caos):",
+        "lbl_pack_name": "Nombre del Pack (Grupo):",
+        "lbl_seed": "Semilla de Generación (Vacío = Aleatorio):",
+        "lbl_presets": "🧪 Plantillas (Presets):",
+        "lbl_adv_settings": "⚙️ Ajustes Avanzados del Motor:",
+        "btn_reset": "Restablecer Parámetros",
+        "label_status_reset": "Estado: Parámetros restablecidos correctamente.",
+        "btn_generate": "¡Procesar y Exportar Dual Pack! 🚀",
+        "lbl_status_wait": "Estado: Esperando archivos mínimos...",
+        "lbl_monitor": "🖥️ Monitor de Densidad en Tiempo Real",
+        "txt_console_wait": "Esperando ejecución para calcular NPS...\n",
+        "txt_inference_wait": "Ejecutando Inferencia Híbrida ⚡...",
+        # Menus
+        "menu_opt_hide": "Ocultar Parámetros",
+        "menu_opt_time": "Settings de Tiempo",
+        "menu_opt_bpm": "Configuración de BPM y Ritmo",
+        "menu_opt_fx": "Efectos, Minas y Trampas",
+        "menu_opt_filters": "Filtros Espectrales y Dificultad",
+        # Sub-Apartado Tiempo
+        "btn_graph": "Ajustar Límites en Gráfica Interactiva 📊",
+        "lbl_duration": "Duración Máxima (Segundos / 0=Full):",
+        "lbl_sec_time": "--- Parámetros Adicionales de la Canción ---",
+        "lbl_offset": "Offset de Inicio:",
+        "chk_offset_auto": "Detectar Offset Automáticamente (DSP Vol)",
+        "lbl_extension": "Extensión Final Estética:",
+        "lbl_offset_auto_active": "Offset de Inicio: [Automático Activo]",
+        "lbl_synchronize_values_graph": "Calcular y Sincronizar Valores",
+        # Sub-Apartado BPM
+        "lbl_sec_bpm": "--- Parámetros de BPM ---",
+        "lbl_bpm_config": "Configuración de BPM:",
+        "lbl_bpm_auto": "Auto (Detección DSP)",
+        "lbl_bpm_manual": "Manual",
+        "chk_double_bpm": "Doble BPM (x2)",
+        "chk_dynamic_bpm": "Aplicar BPM Dinámico (Alteraciones)",
+        "lbl_min_bpm": "BPM Mínimo (Campo vacío=Auto):",
+        "lbl_max_bpm": "BPM Máximo (Campo vacío=Auto):",
+        "lbl_rms_min_bpm": "Sensibilidad RMS Mínimo BPM:",
+        "lbl_rms_max_bpm": "Sensibilidad RMS Máximo BPM:",
+        "lbl_bpm_damping": "Amortiguador de Marea BPM:",
+        "lbl_bpm_damping_indicator1": "Extremo (Flujo de Olas)",
+        "lbl_bpm_damping_indicator2": "Atenuado (Recomendado)",
+        "lbl_bpm_damping_indicator3": "Reactivo Progresivo",
+        "lbl_bpm_damping_indicator4": "Inmediato (Brusco)",
+        "lbl_sec_speed": "--- Parámetros de Scroll Speeds ---",
+        "chk_dynamic_speed": "Adaptar Velocidad Visual (Scroll Speeds)",
+        "lbl_speed_loss": "Duración de Tiempo Extendida por Pérdida:",
+        "lbl_rms_min_speed": "Sensibilidad RMS Mínimo Scroll:",
+        "lbl_rms_max_speed": "Sensibilidad RMS Máximo Scroll:",
+        "lbl_speed_min": "Velocidad en Mínimos (Calma):",
+        "lbl_speed_max": "Velocidad en Máximos (Drop):",
+        "lbl_speed_trans": "Duración de Transición:",
+        "lbl_speed_anti_dizzy": "Filtro Anti-Mareo (Umbral de Disparo):",
+        "lbl_speed_anti_dizzy_indicator1": "Estable Óptimo (Cero Mareos)",
+        "lbl_speed_anti_dizzy_indicator2": "Sensible (Riesgo de Mareo)",
+        "lbl_speed_anti_dizzy_indicator3": "Cambios Bruscos / Gimmick",
+        "lbl_speed_anti_dizzy_indicator4": "Hiper-Reactivo (Inestable)",
+        # Sub-Apartado FX
+        "lbl_sec_fx": "--- Parámetros de Efectos y Trampas ---",
+        "lbl_prob_mines": "Probabilidad de Minas por compás:",
+        "lbl_max_mines": "Máximo Minas por Compás:",
+        "lbl_prob_fakes": "Probabilidad de Fakes por compás:",
+        "lbl_max_fakes": "Máximo Fakes por Compás:",
+        "lbl_prob_lifts": "Probabilidad de Lifts por compás:",
+        "lbl_max_lifts": "Máximo Lifts por Compás:",
+        "lbl_prob_potions": "Probabilidad de Potions por compás:",
+        "lbl_max_potions": "Máximo Potions por Compás:",
+        "lbl_prob_shields": "Probabilidad de Shields por compás:",
+        "lbl_max_shields": "Máximo Shields por Compás:",
+        "lbl_prob_rayos": "Probabilidad de Rayos por compás:",
+        "lbl_max_rayos": "Máximo Rayos por Compás:",
+        "lbl_prob_hiddens": "Probabilidad de Hiddens por compás:",
+        "lbl_max_hiddens": "Máximo Hiddens por Compás:",
+        "chk_fx_rms": "Potenciar Efectos y Trampas en Drops (Análisis RMS)",
+        "lbl_rms_min_fx": "Sensibilidad RMS Mínimo Trampas:",
+        "lbl_rms_max_fx": "Sensibilidad RMS Máximo Trampas:",
+        # Sub-Apartado Filtros/Dificultad
+        "lbl_sec_holders": "--- Parámetros de Holders ---",
+        "lbl_max_hold": "Duración Máxima de Hold (líneas):",
+        "lbl_sim_holds": "Máximo de Holds simultáneos:",
+        "chk_postprocess": "Aplicar Posprocesamiento Rítmico a los Holders",
+        "chk_jumps": "Generar Secciones de Saltos (Filtro RMS)",
+        "lbl_rms_min_jumps": "Sensibilidad RMS Mínimo Saltos:",
+        "lbl_rms_max_jumps": "Sensibilidad RMS Máximo Saltos:",
+        "lbl_sec_diff": "--- Parámetros de Dificultad ---",
+        "lbl_diff_ceiling": "Dificultad Techo del Pack: Nivel",
+        "chk_recalc_diff": "Recalcular Dificultad Dinámicamente (NPS)",
+        "lbl_sec_extra_diff": "--- Parámetros de Dificultad Adicional ---",
+        "lbl_rms_min_density": "Sensibilidad RMS Mínimo (Densidad de Notas):",
+        "lbl_rms_max_density": "Sensibilidad RMS Máximo (Densidad de Notas):",
+        "lbl_compas_lines_low": "Lineas por compas (Baja Densidad):",
+        "lbl_compas_lines_sug": "Lineas por compas (Recomendado):",
+        "lbl_compas_lines_high": "Lineas por compas (Precisión Alta):",
+        "lbl_compas_lines_madness": "Lineas por compas (Precisión Milimétrica):",
+        "lbl_min_compas_notes": "MIN notas por compas:",
+        "lbl_min_compas_notes_sug" : "MIN notas por compas (Sugerido):",
+        "lbl_max_compas_notes_low" : "MAX notas por compas (Dificultad Baja/Normal):",
+        "lbl_max_compas_notes_sug" : "MAX notas por compas (Dificultad Normal/Dificíl):",
+        "lbl_max_compas_notes_high" : "MAX notas por compas (Dificultad Dificíl/Experto):",
+        "lbl_max_compas_notes_madness" : "MAX notas por compas (Dificultad Experto/Locura):",
+        "lbl_sec_sampling": "--- Reducción Adaptativa de Mapas (Muestreo) ---",
+        "chk_sampling": "Habilitar Generación de Muestras Multi-Capa",
+        "lbl_sampling_min": "Muestreo Inicial Mínimo:",
+        "lbl_sampling_num": "Muestras Intermedias Totales (Hasta completar el 100%):",
+        # Presets
+        "lbl_present_status": "Present Cargado",
+        "preset_0": "Seleccionar Preset (Manual)",
+        "preset_1": "1. Visualmente dinámico.",
+        "preset_2": "2. Más Saltos",
+        "preset_3": "3. Velocidad caótica.",
+        "preset_4": "4. Marea Flotante (Flujo de Olas y Smooth Scroll)",
+        "preset_5": "5. Gimmick Caótico (Cortes Abruptos y Trampas de Impacto)",
+        "preset_6": "6. Inferencia de Densidad Pura (Filtros Espectrales sin Modificadores)",
+        "preset_7": "7. Tormenta Hardcore (Deathstream Máximo y Modificadores Coexistentes)",
+        # Estado y Alertas
+        "status_processing": "Estado: Procesando matrices y DSP...",
+        "status_success": "¡ÉXITO: Archivos creados! ✅",
+        "status_error": "Error Crítico ❌",
+        "msg_error_dsp": "Error en Análisis DSP:",
+        "msg_error_inference": "Error de Inferencia",
+        "msg_error_missing": "Debes cargar obligatoriamente el audio y el checkpoint (.pt) de la IA.",
+        "msg_error_title": "El título del simfile no puede estar vacío.",
+        "msg_error_duration": "La duración debe ser un número válido.",
+        "msg_error_bpm_range": "El BPM del mínimo o máximo no es válido, no puede ser superior a 300 o menor a 30",
+        "msg_success_box": "Pack Híbrido Creado con Éxito.\n\nArchivos .sm y .ssc listos.",
+        # Nuevas claves para el Visualizador de Audio (Matplotlib)
+        "vis_window_title": "Límites de Audio Asimétricos",
+        "vis_lbl_info": "Arrastra las líneas: Offset (Izq) y Duración (Centro) frenan en el límite. Extensión (Der) puede expandirse.",
+        "vis_btn_sync": "Calcular y Sincronizar Valores",
+        "vis_axis_time": "Tiempo (s)",
+        "vis_axis_amp": "Amplitud",
+        "vis_msg_sync_title": "Sincronización Exitosa",
+        "vis_msg_sync_body": "Valores ajustados con límites del motor:\n• Offset: {:.3f}s (Límite Máx 16s)\n• Duración: {:.3f}s\n• Extensión: {:.1f}s (Límite Máx 15s)",
+        "vis_msg_missing_audio": "Por favor selecciona primero un archivo de audio válido en el paso 1.",
+        "vis_msg_missing_title": "Falta Archivo",
+        # Nuevas claves para el Reporte de Consola NPS
+        "console_recalc_disabled": "Recálculo desactivado. Se usaron niveles base del GUI.\n",
+        "console_report_header": "📊 [{}] (Capa {}%) NPS Glob: {:.2f}\n",
+        "console_report_meter": "🎯 METER DINÁMICO ESCALADO: Nivel {} (Techo Máx Capa: {})\n",
+        "console_report_offset": "⏱️ OFFSET GENERAL: {:.3f} s\n",
+        "console_report_bpm": "💓 BPM BASE GENERAL: {:.3f} \n",
+        "console_report_seed": "🔑 HUELLA DIGITAL (SEED): {}\n",
+        "console_report_multi": "🚀 Proceso Multi-Capa completado: se exportaron {} archivos simfiles.\n",
+        "console_report_standard": "🚀 Proceso Estándar completado: se exportaron 2 archivos simfiles.\n"
+    },
+    "en": {
+        "window_title": "StepMania AI + DSP Dual Simfile Generator",
+        "main_title": "AI + DSP Chart Generator (Dual SM/SSC)",
+        "select_lang": "Language / Idioma:",
+        "btn_audio": "1. Select Song (.mp3, .wav)",
+        "lbl_audio_selection": "Audio File",
+        "lbl_no_audio": "No file selected",
+        "btn_checkpoint": "2. Select AI Checkpoint (.pt)",
+        "lbl_checkpoint_default": "Loading Default Checkpoint",
+        "lbl_no_model": "No model loaded",
+        "lbl_title": "Song Title:",
+        "lbl_artist": "Artist Name:",
+        "btn_banner": "Select Banner Graphic (Optional)",
+        "lbl_banner_selection": "Select Banner File",
+        "lbl_no_banner": "No banner selected",
+        "btn_video": "Select Background Video (Optional)",
+        "lbl_video_selection": "Video File",
+        "lbl_no_video": "No video selected",
+        "chk_rename": "Rename files (Song Title)",
+        "lbl_sec_adv": "--- Step Engine Parameters (Originality) ---",
+        "lbl_temp": "AI Temperature (Chaos):",
+        "lbl_pack_name": "Pack Name (Group):",
+        "lbl_seed": "Generation Seed (Empty = Random):",
+        "lbl_presets": "🧪 Presets Template:",
+        "lbl_adv_settings": "⚙️ Advanced Engine Settings:",
+        "btn_reset": "Reset Parameters",
+        "label_status_reset": "Status: Parameters per Default.",
+        "btn_generate": "Process and Export Dual Pack! 🚀",
+        "lbl_status_wait": "Status: Waiting for minimum required files...",
+        "lbl_monitor": "🖥️ Real-Time Density Monitor",
+        "txt_console_wait": "Waiting for execution to calculate NPS...\n",
+        "txt_inference_wait": "Processing Hybrid Inference ⚡...",
+        # Menú options
+        "menu_opt_hide": "Hide Parameters",
+        "menu_opt_time": "Time Settings",
+        "menu_opt_bpm": "BPM & Rhythm Configuration",
+        "menu_opt_fx": "Effects, Mines & Traps",
+        "menu_opt_filters": "Spectral Filters & Difficulty",
+        # Time Sub-Apartado
+        "btn_graph": "Adjust Limits in Interactive Graph 📊",
+        "lbl_duration": "Maximum Duration (Seconds / 0=Full):",
+        "lbl_sec_time": "--- Additional Song Parameters ---",
+        "lbl_offset": "Starting Offset:",
+        "chk_offset_auto": "Auto-Detect Offset (DSP Vol)",
+        "lbl_extension": "Aesthetic Final Extension:",
+        "lbl_offset_auto_active": "Starting Offset: [Automatic Active]",
+        "lbl_synchronize_values_graph": "Calculate and Synchronize Values",
+        # BPM Sub-Apartado
+        "lbl_sec_bpm": "--- BPM Parameters ---",
+        "lbl_bpm_config": "BPM Configuration:",
+        "lbl_bpm_auto": "Auto (DSP Detection)",
+        "lbl_bpm_manual": "Manual",
+        "chk_double_bpm": "Double BPM (x2)",
+        "chk_dynamic_bpm": "Apply Dynamic BPM (Alterations)",
+        "lbl_min_bpm": "Minimum BPM (Empty=Auto):",
+        "lbl_max_bpm": "Maximum BPM (Empty=Auto):",
+        "lbl_rms_min_bpm": "Minimum BPM RMS Sensitivity:",
+        "lbl_rms_max_bpm": "Maximum BPM RMS Sensitivity:",
+        "lbl_bpm_damping": "BPM Tide Damping:",
+        "lbl_bpm_damping_indicator1": "Extreme (Very soft)",
+        "lbl_bpm_damping_indicator2": "Soft (Suggested)",
+        "lbl_bpm_damping_indicator3": "Reactive",
+        "lbl_bpm_damping_indicator4": "Inmmediate (Hard Reaction)",
+        "lbl_sec_speed": "--- Scroll Speeds Parameters ---",
+        "chk_dynamic_speed": "Adapt Visual Speed (Scroll Speeds)",
+        "lbl_speed_loss": "Extended Time Duration by Loss:",
+        "lbl_rms_min_speed": "Minimum Scroll RMS Sensitivity:",
+        "lbl_rms_max_speed": "Maximum Scroll RMS Sensitivity:",
+        "lbl_speed_min": "Speed at Minimums (Calm):",
+        "lbl_speed_max": "Speed at Maximums (Drop):",
+        "lbl_speed_trans": "Transition Duration:",
+        "lbl_speed_anti_dizzy": "Anti-Dizziness Filter (Trigger Threshold):",
+        "lbl_speed_anti_dizzy_indicator1": "Suggested (Low Dizzy)",
+        "lbl_speed_anti_dizzy_indicator2": "Sensitive (Middle Dizzy)",
+        "lbl_speed_anti_dizzy_indicator3": "High Sensitive / Gimmick",
+        "lbl_speed_anti_dizzy_indicator4": "Hiper-React (Unstable)",
+        # FX Sub-Apartado
+        "lbl_sec_fx": "--- Effects & Traps Parameters ---",
+        "lbl_prob_mines": "Mines Probability per measure:",
+        "lbl_max_mines": "Max Mines per Measure:",
+        "lbl_prob_fakes": "Fakes Probability per measure:",
+        "lbl_max_fakes": "Max Fakes per Measure:",
+        "lbl_prob_lifts": "Lifts Probability per measure:",
+        "lbl_max_lifts": "Max Lifts per Measure:",
+        "lbl_prob_potions": "Potions Probability per measure:",
+        "lbl_max_potions": "Max Potions per Measure:",
+        "lbl_prob_shields": "Shields Probability per measure:",
+        "lbl_max_shields": "Max Shields per Measure:",
+        "lbl_prob_rayos": "Shock Probability per measure:",
+        "lbl_max_rayos": "Max Shock per Measure:",
+        "lbl_prob_hiddens": "Hiddens Probability per measure:",
+        "lbl_max_hiddens": "Max Hiddens per Measure:",
+        "chk_fx_rms": "Boost Effects & Traps in Drops (RMS Analysis)",
+        "lbl_rms_min_fx": "Minimum Traps RMS Sensitivity:",
+        "lbl_rms_max_fx": "Maximum Traps RMS Sensitivity:",
+        # Filters/Difficulty Sub-Apartado
+        "lbl_sec_holders": "--- Holders Parameters ---",
+        "lbl_max_hold": "Maximum Hold Duration (lines):",
+        "lbl_sim_holds": "Max Simultaneous Holds:",
+        "chk_postprocess": "Apply Rhythmic Post-Processing to Holders",
+        "chk_jumps": "Generate Jump Sections (RMS Filter)",
+        "lbl_rms_min_jumps": "Minimum Jumps RMS Sensitivity:",
+        "lbl_rms_max_jumps": "Maximum Jumps RMS Sensitivity:",
+        "lbl_sec_diff": "--- Difficulty Parameters ---",
+        "lbl_diff_ceiling": "Pack Ceiling Difficulty: Level",
+        "chk_recalc_diff": "Recalculate Difficulty Dynamically (NPS)",
+        "lbl_sec_extra_diff": "--- Additional Difficulty Parameters ---",
+        "lbl_rms_min_density": "Minimum RMS Sensitivity (Note Density):",
+        "lbl_rms_max_density": "Maximum RMS Sensitivity (Note Density):",
+        "lbl_sec_sampling": "--- Adaptive Chart Reduction (Sampling) ---",
+        "lbl_compas_lines_low": "Lines per Measure (Low Density):",
+        "lbl_compas_lines_sug": "Lines per Measure (Suggested):",
+        "lbl_compas_lines_high": "Lines per Measure (High Precision):",
+        "lbl_compas_lines_madness": "Lines per Measure (Extreme Precision):",
+        "lbl_min_compas_notes": "MIN Notes per Measure: ",
+        "lbl_min_compas_notes_sug": "MIN Notes per Measure (Suggested):",
+        "lbl_max_compas_notes_low" : "MAX Notes per Measure (Level Easy/Normal):",
+        "lbl_max_compas_notes_sug" : "MAX Notes per Measures (Level Normal/Hard):",
+        "lbl_max_compas_notes_high" : "MAX Notes per Measure (Level Hard/Challenge):",
+        "lbl_max_compas_notes_madness" : "MAX Notes per Measure (Level Challenge/Madness):",
+        "chk_sampling": "Enable Multi-Layer Sample Generation",
+        "lbl_sampling_min": "Minimum Initial Sampling:",
+        "lbl_sampling_num": "Total Intermediate Samples (To Complete 100%):",
+        # Presets
+        "lbl_present_status": "Present Loaded",
+        "preset_0": "Select Preset (Manual)",
+        "preset_1": "1. Visually dynamic.",
+        "preset_2": "2. More Jumps",
+        "preset_3": "3. Chaotic speed.",
+        "preset_4": "4. Floating Tide (Wave Flow and Smooth Scroll)",
+        "preset_5": "5. Chaotic Gimmick (Abrupt Cuts and Impact Traps)",
+        "preset_6": "6. Pure Density Inference (Spectral Filters without Modifiers)",
+        "preset_7": "7. Hardcore Storm (Maximum Deathstream and Coexisting Modifiers)",
+        # Status and Alerts
+        "status_processing": "Status: Processing matrices and DSP...",
+        "status_success": "SUCCESS: Files created! ✅",
+        "status_error": "Critical Error ❌",
+        "msg_error_dsp": "Error in DSP Analysis:",
+        "msg_error_inference": "Inference Error",
+        "msg_error_missing": "You must strictly load both the audio and the AI checkpoint (.pt).",
+        "msg_error_title": "The simfile title cannot be empty.",
+        "msg_error_duration": "Duration must be a valid number.",
+        "msg_error_bpm_range": "The minimum or maximum BPM is invalid, it cannot exceed 300 or be lower than 30",
+        "msg_success_box": "Hybrid Pack Successfully Created.\n\n.sm and .ssc files ready.",
+        #Matplot graphic
+        "vis_window_title": "Asymmetric Audio Limits",
+        "vis_lbl_info": "Drag lines: Offset (Left) & Duration (Center) stop at boundary. Extension (Right) can expand.",
+        "vis_btn_sync": "Calculate and Sync Values",
+        "vis_axis_time": "Time (s)",
+        "vis_axis_amp": "Amplitude",
+        "vis_msg_sync_title": "Sync Successful",
+        "vis_msg_sync_body": "Values adjusted within engine limits:\n• Offset: {:.3f}s (Max Limit 16s)\n• Duration: {:.3f}s\n• Extension: {:.1f}s (Max Limit 15s)",
+        "vis_msg_missing_audio": "Please select a valid audio file in step 1 first.",
+        "vis_msg_missing_title": "Missing File",
+        # New keys for NPS Console Report
+        "console_recalc_disabled": "Recalculation disabled. Default GUI levels applied.\n",
+        "console_report_header": "📊 [{}] (Layer {}%) Glob NPS: {:.2f}\n",
+        "console_report_meter": "🎯 SCALED DYNAMIC METER: Level {} (Max Layer Ceiling: {})\n",
+        "console_report_offset": "⏱️ GENERAL OFFSET: {:.3f} s\n",
+        "console_report_bpm": "💓 GENERAL BASE BPM: {:.3f} \n",
+        "console_report_seed": "🔑 DIGITAL FINGERPRINT (SEED): {}\n",
+        "console_report_multi": "🚀 Multi-Layer Process completed: {} simfiles exported.\n",
+        "console_report_standard": "🚀 Standard Process completed: 2 simfiles exported.\n"
+        }
+    }
+
+def get_translation(key):
+    """Función de traducción rápida basada en el idioma activo."""
+    return TEXTOS.get(IDIOMA_ACTUAL, TEXTOS["es"]).get(key, key)
+
+# =====================================================================
 # CORE DE IA
 # =====================================================================
 class StepTokenizer:
@@ -281,13 +621,13 @@ class PostProcesadorStepMania:
 
         bloques_barra = "█" * min(30, meter_real)
         espacios_barra = "░" * max(0, (30 - meter_real))
+
+        # 🟢 Reporte rítmico traducido mediante el diccionario global utilizando los formatos parametrizados
+        linea_1 = get_translation("console_report_header").format(dificultad_tag.upper(), int(factor_escala_muestreo*100), nps_promedio_global*factor_escala_muestreo)
+        linea_2 = get_translation("console_report_meter").format(meter_real, techo_chal)
+        linea_3 = f"└─ [{bloques_barra}{espacios_barra}]\n{'-'*45}\n"
         
-        reporte = (
-            f"📊 [{dificultad_tag.upper()}] (Capa {int(factor_escala_muestreo*100)}%) NPS Glob: {nps_promedio_global*factor_escala_muestreo:.2f}\n"
-            f"🎯 METER DINÁMICO ESCALADO: Nivel {meter_real} (Techo Máx Capa: {techo_chal})\n"
-            f"└─ [{bloques_barra}{espacios_barra}]\n"
-            f"{'-'*45}\n"
-        )
+        reporte = linea_1 + linea_2 + linea_3
 
         return meter_real, reporte
 
@@ -337,7 +677,7 @@ def analizar_audio_hibrido(audio_path):
         return bpm_detectado, duracion_segundos, dsp_rms_data, centroide, centroide_medio, mel_db
 
     except Exception as e:
-        print(f"Error en análisis DSP: {e}")
+        print(f"{get_translation("msg_error_dsp")} {e}")
         # Caída de seguridad pasiva
         vacio = np.array([])
         fallback = {"bpm": (vacio, 1.0, 1024), "speed": (vacio, 1.0, 512), "saltos": (vacio, 1.0, 256)}
@@ -1157,20 +1497,22 @@ def generar_simfiles_hibridos(audio_path, checkpoint_path, song_title, max_level
                 f.write(f"#RADARVALUES:0.1,0.1,0.1,0.1,0.1;\n#CREDIT:AI_Engine;\n#NOTES:\n")
                 f.write(bloque)
                 f.write("\n")
-
+        
         if activar_muestreo:
             log_metricas_acumulado += f"📌 [VERSIÓN {int(round(pct*100))}%] Pasos procesados con éxito.\n"
         else:
             log_metricas_acumulado += log_metricas_diff
 
-    # Estructura del log de cierre para la consola
-    log_metricas_acumulado += f"\n⏱️ OFFSET GENERAL: {val_offset:.3f} s\n"
-    log_metricas_acumulado += f"💓 BPM BASE GENERAL: {bpm:.3f} \n"
-    log_metricas_acumulado += f"🔑 HUELLA DIGITAL (SEED): {seed_actual}\n"
+    # 🟢 Estructura de logs finales de consola completamente internacionalizados
+    log_metricas_acumulado += get_translation("console_report_offset").format(val_offset)
+    log_metricas_acumulado += get_translation("console_report_bpm").format(bpm)
+    log_metricas_acumulado += get_translation("console_report_seed").format(seed_actual)
+    
     if activar_muestreo:
-        log_metricas_acumulado += f"🚀 Proceso Multi-Capa completado: se exportaron {len(porcentajes_muestreo) * 2} archivos simfiles.\n"
+        log_metricas_acumulado += get_translation("console_report_multi").format(len(porcentajes_muestreo) * 2)
     else:
-        log_metricas_acumulado += f"🚀 Proceso Estándar completado: se exportaron 2 archivos simfiles.\n"
+        log_metricas_acumulado += get_translation("console_report_standard")
+        
     log_metricas_acumulado += f"{'-'*45}\n"
         
     return bpm, duracion, log_metricas_acumulado
@@ -1182,7 +1524,7 @@ class AudioVisualizerSubWindow(ctk.CTkToplevel):
     def __init__(self, master, audio_path, current_duration):
         super().__init__(master)
         self.master_app = master
-        self.title("Límites de Audio Asimétricos")
+        self.title(get_translation("vis_window_title")) # 🟢 Ventana traducida
         self.geometry("900x550")
         self.transient(master)  
         self.grab_set()  # Bloquea la interacción con la ventana base hasta cerrar
@@ -1201,7 +1543,7 @@ class AudioVisualizerSubWindow(ctk.CTkToplevel):
         self.y_search = self.y[::self.downsample_factor]
         self.time_search = self.time_axis[::self.downsample_factor]
 
-        lbl_info = ctk.CTkLabel(self, text="Arrastra las líneas: Offset (Izq) y Duración (Centro) frenan en el límite. Extensión (Der) puede expandirse.", font=ctk.CTkFont(size=12, slant="italic"))
+        lbl_info = ctk.CTkLabel(self, text=get_translation("vis_lbl_info"), font=ctk.CTkFont(size=12, slant="italic")) # 🟢 Info traducida
         lbl_info.pack(pady=5)
 
         # Integrar Lienzo de Matplotlib
@@ -1212,8 +1554,8 @@ class AudioVisualizerSubWindow(ctk.CTkToplevel):
         self.ax = self.fig.add_subplot(111)
         self.ax.set_facecolor("#151515")
         self.ax.plot(self.time_search, self.y_search, color='#2b5c8f', linewidth=1)
-        self.ax.set_xlabel("Tiempo (s)", color="white")
-        self.ax.set_ylabel("Amplitud", color="white")
+        self.ax.set_xlabel(get_translation("vis_axis_time"), color="white") # 🟢 Eje X traducido
+        self.ax.set_ylabel(get_translation("vis_axis_amp"), color="white")  # 🟢 Eje Y traducido
         self.ax.tick_params(colors="white")
         
         self.ax.set_xlim(-5, self.duration + 20)
@@ -1222,11 +1564,11 @@ class AudioVisualizerSubWindow(ctk.CTkToplevel):
         # Inicializar Marcadores Inteligentes
         init_pos = [self.duration * 0.15, self.duration * 0.80, self.duration * 0.95]
         self.create_full_marker("Offset", init_pos[0])
-        self.create_full_marker("Duracion", init_pos[1])
+        self.create_full_marker("Duration", init_pos[1])
         self.create_full_marker("Extension", init_pos[2])
 
         # Botón de sincronización
-        btn_sync = ctk.CTkButton(self, text="Calcular y Sincronizar Valores", fg_color="#1abc9c", hover_color="#16a085", font=ctk.CTkFont(weight="bold"), command=self.procesar_y_enviar)
+        btn_sync = ctk.CTkButton(self, text=get_translation("lbl_synchronize_values_graph"), fg_color="#1abc9c", hover_color="#16a085", font=ctk.CTkFont(weight="bold"), command=self.procesar_y_enviar) # 🟢 Botón de sincronía
         btn_sync.pack(pady=10)
 
         # Conectar eventos de Matplotlib
@@ -1297,7 +1639,7 @@ class AudioVisualizerSubWindow(ctk.CTkToplevel):
 
     def procesar_y_enviar(self):
         offset = float(self.markers_data["Offset"]['line'].get_xdata()[0])
-        duracion = float(self.markers_data["Duracion"]['line'].get_xdata()[0])
+        duracion = float(self.markers_data["Duration"]['line'].get_xdata()[0])
         extension = float(self.markers_data["Extension"]['line'].get_xdata()[0])
 
         # Lógicas de filtrado condicional solicitadas
@@ -1318,15 +1660,13 @@ class AudioVisualizerSubWindow(ctk.CTkToplevel):
         self.master_app.slider_extension.set(final_extension)
         self.master_app.actualizar_texto_extension(final_extension)
 
-        messagebox.showinfo("Sincronización Exitosa", 
-                            f"Valores ajustados con límites del motor:\n"
-                            f"• Offset: {final_offset:.3f}s (Límite Máx 16s)\n"
-                            f"• Duración: {duracion:.3f}s\n"
-                            f"• Extensión: {final_extension:.1f}s (Límite Máx 15s)")
+        # 🟢 Ventana de confirmación traducida dinámicamente con variables formateadas
+        messagebox.showinfo(get_translation("vis_msg_sync_title"), 
+                            get_translation("vis_msg_sync_body").format(final_offset, duracion, final_extension))
         self.destroy()
 
 # =====================================================================
-# 5. INTERFAZ GRÁFICA COMPATIBLE ADAPTATIVA CON SCROLL
+# INTERFAZ GRÁFICA COMPATIBLE ADAPTATIVA CON SCROLL
 # =====================================================================
 ctk.set_appearance_mode("Dark")
 ctk.set_default_color_theme("blue")
@@ -1338,17 +1678,18 @@ class StepHybridUI(ctk.CTk):
 
     def __init__(self):
         super().__init__()
-        self.title("StepMania AI + DSP Dual Simfile Generator")
-        self.geometry("480x640") # Ancho optimizado para distribución completamente vertical fija
+        #self.title("StepMania AI + DSP Dual Simfile Generator")
+        self.title(get_translation("window_title")) # 🟢 Título dinámico
+        self.geometry("640x640") # Ancho optimizado para distribución completamente vertical fija
         self.resizable(True, True)
-        self.minsize(420, 550)
+        self.minsize(480, 550)
         self.audio_file_path = ""
         self.checkpoint_file_path = ""
         self.banner_file_path = ""
         self.video_file_path = ""
         self.minas_rms_activa = False
 
-        self.label_titulo = ctk.CTkLabel(self, text="AI + DSP Chart Generator (Dual SM/SSC)", font=ctk.CTkFont(size=16, weight="bold"))
+        self.label_titulo = ctk.CTkLabel(self, text=get_translation("main_title"), font=ctk.CTkFont(size=16, weight="bold")) # 🟢 Título dinámico
         self.label_titulo.pack(pady=10, fill="x")
         self.scroll_frame = ctk.CTkScrollableFrame(self, fg_color="transparent")
         self.scroll_frame.pack(fill="both", expand=True, padx=10, pady=5)
@@ -1369,49 +1710,67 @@ class StepHybridUI(ctk.CTk):
         self.contenedor_vertical = ctk.CTkFrame(self.scroll_frame, fg_color="transparent")
         self.contenedor_vertical.pack(fill="x", expand=True, padx=5)
 
+        # === 🟢 NUEVO COMPONENTE: SELECTOR DE IDIOMA EN VIVO ===
+        self.frame_lang = ctk.CTkFrame(self.contenedor_vertical, fg_color="transparent")
+        self.frame_lang.pack(pady=5, fill="x", padx=20)
+        
+        self.lbl_lang = ctk.CTkLabel(self.frame_lang, text=get_translation("select_lang"), font=ctk.CTkFont(weight="bold"))
+        self.lbl_lang.pack(side="left", padx=5)
+        
+        self.menu_lang = ctk.CTkOptionMenu(
+            self.frame_lang,
+            values=["Español", "English"],
+            command=self.cambiar_idioma_ui,
+            fg_color="#1abc9c",
+            button_color="#16a085",
+            width=120
+        )
+        self.menu_lang.pack(side="left", padx=5)
+        self.menu_lang.set("Español" if IDIOMA_ACTUAL == "es" else "English")
+
         # =====================================================================
         # BLOQUE PRINCIPAL: DATOS DE ENTRADA Y ARCHIVOS ESENCIALES (FUERA)
         # =====================================================================
-        self.btn_audio = ctk.CTkButton(self.contenedor_vertical, text="1. Seleccionar Canción (.mp3, .wav)", fg_color="#34495e", command=self.buscar_audio)
-        self.label_audio_path = ctk.CTkLabel(self.contenedor_vertical, text="Ningún archivo seleccionado", text_color="gray", wraplength=350)
+        self.btn_audio = ctk.CTkButton(self.contenedor_vertical, text=get_translation("btn_audio"), fg_color="#34495e", command=self.buscar_audio)
+        self.label_audio_path = ctk.CTkLabel(self.contenedor_vertical, text=get_translation("lbl_no_audio"), text_color="gray", wraplength=350)
 
-        self.btn_checkpoint = ctk.CTkButton(self.contenedor_vertical, text="2. Seleccionar Checkpoint IA (.pt)", fg_color="#2c3e50", command=self.buscar_checkpoint)
-        self.label_checkpoint_path = ctk.CTkLabel(self.contenedor_vertical, text="Ningún modelo cargado", text_color="gray", wraplength=350)
+        self.btn_checkpoint = ctk.CTkButton(self.contenedor_vertical, text=get_translation("btn_checkpoint"), fg_color="#2c3e50", command=self.buscar_checkpoint)
+        self.label_checkpoint_path = ctk.CTkLabel(self.contenedor_vertical, text=get_translation("lbl_no_model"), text_color="gray", wraplength=350)
         
         # Verificando si existe el checkpoint por default
         self.checkpoint_path = os.path.join(checkpoint_dir, model_name)
         if os.path.exists(self.checkpoint_path):
-            print(f" 📦 Cargando pesos desde checkpoint histórico: {self.checkpoint_path}")
+            print(f"{get_translation("lbl_checkpoint_default")} {self.checkpoint_path}")
             self.checkpoint_file_path = self.checkpoint_path
             self.label_checkpoint_path.configure(text=f"{self.checkpoint_path}", text_color="gray")
 
-        self.label_name = ctk.CTkLabel(self.contenedor_vertical, text="Título de la Canción:", font=ctk.CTkFont(weight="bold"))
-        self.entry_title = ctk.CTkEntry(self.contenedor_vertical, placeholder_text="Ej: Cybernetic Beats", width=340)
+        self.label_name = ctk.CTkLabel(self.contenedor_vertical, text=get_translation("lbl_title"), font=ctk.CTkFont(weight="bold"))
+        self.entry_title = ctk.CTkEntry(self.contenedor_vertical, placeholder_text="Ex: Cybernetic Beats", width=340)
 
-        self.label_artist_name = ctk.CTkLabel(self.contenedor_vertical, text="Nombre del artista:", font=ctk.CTkFont(weight="bold"))
-        self.entry_artist_name = ctk.CTkEntry(self.contenedor_vertical, placeholder_text="Ej: AI", width=340)
+        self.label_artist_name = ctk.CTkLabel(self.contenedor_vertical, text=get_translation("lbl_artist"), font=ctk.CTkFont(weight="bold"))
+        self.entry_artist_name = ctk.CTkEntry(self.contenedor_vertical, placeholder_text="Ex: AI", width=340)
 
         #-- Meta datos --
-        self.btn_banner = ctk.CTkButton(self.contenedor_vertical, text="Seleccionar Banner Graphic (Opcional)", fg_color="#16a085", command=self.buscar_banner)
-        self.label_banner_path = ctk.CTkLabel(self.contenedor_vertical, text="Ningún banner seleccionado", text_color="gray", wraplength=350)
-        self.btn_video = ctk.CTkButton(self.contenedor_vertical, text="Seleccionar Video de Fondo (Opcional)", fg_color="#8e44ad", command=self.buscar_video)
-        self.label_video_path = ctk.CTkLabel(self.contenedor_vertical, text="Ningún video seleccionado", text_color="gray", wraplength=350)
+        self.btn_banner = ctk.CTkButton(self.contenedor_vertical, text=get_translation("btn_banner"), fg_color="#16a085", command=self.buscar_banner)
+        self.label_banner_path = ctk.CTkLabel(self.contenedor_vertical, text=get_translation("lbl_no_banner"), text_color="gray", wraplength=350)
+        self.btn_video = ctk.CTkButton(self.contenedor_vertical, text=get_translation("btn_video"), fg_color="#8e44ad", command=self.buscar_video)
+        self.label_video_path = ctk.CTkLabel(self.contenedor_vertical, text=get_translation("lbl_no_video"), text_color="gray", wraplength=350)
 
-        self.checkbox_rename = ctk.CTkCheckBox(self.contenedor_vertical, text="Renombrar archivos (Título de la Canción))") 
+        self.checkbox_rename = ctk.CTkCheckBox(self.contenedor_vertical, text=get_translation("chk_rename")) 
 
         # Separador visual lógico
-        self.label_seccion_adv = ctk.CTkLabel(self.contenedor_vertical, text="--- Parámetros del Motor de Pasos (Originalidad) ---", font=ctk.CTkFont(size=13, weight="bold", slant="italic"), text_color="#95a5a6")
-        self.label_temp = ctk.CTkLabel(self.contenedor_vertical, text="Temperatura IA (Caos): 1.30", font=ctk.CTkFont(weight="bold"))
-        self.slider_temp = ctk.CTkSlider(self.contenedor_vertical, from_=0.5, to=1.5, number_of_steps=20, width=340, command=lambda v: self.label_temp.configure(text=f"Temperatura IA (Caos): {v:.2f}"))
+        self.label_seccion_adv = ctk.CTkLabel(self.contenedor_vertical, text=get_translation("lbl_sec_adv"), font=ctk.CTkFont(size=13, weight="bold", slant="italic"), text_color="#95a5a6")
+        self.label_temp = ctk.CTkLabel(self.contenedor_vertical, text=f"{get_translation("lbl_temp")} 1.30", font=ctk.CTkFont(weight="bold"))
+        self.slider_temp = ctk.CTkSlider(self.contenedor_vertical, from_=0.5, to=1.5, number_of_steps=20, width=340, command=lambda v: self.label_temp.configure(text=f"{get_translation("lbl_temp")} {v:.2f}"))
         self.slider_temp.set(1.3)
 
         # Campo para el nombre del Song Pack
-        self.label_pack_name = ctk.CTkLabel(self.contenedor_vertical, text="Nombre del Pack (Grupo):", font=ctk.CTkFont(weight="bold"))
-        self.entry_pack_name = ctk.CTkEntry(self.contenedor_vertical, placeholder_text="Ej: Mi_AI_Pack_Vol1", width=340)
+        self.label_pack_name = ctk.CTkLabel(self.contenedor_vertical, text=get_translation("lbl_pack_name"), font=ctk.CTkFont(weight="bold"))
+        self.entry_pack_name = ctk.CTkEntry(self.contenedor_vertical, placeholder_text="Ex: Mi_AI_Pack_Vol1", width=340)
         self.entry_pack_name.insert(0, "AI_Generated_Charts") # Nombre por defecto
 
-        self.label_seed = ctk.CTkLabel(self.contenedor_vertical, text="Semilla de Generación (Vacío = Aleatorio):", font=ctk.CTkFont(weight="bold"))
-        self.entry_seed = ctk.CTkEntry(self.contenedor_vertical, placeholder_text="Ej: 12345 o texto_libre", width=340)
+        self.label_seed = ctk.CTkLabel(self.contenedor_vertical, text=get_translation("lbl_seed"), font=ctk.CTkFont(weight="bold"))
+        self.entry_seed = ctk.CTkEntry(self.contenedor_vertical, placeholder_text="Ex: 12345 o texto_libre", width=340)
 
         # Empaquetado inmediato de los Datos de Entrada obligatorios
         componentes_entrada = [
@@ -1428,21 +1787,12 @@ class StepHybridUI(ctk.CTk):
         # =====================================================================
         # CONTROLADOR MAESTRO DE PRESETS DE PRUEBA
         # =====================================================================
-        self.label_presets = ctk.CTkLabel(self.contenedor_vertical, text="🧪 Plantillas (Presets):", font=ctk.CTkFont(size=13, weight="bold"))
+        self.label_presets = ctk.CTkLabel(self.contenedor_vertical, text=get_translation("lbl_presets"), font=ctk.CTkFont(size=13, weight="bold"))
         self.label_presets.pack(pady=(15, 2), padx=20)
 
         self.menu_presets = ctk.CTkOptionMenu(
             self.contenedor_vertical,
-            values=[
-                "Seleccionar Preset (Manual)",
-                "1. Visualmente dinámico.",
-                "2. Más Saltos",
-                "3. Velocidad caótica.",
-                "4. Marea Flotante (Flujo de Olas y Smooth Scroll)",
-                "5. Gimmick Caótico (Cortes Abruptos y Trampas de Impacto)",
-                "6. Inferencia de Densidad Pura (Filtros Espectrales sin Modificadores)",
-                "7. Tormenta Hardcore (Deathstream Máximo y Modificadores Coexistentes)"
-            ],
+            values=[get_translation("preset_0"), get_translation("preset_1"), get_translation("preset_2"), get_translation("preset_3"), get_translation("preset_4"), get_translation("preset_5"), get_translation("preset_6"), get_translation("preset_7")],
             command=self.aplicar_preset_config,
             fg_color="#d35400",
             button_color="#e67e22"
@@ -1452,12 +1802,12 @@ class StepHybridUI(ctk.CTk):
         # =====================================================================
         # SELECTOR DESPLEGABLE PARA APARTADOS CONFIGURACIÓN AVANZADA
         # =====================================================================
-        self.label_menu_apartados = ctk.CTkLabel(self.contenedor_vertical, text="⚙️ Ajustes Avanzados del Motor:", font=ctk.CTkFont(size=13, weight="bold"))
+        self.label_menu_apartados = ctk.CTkLabel(self.contenedor_vertical, text=get_translation("lbl_adv_settings"), font=ctk.CTkFont(size=13, weight="bold"))
         self.label_menu_apartados.pack(pady=(15, 2), padx=20)
         
         self.menu_apartados = ctk.CTkOptionMenu(
             self.contenedor_vertical, 
-            values=["Ocultar Parámetros", "Settings de Tiempo", "Configuración de BPM y Ritmo", "Efectos, Minas y Trampas", "Filtros Espectrales y Dificultad"],
+            values=[get_translation("menu_opt_hide"), get_translation("menu_opt_time"), get_translation("menu_opt_bpm"), get_translation("menu_opt_fx"), get_translation("menu_opt_filters")],
             command=self.conmutar_apartados_ui,
             fg_color="#2980b9",
             button_color="#3498db"
@@ -1473,13 +1823,13 @@ class StepHybridUI(ctk.CTk):
         self.apartado_tiempo = ctk.CTkFrame(self.contenedor_vertical, fg_color="transparent")
 
         # --- APARTADO: TIEMPO ---
-        self.btn_visualizar_grafico = ctk.CTkButton(self.apartado_tiempo, text="Ajustar Límites en Gráfica Interactiva 📊", fg_color="#8e44ad", hover_color="#9b59b6", font=ctk.CTkFont(weight="bold"), command=self.abrir_visualizador_audio)
+        self.btn_visualizar_grafico = ctk.CTkButton(self.apartado_tiempo, text=get_translation("btn_graph"), fg_color="#8e44ad", hover_color="#9b59b6", font=ctk.CTkFont(weight="bold"), command=self.abrir_visualizador_audio)
 
-        self.label_duracion = ctk.CTkLabel(self.apartado_tiempo, text="Duración Máxima (Segundos / 0=Full):", font=ctk.CTkFont(weight="bold"))
-        self.entry_duracion = ctk.CTkEntry(self.apartado_tiempo, placeholder_text="Ej: 90", width=340)
+        self.label_duracion = ctk.CTkLabel(self.apartado_tiempo, text=get_translation("lbl_duration"), font=ctk.CTkFont(weight="bold"))
+        self.entry_duracion = ctk.CTkEntry(self.apartado_tiempo, placeholder_text="Ex: 90", width=340)
 
-        self.label_seccion_adv_tiempo = ctk.CTkLabel(self.apartado_tiempo, text="--- Parámetros Adicionales de la Canción ---", font=ctk.CTkFont(size=13, weight="bold", slant="italic"), text_color="#40FFEE")
-        self.label_offset = ctk.CTkLabel(self.apartado_tiempo, text="Offset de Inicio: 0.000 s (Por defecto)", font=ctk.CTkFont(weight="bold"))
+        self.label_seccion_adv_tiempo = ctk.CTkLabel(self.apartado_tiempo, text=get_translation("lbl_sec_time"), font=ctk.CTkFont(size=13, weight="bold", slant="italic"), text_color="#40FFEE")
+        self.label_offset = ctk.CTkLabel(self.apartado_tiempo, text=get_translation("lbl_offset_auto_active"), font=ctk.CTkFont(weight="bold"))
         self.slider_offset = ctk.CTkSlider(self.apartado_tiempo, from_=0.0, to=16.0, number_of_steps=400, width=340, command=self.actualizar_texto_offset)
         self.slider_offset.set(0.000)
 
@@ -1491,14 +1841,14 @@ class StepHybridUI(ctk.CTk):
 
         self.checkbox_offset_auto = ctk.CTkCheckBox(
             self.apartado_tiempo, 
-            text="Detectar Offset Automáticamente (DSP Vol)",
+            text=get_translation("chk_offset_auto"),
             text_color="#1abc9c",
             command=self.gestionar_exclusividad_offset
         )
         self.checkbox_offset_auto.select()
 
         # === Extensión final de la canción ===
-        self.label_extension = ctk.CTkLabel(self.apartado_tiempo, text="Extensión Final Estética: 0.0 s (Corte normal)", font=ctk.CTkFont(weight="bold"))
+        self.label_extension = ctk.CTkLabel(self.apartado_tiempo, text=f"{get_translation("lbl_extension")} 0.0 s", font=ctk.CTkFont(weight="bold"))
         self.slider_extension = ctk.CTkSlider(self.apartado_tiempo, from_=0.0, to=15.0, number_of_steps=30, width=340, command=self.actualizar_texto_extension)
         self.slider_extension.set(0.0)
 
@@ -1511,9 +1861,9 @@ class StepHybridUI(ctk.CTk):
             w.pack(pady=4, padx=20)
 
         # --- APARTADO: BPM Y RITMO ---
-        self.label_seccion_adv_bpm = ctk.CTkLabel(self.apartado_bpm, text="--- Parámetros de BPM ---", font=ctk.CTkFont(size=13, weight="bold", slant="italic"), text_color="#A6408C")
+        self.label_seccion_adv_bpm = ctk.CTkLabel(self.apartado_bpm, text=get_translation("lbl_sec_bpm"), font=ctk.CTkFont(size=13, weight="bold", slant="italic"), text_color="#A6408C")
         
-        self.label_bpm = ctk.CTkLabel(self.apartado_bpm, text="Configuración de BPM: Auto (Detección DSP)", font=ctk.CTkFont(weight="bold"))
+        self.label_bpm = ctk.CTkLabel(self.apartado_bpm, text=f"{get_translation("lbl_bpm_config")} {get_translation("lbl_bpm_auto")}", font=ctk.CTkFont(weight="bold"))
         #self.label_bpm.pack(pady=(10, 5), anchor="w")
 
         # Contenedor horizontal para el slider y el checkbox
@@ -1534,7 +1884,7 @@ class StepHybridUI(ctk.CTk):
         # Checkbox para el modo Auto
         self.check_auto_bpm = ctk.CTkCheckBox(
             self.frame_controles_bpm, 
-            text="Auto", 
+            text=get_translation("lbl_bpm_auto"), 
             command=self.conmutar_auto_bpm,
             width=60
         )
@@ -1552,9 +1902,12 @@ class StepHybridUI(ctk.CTk):
         self.btn_bpm_mas.pack(side="left", padx=10)
         self.btn_bpm_mas.configure(state="disabled")
 
-        self.checkbox_bpm = ctk.CTkCheckBox(self.apartado_bpm, text="Doble BPM (x2)") 
+        #Doble BPM
+        self.checkbox_bpm = ctk.CTkCheckBox(self.apartado_bpm, text=get_translation("chk_double_bpm")) 
+        self.checkbox_bpm.deselect()
 
-        self.checkbox_bpm_dinamico = ctk.CTkCheckBox(self.apartado_bpm, text="Aplicar BPM Dinámico (Alteraciones)", command=self.gestionar_exclusividad_ritmo)
+        self.checkbox_bpm_dinamico = ctk.CTkCheckBox(self.apartado_bpm, text=get_translation("chk_dynamic_bpm"), command=self.gestionar_exclusividad_ritmo)
+        self.checkbox_bpm_dinamico.deselect()
         
         # Contenedor principal para la sección dinámica
         self.frame_bpm_dinamico = ctk.CTkFrame(self.apartado_bpm, fg_color="transparent")
@@ -1563,7 +1916,7 @@ class StepHybridUI(ctk.CTk):
         # Fila 1: BPM Mínimo
         self.label_min_bpm_dinamico = ctk.CTkLabel(
             self.frame_bpm_dinamico, 
-            text="BPM Mínimo (Campo vacío=Auto):", 
+            text=get_translation("lbl_min_bpm"), 
             width=160, 
             font=ctk.CTkFont(weight="bold"),
             anchor="w"
@@ -1573,7 +1926,7 @@ class StepHybridUI(ctk.CTk):
 
         self.entry_min_bpm_dinamico = ctk.CTkEntry(
             self.frame_bpm_dinamico, 
-            placeholder_text="Ej: 90", 
+            placeholder_text="Ex: 90", 
             width=100
         )
         self.entry_min_bpm_dinamico.pack(pady=2, padx=5)
@@ -1582,7 +1935,7 @@ class StepHybridUI(ctk.CTk):
         # Fila 2: BPM Máximo
         self.label_max_bpm_dinamico = ctk.CTkLabel(
             self.frame_bpm_dinamico, 
-            text="BPM Máximo (Campo vacío=Auto):", 
+            text=get_translation("lbl_max_bpm"), 
             width=160, 
             font=ctk.CTkFont(weight="bold"),
             anchor="w"
@@ -1592,7 +1945,7 @@ class StepHybridUI(ctk.CTk):
 
         self.entry_max_bpm_dinamico = ctk.CTkEntry(
             self.frame_bpm_dinamico, 
-            placeholder_text="Ej: 140", 
+            placeholder_text="Ex: 140", 
             width=100
         )
         self.entry_max_bpm_dinamico.pack(pady=2, padx=5)
@@ -1600,29 +1953,29 @@ class StepHybridUI(ctk.CTk):
 
         # --- SLIDERS PROPIOS PARA EL CONTROL DE RMS EN BPM DINÁMICO ---
         # RMS Mínimo BPM
-        self.label_rms_min_bpm = ctk.CTkLabel(self.frame_bpm_dinamico, text="Sensibilidad RMS Mínimo BPM: 0.50", font=ctk.CTkFont(weight="bold"), anchor="w")
+        self.label_rms_min_bpm = ctk.CTkLabel(self.frame_bpm_dinamico, text=f"{get_translation("lbl_rms_min_bpm")} 0.50", font=ctk.CTkFont(weight="bold"), anchor="w")
         self.label_rms_min_bpm.pack(pady=2, padx=5)
         #self.label_rms_min_bpm.grid(row=2, column=0, columnspan=2, padx=5, pady=(10, 2), sticky="w")
         
         self.slider_rms_min_bpm = ctk.CTkSlider(self.frame_bpm_dinamico, from_=0.1, to=1.0, number_of_steps=18, width=320, 
-                                                command=lambda v: self.label_rms_min_bpm.configure(text=f"Sensibilidad RMS Mínimo BPM: {v:.2f}"))
+                                                command=lambda v: self.label_rms_min_bpm.configure(text=f"{get_translation("lbl_rms_min_bpm")} {v:.2f}"))
         self.slider_rms_min_bpm.pack(pady=2, padx=5)
         #self.slider_rms_min_bpm.grid(row=3, column=0, columnspan=2, padx=5, pady=5)
         self.slider_rms_min_bpm.set(0.50)
 
         # RMS Máximo BPM
-        self.label_rms_max_bpm = ctk.CTkLabel(self.frame_bpm_dinamico, text="Sensibilidad RMS Máximo BPM: 1.50", font=ctk.CTkFont(weight="bold"), anchor="w")
+        self.label_rms_max_bpm = ctk.CTkLabel(self.frame_bpm_dinamico, text=f"{get_translation("lbl_rms_max_bpm")} 1.50", font=ctk.CTkFont(weight="bold"), anchor="w")
         self.label_rms_max_bpm.pack(pady=2, padx=5)
         #self.label_rms_max_bpm.grid(row=4, column=0, columnspan=2, padx=5, pady=(10, 2), sticky="w")
         
         self.slider_rms_max_bpm = ctk.CTkSlider(self.frame_bpm_dinamico, from_=1.0, to=2.5, number_of_steps=30, width=320, 
-                                                command=lambda v: self.label_rms_max_bpm.configure(text=f"Sensibilidad RMS Máximo BPM: {v:.2f}"))
+                                                command=lambda v: self.label_rms_max_bpm.configure(text=f"{get_translation("lbl_rms_max_bpm")} {v:.2f}"))
         self.slider_rms_max_bpm.pack(pady=2, padx=5)
         #self.slider_rms_max_bpm.grid(row=5, column=0, columnspan=2, padx=5, pady=5)
         self.slider_rms_max_bpm.set(1.50)
 
         # Slider nuevo para la amortiguación del BPM
-        self.label_bpm_amortiguador = ctk.CTkLabel(self.frame_bpm_dinamico, text="Amortiguador de Marea BPM: 0.12 (Atenuado)", font=ctk.CTkFont(weight="bold"), anchor="w")
+        self.label_bpm_amortiguador = ctk.CTkLabel(self.frame_bpm_dinamico, text=f"{get_translation("lbl_bpm_damping")} 0.12", font=ctk.CTkFont(weight="bold"), anchor="w")
         self.label_bpm_amortiguador.pack(pady=2, padx=5)
         
         self.slider_bpm_amortiguador = ctk.CTkSlider(
@@ -1632,51 +1985,52 @@ class StepHybridUI(ctk.CTk):
         self.slider_bpm_amortiguador.pack(pady=2, padx=5)
         self.slider_bpm_amortiguador.set(0.12)
 
-        self.label_seccion_adv_speed = ctk.CTkLabel(self.apartado_bpm, text="--- Parámetros de Scroll Speeds ---", font=ctk.CTkFont(size=13, weight="bold", slant="italic"), text_color="#67B3E6")
-        self.checkbox_speeds_dinamico = ctk.CTkCheckBox(self.apartado_bpm, text="Adaptar Velocidad Visual (Scroll Speeds)", command=self.gestionar_exclusividad_ritmo)
+        self.label_seccion_adv_speed = ctk.CTkLabel(self.apartado_bpm, text=get_translation("lbl_sec_speed"), font=ctk.CTkFont(size=13, weight="bold", slant="italic"), text_color="#67B3E6")
+        self.checkbox_speeds_dinamico = ctk.CTkCheckBox(self.apartado_bpm, text=get_translation("chk_dynamic_speed"), command=self.gestionar_exclusividad_ritmo)
+        self.checkbox_speeds_dinamico.deselect()
         
         # CONTENEDOR DE SCROLL SPEED
         self.frame_scroll_speed_dinamico = ctk.CTkFrame(self.apartado_bpm, fg_color="transparent")
-        self.label_speed_offset_time = ctk.CTkLabel(self.frame_scroll_speed_dinamico, text="Duración Extendida por Pérdida: 0.65% (Recomendado)", font=ctk.CTkFont(weight="bold"))
+        self.label_speed_offset_time = ctk.CTkLabel(self.frame_scroll_speed_dinamico, text=f"{get_translation("lbl_speed_loss")} 0.15%", font=ctk.CTkFont(weight="bold"))
         self.label_speed_offset_time.pack(pady=2, padx=5)
-        self.slider_speed_offset_time = ctk.CTkSlider(self.frame_scroll_speed_dinamico, from_=0, to=5, number_of_steps=500, width=340, command=lambda v: self.label_speed_offset_time.configure(text=f"Duración Extendida por Pérdida: {v:.2f}%" if v > 0 else "Duración Extendida por Pérdida: 0%"))
+        self.slider_speed_offset_time = ctk.CTkSlider(self.frame_scroll_speed_dinamico, from_=0, to=5, number_of_steps=500, width=340, command=lambda v: self.label_speed_offset_time.configure(text=f"{get_translation("lbl_speed_loss")} {v:.2f}%" if v > 0 else f"{get_translation("lbl_speed_loss")} 0%"))
         self.slider_speed_offset_time.pack(pady=2, padx=5)
-        self.slider_speed_offset_time.set(0.65)
+        self.slider_speed_offset_time.set(0.15)
 
-        self.label_rms_min_speed = ctk.CTkLabel(self.frame_scroll_speed_dinamico, text="Sensibilidad RMS Mínimo Scroll: 0.50", font=ctk.CTkFont(weight="bold"))
+        self.label_rms_min_speed = ctk.CTkLabel(self.frame_scroll_speed_dinamico, text=f"{get_translation("lbl_rms_min_speed")} 0.50", font=ctk.CTkFont(weight="bold"))
         self.label_rms_min_speed.pack(pady=2, padx=5)
         self.slider_rms_min_speed = ctk.CTkSlider(self.frame_scroll_speed_dinamico, from_=0.1, to=1.0, number_of_steps=18, width=340, 
-                                                 command=lambda v: self.label_rms_min_speed.configure(text=f"Sensibilidad RMS Mínimo Scroll: {v:.2f}"))
+                                                 command=lambda v: self.label_rms_min_speed.configure(text=f"{get_translation("lbl_rms_min_speed")} {v:.2f}"))
         self.slider_rms_min_speed.pack(pady=4, padx=5)
         self.slider_rms_min_speed.set(0.50)
         
-        self.label_rms_max_speed = ctk.CTkLabel(self.frame_scroll_speed_dinamico, text="Sensibilidad RMS Máximo Scroll: 1.50", font=ctk.CTkFont(weight="bold"))
+        self.label_rms_max_speed = ctk.CTkLabel(self.frame_scroll_speed_dinamico, text=f"{get_translation("lbl_rms_max_speed")} 1.50", font=ctk.CTkFont(weight="bold"))
         self.label_rms_max_speed.pack(pady=2, padx=5)
         self.slider_rms_max_speed = ctk.CTkSlider(self.frame_scroll_speed_dinamico, from_=1.0, to=2.5, number_of_steps=30, width=340, 
-                                                 command=lambda v: self.label_rms_max_speed.configure(text=f"Sensibilidad RMS Máximo Scroll: {v:.2f}"))
+                                                 command=lambda v: self.label_rms_max_speed.configure(text=f"{get_translation("lbl_rms_max_speed")} {v:.2f}"))
         self.slider_rms_max_speed.pack(pady=2, padx=5)
         self.slider_rms_max_speed.set(1.50)
 
-        self.label_speed_min = ctk.CTkLabel(self.frame_scroll_speed_dinamico, text="Velocidad en Mínimos (Calma): 0.70x", font=ctk.CTkFont(weight="bold"))
+        self.label_speed_min = ctk.CTkLabel(self.frame_scroll_speed_dinamico, text=f"{get_translation("lbl_speed_min")} 0.70x", font=ctk.CTkFont(weight="bold"))
         self.label_speed_min.pack(pady=2, padx=5)
-        self.slider_speed_min = ctk.CTkSlider(self.frame_scroll_speed_dinamico, from_=0.25, to=1.0, number_of_steps=15, width=340, command=lambda v: self.label_speed_min.configure(text=f"Scroll Mínimo (Calma): {v:.2f}x"))
+        self.slider_speed_min = ctk.CTkSlider(self.frame_scroll_speed_dinamico, from_=0.25, to=1.0, number_of_steps=15, width=340, command=lambda v: self.label_speed_min.configure(text=f"{get_translation("lbl_speed_min")} {v:.2f}x"))
         self.slider_speed_min.pack(pady=2, padx=5)
         self.slider_speed_min.set(0.70)
 
-        self.label_speed_max = ctk.CTkLabel(self.frame_scroll_speed_dinamico, text="Velocidad en Máximos (Drop): 1.40x", font=ctk.CTkFont(weight="bold"))
+        self.label_speed_max = ctk.CTkLabel(self.frame_scroll_speed_dinamico, text=f"{get_translation("lbl_speed_max")} 1.40x", font=ctk.CTkFont(weight="bold"))
         self.label_speed_max.pack(pady=2, padx=5)
-        self.slider_speed_max = ctk.CTkSlider(self.frame_scroll_speed_dinamico, from_=1.0, to=3.0, number_of_steps=40, width=340, command=lambda v: self.label_speed_max.configure(text=f"Scroll Máximo (Drop): {v:.2f}x"))
+        self.slider_speed_max = ctk.CTkSlider(self.frame_scroll_speed_dinamico, from_=1.0, to=3.0, number_of_steps=40, width=340, command=lambda v: self.label_speed_max.configure(text=f"{get_translation("lbl_speed_max")} {v:.2f}x"))
         self.slider_speed_max.pack(pady=2, padx=5)
         self.slider_speed_max.set(1.40)
 
         # Reemplazo de slider_speed_trans por slider_speed_trans
-        self.label_speed_trans = ctk.CTkLabel(self.frame_scroll_speed_dinamico, text="Duración de Transición: 2.0 Beats (Suave)", font=ctk.CTkFont(weight="bold"))
+        self.label_speed_trans = ctk.CTkLabel(self.frame_scroll_speed_dinamico, text=f"{get_translation("lbl_speed_trans")} 2.0 Beats ", font=ctk.CTkFont(weight="bold"))
         self.label_speed_trans.pack(pady=2, padx=5)
-        self.slider_speed_trans = ctk.CTkSlider(self.frame_scroll_speed_dinamico, from_=0.0, to=4.0, number_of_steps=16, width=340, command=lambda v: self.label_speed_trans.configure(text=f"Duración de Transición: {v:.1f} Beats" if v > 0 else "Duración de Transición: Inmediata (0.0)"))
+        self.slider_speed_trans = ctk.CTkSlider(self.frame_scroll_speed_dinamico, from_=0.0, to=4.0, number_of_steps=16, width=340, command=lambda v: self.label_speed_trans.configure(text=f"{get_translation("lbl_speed_trans")} {v:.1f} Beats" if v > 0 else f"{get_translation("lbl_speed_trans")} (0.0)"))
         self.slider_speed_trans.pack(pady=2, padx=5)
         self.slider_speed_trans.set(2.0)
 
-        self.label_speed_umbral = ctk.CTkLabel(self.frame_scroll_speed_dinamico, text="Filtro Anti-Mareo (Umbral de Disparo): 0.50", font=ctk.CTkFont(weight="bold"))
+        self.label_speed_umbral = ctk.CTkLabel(self.frame_scroll_speed_dinamico, text=f"{get_translation("lbl_speed_anti_dizzy")} 0.50", font=ctk.CTkFont(weight="bold"))
         self.label_speed_umbral.pack(pady=2, padx=5)
         
         # Rango de 0.05 a 1.00 para cubrir todos tus escenarios probados
@@ -1695,80 +2049,80 @@ class StepHybridUI(ctk.CTk):
             w.pack(pady=4, padx=20)
 
         # --- APARTADO: MINAS Y TRAMPAS (FX) ---
-        self.label_seccion_adv_trampas = ctk.CTkLabel(self.apartado_efectos, text="--- Parámetros de Efectos y Trampas ---", font=ctk.CTkFont(size=13, weight="bold", slant="italic"), text_color="#FF278B")
+        self.label_seccion_adv_trampas = ctk.CTkLabel(self.apartado_efectos, text=get_translation("lbl_sec_fx"), font=ctk.CTkFont(size=13, weight="bold", slant="italic"), text_color="#FF278B")
 
-        self.label_prob_minas = ctk.CTkLabel(self.apartado_efectos, text="Probabilidad de Minas por compás: 35%", font=ctk.CTkFont(weight="bold"))
-        self.slider_prob_minas = ctk.CTkSlider(self.apartado_efectos, from_=0, to=100, number_of_steps=100, width=340, command=lambda v: self.label_prob_minas.configure(text=f"Probabilidad de Minas por compás: {int(v)}%"))
+        self.label_prob_minas = ctk.CTkLabel(self.apartado_efectos, text=f"{get_translation("lbl_prob_mines")} 35%", font=ctk.CTkFont(weight="bold"))
+        self.slider_prob_minas = ctk.CTkSlider(self.apartado_efectos, from_=0, to=100, number_of_steps=100, width=340, command=lambda v: self.label_prob_minas.configure(text=f"{get_translation("lbl_prob_mines")} {int(v)}%"))
         self.slider_prob_minas.set(35)
         
-        self.label_max_minas = ctk.CTkLabel(self.apartado_efectos, text="Máximo Minas por Compás: 3", font=ctk.CTkFont(weight="bold"))
-        self.slider_max_minas = ctk.CTkSlider(self.apartado_efectos, from_=0, to=4, number_of_steps=4, width=340, command=lambda v: self.label_max_minas.configure(text=f"Máximo Minas por Compás: {int(v)}"))
+        self.label_max_minas = ctk.CTkLabel(self.apartado_efectos, text=f"{get_translation("lbl_max_mines")} 3", font=ctk.CTkFont(weight="bold"))
+        self.slider_max_minas = ctk.CTkSlider(self.apartado_efectos, from_=0, to=4, number_of_steps=4, width=340, command=lambda v: self.label_max_minas.configure(text=f"{get_translation("lbl_max_mines")} {int(v)}"))
         self.slider_max_minas.set(3)
 
-        self.label_prob_fakes = ctk.CTkLabel(self.apartado_efectos, text="Probabilidad de Fakes por compás: 25%", font=ctk.CTkFont(weight="bold"))
-        self.slider_prob_fakes = ctk.CTkSlider(self.apartado_efectos, from_=0, to=100, number_of_steps=100, width=340, command=lambda v: self.label_prob_fakes.configure(text=f"Probabilidad de Fakes por compás: {int(v)}%"))
+        self.label_prob_fakes = ctk.CTkLabel(self.apartado_efectos, text=f"{get_translation("lbl_prob_fakes")} 25%", font=ctk.CTkFont(weight="bold"))
+        self.slider_prob_fakes = ctk.CTkSlider(self.apartado_efectos, from_=0, to=100, number_of_steps=100, width=340, command=lambda v: self.label_prob_fakes.configure(text=f"{get_translation("lbl_prob_fakes")} {int(v)}%"))
         self.slider_prob_fakes.set(25)
 
-        self.label_max_fakes = ctk.CTkLabel(self.apartado_efectos, text="Máximo Fakes por Compás: 0", font=ctk.CTkFont(weight="bold"))
-        self.slider_max_fakes = ctk.CTkSlider(self.apartado_efectos, from_=0, to=4, number_of_steps=4, width=340, command=lambda v: self.label_max_fakes.configure(text=f"Máximo Fakes por Compás: {int(v)}"))
+        self.label_max_fakes = ctk.CTkLabel(self.apartado_efectos, text=f"{get_translation("lbl_max_fakes")} 0", font=ctk.CTkFont(weight="bold"))
+        self.slider_max_fakes = ctk.CTkSlider(self.apartado_efectos, from_=0, to=4, number_of_steps=4, width=340, command=lambda v: self.label_max_fakes.configure(text=f"{get_translation("lbl_max_fakes")} {int(v)}"))
         self.slider_max_fakes.set(0)
 
-        self.label_prob_lifts = ctk.CTkLabel(self.apartado_efectos, text="Probabilidad de Lifts por compás: 25%", font=ctk.CTkFont(weight="bold"))
-        self.slider_prob_lifts = ctk.CTkSlider(self.apartado_efectos, from_=0, to=100, number_of_steps=100, width=340, command=lambda v: self.label_prob_lifts.configure(text=f"Probabilidad de Lifts por compás: {int(v)}%"))
+        self.label_prob_lifts = ctk.CTkLabel(self.apartado_efectos, text=f"{get_translation("lbl_prob_lifts")} 25%", font=ctk.CTkFont(weight="bold"))
+        self.slider_prob_lifts = ctk.CTkSlider(self.apartado_efectos, from_=0, to=100, number_of_steps=100, width=340, command=lambda v: self.label_prob_lifts.configure(text=f"{get_translation("lbl_prob_lifts")} {int(v)}%"))
         self.slider_prob_lifts.set(25)
 
-        self.label_max_lifts = ctk.CTkLabel(self.apartado_efectos, text="Máximo Lifts por Compás: 0", font=ctk.CTkFont(weight="bold"))
-        self.slider_max_lifts = ctk.CTkSlider(self.apartado_efectos, from_=0, to=4, number_of_steps=4, width=340, command=lambda v: self.label_max_lifts.configure(text=f"Máximo Lifts por Compás: {int(v)}"))
+        self.label_max_lifts = ctk.CTkLabel(self.apartado_efectos, text=f"{get_translation("lbl_max_lifts")} 0", font=ctk.CTkFont(weight="bold"))
+        self.slider_max_lifts = ctk.CTkSlider(self.apartado_efectos, from_=0, to=4, number_of_steps=4, width=340, command=lambda v: self.label_max_lifts.configure(text=f"{get_translation("lbl_max_lifts")} {int(v)}"))
         self.slider_max_lifts.set(0)
 
-        self.label_prob_potions = ctk.CTkLabel(self.apartado_efectos, text="Probabilidad de Potions por compás: 15%", font=ctk.CTkFont(weight="bold"))
-        self.slider_prob_potions = ctk.CTkSlider(self.apartado_efectos, from_=0, to=100, number_of_steps=100, width=340, command=lambda v: self.label_prob_potions.configure(text=f"Probabilidad de Potions por compás: {int(v)}%"))
+        self.label_prob_potions = ctk.CTkLabel(self.apartado_efectos, text=f"{get_translation("lbl_prob_potions")} 15%", font=ctk.CTkFont(weight="bold"))
+        self.slider_prob_potions = ctk.CTkSlider(self.apartado_efectos, from_=0, to=100, number_of_steps=100, width=340, command=lambda v: self.label_prob_potions.configure(text=f"{get_translation("lbl_prob_potions")} {int(v)}%"))
         self.slider_prob_potions.set(15)
 
-        self.label_max_potions = ctk.CTkLabel(self.apartado_efectos, text="Máximo Potions por Compás: 0", font=ctk.CTkFont(weight="bold"))
-        self.slider_max_potions = ctk.CTkSlider(self.apartado_efectos, from_=0, to=4, number_of_steps=4, width=340, command=lambda v: self.label_max_potions.configure(text=f"Máximo Potions por Compás: {int(v)}"))
+        self.label_max_potions = ctk.CTkLabel(self.apartado_efectos, text=f"{get_translation("lbl_max_potions")} 0", font=ctk.CTkFont(weight="bold"))
+        self.slider_max_potions = ctk.CTkSlider(self.apartado_efectos, from_=0, to=4, number_of_steps=4, width=340, command=lambda v: self.label_max_potions.configure(text=f"{get_translation("lbl_max_potions")} {int(v)}"))
         self.slider_max_potions.set(0)
 
-        self.label_prob_shields = ctk.CTkLabel(self.apartado_efectos, text="Probabilidad de Shields por compás: 15%", font=ctk.CTkFont(weight="bold"))
-        self.slider_prob_shields = ctk.CTkSlider(self.apartado_efectos, from_=0, to=100, number_of_steps=100, width=340, command=lambda v: self.label_prob_shields.configure(text=f"Probabilidad de Shields por compás: {int(v)}%"))
+        self.label_prob_shields = ctk.CTkLabel(self.apartado_efectos, text=f"{get_translation("lbl_prob_shields")} 15%", font=ctk.CTkFont(weight="bold"))
+        self.slider_prob_shields = ctk.CTkSlider(self.apartado_efectos, from_=0, to=100, number_of_steps=100, width=340, command=lambda v: self.label_prob_shields.configure(text=f"{get_translation("lbl_prob_shields")} {int(v)}%"))
         self.slider_prob_shields.set(15)
 
-        self.label_max_shields = ctk.CTkLabel(self.apartado_efectos, text="Máximo Shields por Compás: 0", font=ctk.CTkFont(weight="bold"))
-        self.slider_max_shields = ctk.CTkSlider(self.apartado_efectos, from_=0, to=4, number_of_steps=4, width=340, command=lambda v: self.label_max_shields.configure(text=f"Máximo Shields por Compás: {int(v)}"))
+        self.label_max_shields = ctk.CTkLabel(self.apartado_efectos, text=f"{get_translation("lbl_max_shields")} 0", font=ctk.CTkFont(weight="bold"))
+        self.slider_max_shields = ctk.CTkSlider(self.apartado_efectos, from_=0, to=4, number_of_steps=4, width=340, command=lambda v: self.label_max_shields.configure(text=f"{get_translation("lbl_max_shields")} {int(v)}"))
         self.slider_max_shields.set(0)
 
-        self.label_prob_rayos = ctk.CTkLabel(self.apartado_efectos, text="Probabilidad de Rayos por compás: 15%", font=ctk.CTkFont(weight="bold"))
-        self.slider_prob_rayos = ctk.CTkSlider(self.apartado_efectos, from_=0, to=100, number_of_steps=100, width=340, command=lambda v: self.label_prob_rayos.configure(text=f"Probabilidad de Rayos por compás: {int(v)}%"))
+        self.label_prob_rayos = ctk.CTkLabel(self.apartado_efectos, text=f"{get_translation("lbl_prob_rayos")} 15%", font=ctk.CTkFont(weight="bold"))
+        self.slider_prob_rayos = ctk.CTkSlider(self.apartado_efectos, from_=0, to=100, number_of_steps=100, width=340, command=lambda v: self.label_prob_rayos.configure(text=f"{get_translation("lbl_prob_rayos")} {int(v)}%"))
         self.slider_prob_rayos.set(15)
 
-        self.label_max_rayos = ctk.CTkLabel(self.apartado_efectos, text="Máximo Rayos por Compás: 0", font=ctk.CTkFont(weight="bold"))
-        self.slider_max_rayos = ctk.CTkSlider(self.apartado_efectos, from_=0, to=4, number_of_steps=4, width=340, command=lambda v: self.label_max_rayos.configure(text=f"Máximo Rayos por Compás: {int(v)}"))
+        self.label_max_rayos = ctk.CTkLabel(self.apartado_efectos, text=f"{get_translation("lbl_max_rayos")} 0", font=ctk.CTkFont(weight="bold"))
+        self.slider_max_rayos = ctk.CTkSlider(self.apartado_efectos, from_=0, to=4, number_of_steps=4, width=340, command=lambda v: self.label_max_rayos.configure(text=f"{get_translation("lbl_max_rayos")} {int(v)}"))
         self.slider_max_rayos.set(0)
 
-        self.label_prob_hiddens = ctk.CTkLabel(self.apartado_efectos, text="Probabilidad de Hiddens por compás: 20%", font=ctk.CTkFont(weight="bold"))
-        self.slider_prob_hiddens = ctk.CTkSlider(self.apartado_efectos, from_=0, to=100, number_of_steps=100, width=340, command=lambda v: self.label_prob_hiddens.configure(text=f"Probabilidad de Hiddens por compás: {int(v)}%"))
+        self.label_prob_hiddens = ctk.CTkLabel(self.apartado_efectos, text=f"{get_translation("lbl_prob_hiddens")} 20%", font=ctk.CTkFont(weight="bold"))
+        self.slider_prob_hiddens = ctk.CTkSlider(self.apartado_efectos, from_=0, to=100, number_of_steps=100, width=340, command=lambda v: self.label_prob_hiddens.configure(text=f"{get_translation("lbl_prob_hiddens")} {int(v)}%"))
         self.slider_prob_hiddens.set(20)
 
-        self.label_max_hiddens = ctk.CTkLabel(self.apartado_efectos, text="Máximo Hiddens por Compás: 0", font=ctk.CTkFont(weight="bold"))
-        self.slider_max_hiddens = ctk.CTkSlider(self.apartado_efectos, from_=0, to=4, number_of_steps=4, width=340, command=lambda v: self.label_max_hiddens.configure(text=f"Máximo Hiddens por Compás: {int(v)}"))
+        self.label_max_hiddens = ctk.CTkLabel(self.apartado_efectos, text=f"{get_translation("lbl_max_hiddens")} 0", font=ctk.CTkFont(weight="bold"))
+        self.slider_max_hiddens = ctk.CTkSlider(self.apartado_efectos, from_=0, to=4, number_of_steps=4, width=340, command=lambda v: self.label_max_hiddens.configure(text=f"{get_translation("lbl_max_hiddens")} {int(v)}"))
         self.slider_max_hiddens.set(0)
 
         self.checkbox_efectos_rms = ctk.CTkCheckBox(
             self.apartado_efectos, 
-            text="Potenciar Efectos y Trampas en Drops (Análisis RMS)",
+            text=get_translation("chk_fx_rms"),
             text_color="#e67e22"
         )
 
         self.checkbox_efectos_rms.select()
 
-        self.label_rms_min_fx = ctk.CTkLabel(self.apartado_efectos, text="Sensibilidad RMS Mínimo Trampas: 0.50", font=ctk.CTkFont(weight="bold"))
+        self.label_rms_min_fx = ctk.CTkLabel(self.apartado_efectos, text=f"{get_translation("lbl_rms_min_fx")} 0.50", font=ctk.CTkFont(weight="bold"))
         self.slider_rms_min_fx = ctk.CTkSlider(self.apartado_efectos, from_=0.1, to=1.0, number_of_steps=18, width=340, 
-                                              command=lambda v: self.label_rms_min_fx.configure(text=f"Sensibilidad RMS Mínimo Trampas: {v:.2f}"))
+                                              command=lambda v: self.label_rms_min_fx.configure(text=f"{get_translation("lbl_rms_min_fx")} {v:.2f}"))
         self.slider_rms_min_fx.set(0.50)
         
-        self.label_rms_max_fx = ctk.CTkLabel(self.apartado_efectos, text="Sensibilidad RMS Máximo Trampas: 1.50", font=ctk.CTkFont(weight="bold"))
+        self.label_rms_max_fx = ctk.CTkLabel(self.apartado_efectos, text=f"{get_translation("lbl_rms_max_fx")} 1.50", font=ctk.CTkFont(weight="bold"))
         self.slider_rms_max_fx = ctk.CTkSlider(self.apartado_efectos, from_=1.0, to=2.5, number_of_steps=30, width=340, 
-                                              command=lambda v: self.label_rms_max_fx.configure(text=f"Sensibilidad RMS Máximo Trampas: {v:.2f}"))
+                                              command=lambda v: self.label_rms_max_fx.configure(text=f"{get_translation("lbl_rms_max_fx")} {v:.2f}"))
         self.slider_rms_max_fx.set(1.50)
 
         widgets_fx = [
@@ -1786,62 +2140,62 @@ class StepHybridUI(ctk.CTk):
             w.pack(pady=4, padx=20)
 
         # --- APARTADO: FILTROS ESPECTRALES, OFFSETS Y NOTAS ---
-        self.label_seccion_adv_holders = ctk.CTkLabel(self.apartado_filtros, text="--- Parámetros de Holders ---", font=ctk.CTkFont(size=13, weight="bold", slant="italic"), text_color="#FFB874")
+        self.label_seccion_adv_holders = ctk.CTkLabel(self.apartado_filtros, text=get_translation("lbl_sec_holders"), font=ctk.CTkFont(size=13, weight="bold", slant="italic"), text_color="#FFB874")
 
-        self.label_max_hold = ctk.CTkLabel(self.apartado_filtros, text="Duración Máxima de Hold: 8 líneas", font=ctk.CTkFont(weight="bold"))
-        self.slider_max_hold = ctk.CTkSlider(self.apartado_filtros, from_=2, to=32, number_of_steps=30, width=340, command=lambda v: self.label_max_hold.configure(text=f"Duración Máxima de Hold: {int(v)} líneas"))
+        self.label_max_hold = ctk.CTkLabel(self.apartado_filtros, text=f"{get_translation("lbl_max_hold")} 8", font=ctk.CTkFont(weight="bold"))
+        self.slider_max_hold = ctk.CTkSlider(self.apartado_filtros, from_=2, to=32, number_of_steps=30, width=340, command=lambda v: self.label_max_hold.configure(text=f"{get_translation("lbl_max_hold")} {int(v)}"))
         self.slider_max_hold.set(8)
         
-        self.label_holds_sim = ctk.CTkLabel(self.apartado_filtros, text="Máximo de Holds simultáneos: 2", font=ctk.CTkFont(weight="bold"))
-        self.slider_holds_sim = ctk.CTkSlider(self.apartado_filtros, from_=1, to=4, number_of_steps=3, width=340, command=lambda v: self.label_holds_sim.configure(text=f"Máximo de Holds simultáneos: {int(v)}"))
+        self.label_holds_sim = ctk.CTkLabel(self.apartado_filtros, text=f"{get_translation("lbl_sim_holds")} 2", font=ctk.CTkFont(weight="bold"))
+        self.slider_holds_sim = ctk.CTkSlider(self.apartado_filtros, from_=1, to=4, number_of_steps=3, width=340, command=lambda v: self.label_holds_sim.configure(text=f"{get_translation("lbl_sim_holds")} {int(v)}"))
         self.slider_holds_sim.set(2)
 
-        self.checkbox_postprocesar = ctk.CTkCheckBox(self.apartado_filtros, text="Aplicar Posprocesamiento Rítmico a los Holders", command=self.alternar_visibilidad_postprocesamiento)
+        self.checkbox_postprocesar = ctk.CTkCheckBox(self.apartado_filtros, text=get_translation("chk_postprocess"), command=self.alternar_visibilidad_postprocesamiento)
         self.checkbox_postprocesar.select()
 
         self.checkbox_secciones_saltos = ctk.CTkCheckBox(
             self.apartado_filtros, 
-            text="Generar Secciones de Saltos (Filtro RMS)",
+            text=get_translation("chk_jumps"),
             text_color="#9b59b6",
             command=self.gestionar_exclusividad_saltos
         )
 
         self.frame_saltos_dinamico = ctk.CTkFrame(self.apartado_filtros, fg_color="transparent")
 
-        self.label_rms_min_saltos = ctk.CTkLabel(self.frame_saltos_dinamico, text="Sensibilidad RMS Mínimo Saltos: 0.50", font=ctk.CTkFont(weight="bold"))
+        self.label_rms_min_saltos = ctk.CTkLabel(self.frame_saltos_dinamico, text=f"{get_translation("lbl_rms_min_jumps")} 0.50", font=ctk.CTkFont(weight="bold"))
         self.label_rms_min_saltos.pack(pady=2, padx=5)
         self.slider_rms_min_saltos = ctk.CTkSlider(self.frame_saltos_dinamico, from_=0.1, to=1.0, number_of_steps=18, width=340, 
-                                                  command=lambda v: self.label_rms_min_saltos.configure(text=f"Sensibilidad RMS Mínimo Saltos: {v:.2f}"))
+                                                  command=lambda v: self.label_rms_min_saltos.configure(text=f"{get_translation("lbl_rms_min_jumps")} {v:.2f}"))
         self.slider_rms_min_saltos.pack(pady=2, padx=5)
         self.slider_rms_min_saltos.set(0.50)
 
-        self.label_rms_max_saltos = ctk.CTkLabel(self.frame_saltos_dinamico, text="Sensibilidad RMS Máximo Saltos: 1.50", font=ctk.CTkFont(weight="bold"))
+        self.label_rms_max_saltos = ctk.CTkLabel(self.frame_saltos_dinamico, text=f"{get_translation("lbl_rms_max_jumps")} 1.50", font=ctk.CTkFont(weight="bold"))
         self.label_rms_max_saltos.pack(pady=2, padx=5)
         self.slider_rms_max_saltos = ctk.CTkSlider(self.frame_saltos_dinamico, from_=1.0, to=2.5, number_of_steps=30, width=340, 
-                                                  command=lambda v: self.label_rms_max_saltos.configure(text=f"Sensibilidad RMS Máximo Saltos: {v:.2f}"))
+                                                  command=lambda v: self.label_rms_max_saltos.configure(text=f"{get_translation("lbl_rms_max_jumps")} {v:.2f}"))
         self.slider_rms_max_saltos.pack(pady=2, padx=5)
         self.slider_rms_max_saltos.set(1.50)
 
-        self.label_seccion_adv_dificultad = ctk.CTkLabel(self.apartado_filtros, text="--- Parámetros de Dificultad ---", font=ctk.CTkFont(size=13, weight="bold", slant="italic"), text_color="#4B00FF")
+        self.label_seccion_adv_dificultad = ctk.CTkLabel(self.apartado_filtros, text=get_translation("lbl_sec_diff"), font=ctk.CTkFont(size=13, weight="bold", slant="italic"), text_color="#4B00FF")
         
-        self.label_nivel_texto = ctk.CTkLabel(self.apartado_filtros, text=f"Dificultad Techo del Pack: Nivel 16/30", font=ctk.CTkFont(size=13, weight="bold"), text_color="#3498db")
+        self.label_nivel_texto = ctk.CTkLabel(self.apartado_filtros, text=f"{get_translation("lbl_diff_ceiling")} 16/30", font=ctk.CTkFont(size=13, weight="bold"), text_color="#3498db")
         self.slider_level = ctk.CTkSlider(self.apartado_filtros, from_=1, to=30, number_of_steps=29, width=340, command=self.actualizar_valores_interfaz)
         self.slider_level.set(16)
 
-        self.checkbox_recalcular_diff = ctk.CTkCheckBox(self.apartado_filtros, text="Recalcular Dificultad Dinámicamente (NPS)", text_color="#3498db")
+        self.checkbox_recalcular_diff = ctk.CTkCheckBox(self.apartado_filtros, text=get_translation("chk_recalc_diff"), text_color="#3498db")
         self.checkbox_recalcular_diff.select() # Activado por defecto
 
-        self.label_seccion_adv_compas = ctk.CTkLabel(self.apartado_filtros, text="--- Parámetros de Dificultad Adicional ---", font=ctk.CTkFont(size=13, weight="bold", slant="italic"), text_color="#C7FF00")
+        self.label_seccion_adv_compas = ctk.CTkLabel(self.apartado_filtros, text=get_translation("lbl_sec_extra_diff"), font=ctk.CTkFont(size=13, weight="bold", slant="italic"), text_color="#C7FF00")
 
-        self.label_rms_min = ctk.CTkLabel(self.apartado_filtros, text="Sensibilidad RMS Mínimo (Densidad de Notas): 0.50", font=ctk.CTkFont(weight="bold"))
-        self.slider_rms_min = ctk.CTkSlider(self.apartado_filtros, from_=0.1, to=1.0, number_of_steps=18, width=340, command=lambda v: self.label_rms_min.configure(text=f"Sensibilidad RMS Mínimo (Calma): {v:.2f}"))
+        self.label_rms_min = ctk.CTkLabel(self.apartado_filtros, text=f"{get_translation("lbl_rms_min_density")} 0.50", font=ctk.CTkFont(weight="bold"))
+        self.slider_rms_min = ctk.CTkSlider(self.apartado_filtros, from_=0.1, to=1.0, number_of_steps=18, width=340, command=lambda v: self.label_rms_min.configure(text=f"{get_translation("lbl_rms_min_density")} {v:.2f}"))
         self.slider_rms_min.set(0.5)
         
-        self.label_rms_max = ctk.CTkLabel(self.apartado_filtros, text="Sensibilidad RMS Máximo (Densidad de Notas): 1.50", font=ctk.CTkFont(weight="bold"))
-        self.slider_rms_max = ctk.CTkSlider(self.apartado_filtros, from_=1.0, to=2.5, number_of_steps=30, width=340, command=lambda v: self.label_rms_max.configure(text=f"Sensibilidad RMS Máximo (Drop): {v:.2f}"))
+        self.label_rms_max = ctk.CTkLabel(self.apartado_filtros, text=f"{get_translation("lbl_rms_max_density")} 1.50", font=ctk.CTkFont(weight="bold"))
+        self.slider_rms_max = ctk.CTkSlider(self.apartado_filtros, from_=1.0, to=2.5, number_of_steps=30, width=340, command=lambda v: self.label_rms_max.configure(text=f"{get_translation("lbl_rms_max_density")} {v:.2f}"))
         self.slider_rms_max.set(1.5)
 
-        self.label_lineas_por_compas_texto = ctk.CTkLabel(self.apartado_filtros, text=f"Lineas por compas: Precisión Estándar {self.lineas_por_compas}vas/192vas", font=ctk.CTkFont(size=13, weight="bold"), text_color="#16DB31")
+        self.label_lineas_por_compas_texto = ctk.CTkLabel(self.apartado_filtros, text=f"{get_translation("lbl_compas_lines_sug")} {self.lineas_por_compas}vas/192vas", font=ctk.CTkFont(size=13, weight="bold"), text_color="#16DB31")
         self.frame_lineas_por_compas_botones = ctk.CTkFrame(self.apartado_filtros, fg_color="transparent")
         self.btn_lineas_por_compas_menos_10 = ctk.CTkButton(self.frame_lineas_por_compas_botones, text="- 10", width=80, fg_color="#7f8c8d", hover_color="#95a5a6", command=self.decrementar_lineas_por_compas_ten)
         self.btn_lineas_por_compas_menos_10.pack(side="left", padx=10)
@@ -1852,7 +2206,7 @@ class StepHybridUI(ctk.CTk):
         self.btn_lineas_por_compas_mas_10 = ctk.CTkButton(self.frame_lineas_por_compas_botones, text="+ 10", width=80, fg_color="#7f8c8d", hover_color="#95a5a6", command=self.incrementar_lineas_por_compas_ten)
         self.btn_lineas_por_compas_mas_10.pack(side="left", padx=10)
 
-        self.label_min_notas_compas_texto = ctk.CTkLabel(self.apartado_filtros, text="MIN notas por compas: 8/192", font=ctk.CTkFont(size=13, weight="bold"), text_color="#16DB31")
+        self.label_min_notas_compas_texto = ctk.CTkLabel(self.apartado_filtros, text=f"{get_translation("lbl_min_compas_notes_sug")} 8/192", font=ctk.CTkFont(size=13, weight="bold"), text_color="#16DB31")
         self.frame_min_notas_botones = ctk.CTkFrame(self.apartado_filtros, fg_color="transparent")
         self.btn_min_notas_menos_10 = ctk.CTkButton(self.frame_min_notas_botones, text="- 10", width=80, fg_color="#7f8c8d", hover_color="#95a5a6", command=self.decrementar_min_notas_compas_ten)
         self.btn_min_notas_menos_10.pack(side="left", padx=10)
@@ -1863,7 +2217,7 @@ class StepHybridUI(ctk.CTk):
         self.btn_min_notas_mas_10 = ctk.CTkButton(self.frame_min_notas_botones, text="+ 10", width=80, fg_color="#7f8c8d", hover_color="#95a5a6", command=self.incrementar_min_notas_compas_ten)
         self.btn_min_notas_mas_10.pack(side="left", padx=10)
 
-        self.label_max_notas_compas_texto = ctk.CTkLabel(self.apartado_filtros, text="MAX notas por compas: Dificultad Normal/Dificíl 12/192", font=ctk.CTkFont(size=13, weight="bold"), text_color="#16DB31")
+        self.label_max_notas_compas_texto = ctk.CTkLabel(self.apartado_filtros, text=f"{get_translation("lbl_max_compas_notes_sug")} 12/192", font=ctk.CTkFont(size=13, weight="bold"), text_color="#16DB31")
         self.frame_max_notas_botones = ctk.CTkFrame(self.apartado_filtros, fg_color="transparent")
         self.btn_max_notas_menos_10 = ctk.CTkButton(self.frame_max_notas_botones, text="- 10", width=80, fg_color="#7f8c8d", hover_color="#95a5a6", command=self.decrementar_max_notas_compas_ten)
         self.btn_max_notas_menos_10.pack(side="left", padx=10)
@@ -1875,13 +2229,13 @@ class StepHybridUI(ctk.CTk):
         self.btn_max_notas_mas_10.pack(side="left", padx=10)
 
          # --- NUEVA SUBSECCIÓN: SISTEMA PARAMÉTRICO DE MUESTREO MULTI-ARCHIVO ---
-        self.label_seccion_muestreo_adv = ctk.CTkLabel(self.apartado_filtros, text="--- Reducción Adaptativa de Mapas (Muestreo) ---", font=ctk.CTkFont(size=13, weight="bold", slant="italic"), text_color="#00FFCC")
+        self.label_seccion_muestreo_adv = ctk.CTkLabel(self.apartado_filtros, text=get_translation("lbl_sec_sampling"), font=ctk.CTkFont(size=13, weight="bold", slant="italic"), text_color="#00FFCC")
         self.label_seccion_muestreo_adv.pack(pady=6, padx=20)
 
         # Checkbox muestreo por defecto DESACTIVADO
         self.checkbox_muestreo = ctk.CTkCheckBox(
             self.apartado_filtros, 
-            text="Habilitar Generación de Muestras Multi-Capa", 
+            text=get_translation("chk_sampling"), 
             text_color="#00FFCC",
             command=self.gestionar_exclusividad_muestreo
         )
@@ -1892,14 +2246,14 @@ class StepHybridUI(ctk.CTk):
         self.frame_sub_muestreo = ctk.CTkFrame(self.apartado_filtros, fg_color="transparent")
         
         # Selección de porcentaje base (De 50% a 95%)
-        self.label_muestreo_min = ctk.CTkLabel(self.frame_sub_muestreo, text="Muestreo Inicial Mínimo: 95%", font=ctk.CTkFont(weight="bold"))
+        self.label_muestreo_min = ctk.CTkLabel(self.frame_sub_muestreo, text=f"{get_translation("lbl_sampling_min")} 95%", font=ctk.CTkFont(weight="bold"))
         self.label_muestreo_min.pack(pady=2, padx=5)
-        self.slider_muestreo_min = ctk.CTkSlider(self.frame_sub_muestreo, from_=0.50, to=0.95, number_of_steps=45, width=340, command=self.actualizar_texto_muestreo_min)
+        self.slider_muestreo_min = ctk.CTkSlider(self.frame_sub_muestreo, from_=0.50, to=0.95, number_of_steps=46, width=340, command=self.actualizar_texto_muestreo_min)
         self.slider_muestreo_min.pack(pady=2, padx=5)
         self.slider_muestreo_min.set(0.95)
 
         # Selección de muestras discretas (De 2 a 10)
-        self.label_muestreo_num = ctk.CTkLabel(self.frame_sub_muestreo, text="Muestras Intermedias Totales: 6 (Hasta el 100%)", font=ctk.CTkFont(weight="bold"))
+        self.label_muestreo_num = ctk.CTkLabel(self.frame_sub_muestreo, text=f"{get_translation("lbl_sampling_num")} 6", font=ctk.CTkFont(weight="bold"))
         self.label_muestreo_num.pack(pady=2, padx=5)
         self.slider_muestreo_num = ctk.CTkSlider(self.frame_sub_muestreo, from_=2, to=10, number_of_steps=8, width=340, command=self.actualizar_texto_muestreo_num)
         self.slider_muestreo_num.pack(pady=2, padx=5)
@@ -1924,14 +2278,14 @@ class StepHybridUI(ctk.CTk):
         # BLOQUE FINAL E INMUTABLE DE EJECUCIÓN (FUERA)
         # =====================================================================
 
-        self.btn_resetear = ctk.CTkButton(self.contenedor_vertical, text="Restablecer Parámetros", fg_color="#c0392b", hover_color="#962d22", command=self.restablecer_valores)
-        self.btn_generar = ctk.CTkButton(self.contenedor_vertical, text="¡Procesar y Exportar Dual Pack! 🚀", fg_color="#2ecc71", hover_color="#27ae60", height=45, font=ctk.CTkFont(size=14, weight="bold"), command=self.iniciar_generacion)
-        self.label_status = ctk.CTkLabel(self.contenedor_vertical, text="Estado: Esperando archivos mínimos...", font=ctk.CTkFont(size=12, weight="bold"), text_color="gray")
+        self.btn_resetear = ctk.CTkButton(self.contenedor_vertical, text=get_translation("btn_reset"), fg_color="#c0392b", hover_color="#962d22", command=self.restablecer_valores)
+        self.btn_generar = ctk.CTkButton(self.contenedor_vertical, text=get_translation("btn_generate"), fg_color="#2ecc71", hover_color="#27ae60", height=45, font=ctk.CTkFont(size=14, weight="bold"), command=self.iniciar_generacion)
+        self.label_status = ctk.CTkLabel(self.contenedor_vertical, text=get_translation("lbl_status_wait"), font=ctk.CTkFont(size=12, weight="bold"), text_color="gray")
 
         # --- PANEL CONSOLA DE MÉTRICAS REALES ---
-        self.label_consola = ctk.CTkLabel(self.contenedor_vertical, text="🖥️ Monitor de Densidad en Tiempo Real", font=ctk.CTkFont(size=12, weight="bold"))
+        self.label_consola = ctk.CTkLabel(self.contenedor_vertical, text=get_translation("lbl_monitor"), font=ctk.CTkFont(size=12, weight="bold"))
         self.txt_consola = ctk.CTkTextbox(self.contenedor_vertical, height=140, width=340, font=ctk.CTkFont(family="Courier", size=11), fg_color="#1e272e", text_color="#2ecc71")
-        self.txt_consola.insert("0.0", "Esperando ejecución para calcular NPS...\n")
+        self.txt_consola.insert("0.0", get_translation("txt_console_wait"))
         self.txt_consola.configure(state="disabled")
 
         # Empaquetado lineal descendente y ordenado para scroll seguro
@@ -1948,28 +2302,106 @@ class StepHybridUI(ctk.CTk):
         self.apartado_bpm.pack_forget()
         self.apartado_efectos.pack_forget()
         self.apartado_filtros.pack_forget()
-        if seleccion == "Settings de Tiempo":
+        if seleccion == get_translation("menu_opt_time"):
             self.apartado_tiempo.pack(fill="x", expand=True, before=self.btn_resetear)
-        elif seleccion == "Configuración de BPM y Ritmo":
+        elif seleccion == get_translation("menu_opt_bpm"):
             self.apartado_bpm.pack(fill="x", expand=True, before=self.btn_resetear)
-        elif seleccion == "Efectos, Minas y Trampas":
+        elif seleccion == get_translation("menu_opt_fx"):
             self.apartado_efectos.pack(fill="x", expand=True, before=self.btn_resetear)
-        elif seleccion == "Filtros Espectrales y Dificultad":
+        elif seleccion == get_translation("menu_opt_filters"):
             self.apartado_filtros.pack(fill="x", expand=True, before=self.btn_resetear)
+
+    def cambiar_idioma_ui(self, seleccion):
+        """Alterna el idioma global y reescribe los textos activos en pantalla."""
+        global IDIOMA_ACTUAL
+        IDIOMA_ACTUAL = "es" if seleccion == "Español" else "en"
+        
+        # 1. Ventana y Títulos principales
+        self.title(get_translation("window_title"))
+        self.label_titulo.configure(text=get_translation("main_title"))
+        self.lbl_lang.configure(text=get_translation("select_lang"))
+        
+        # 2. Bloque de archivos y metadatos
+        self.btn_audio.configure(text=get_translation("btn_audio"))
+        if not self.audio_file_path: self.label_audio_path.configure(text=get_translation("lbl_no_audio"))
+        self.btn_checkpoint.configure(text=get_translation("btn_checkpoint"))
+        if not self.checkpoint_file_path: self.label_checkpoint_path.configure(text=get_translation("lbl_no_model"))
+        self.label_name.configure(text=get_translation("lbl_title"))
+        self.label_artist_name.configure(text=get_translation("lbl_artist"))
+        self.btn_banner.configure(text=get_translation("btn_banner"))
+        if not self.banner_file_path: self.label_banner_path.configure(text=get_translation("lbl_no_banner"))
+        self.btn_video.configure(text=get_translation("btn_video"))
+        if not self.video_file_path: self.label_video_path.configure(text=get_translation("lbl_no_video"))
+        self.checkbox_rename.configure(text=get_translation("chk_rename"))
+        self.label_seccion_adv.configure(text=get_translation("lbl_sec_adv"))
+        self.label_pack_name.configure(text=get_translation("lbl_pack_name"))
+        self.label_seed.configure(text=get_translation("lbl_seed"))
+        
+        # 3. Menús y Botones de acción inferior
+        self.label_presets.configure(text=get_translation("lbl_presets"))
+        self.menu_presets.configure(values=[get_translation("preset_0"), get_translation("preset_1"), get_translation("preset_2"), get_translation("preset_3"), get_translation("preset_4"), get_translation("preset_5"), get_translation("preset_6"), get_translation("preset_7")])
+        self.label_menu_apartados.configure(text=get_translation("lbl_adv_settings"))
+        self.menu_apartados.configure(values=[get_translation("menu_opt_hide"), get_translation("menu_opt_time"), get_translation("menu_opt_bpm"), get_translation("menu_opt_fx"), get_translation("menu_opt_filters")])
+        self.btn_resetear.configure(text=get_translation("btn_reset"))
+        self.btn_generar.configure(text=get_translation("btn_generate"))
+        self.label_consola.configure(text=get_translation("lbl_monitor"))
+        
+        # 4. Apartado Tiempo
+        self.btn_visualizar_grafico.configure(text=get_translation("btn_graph"))
+        self.label_duracion.configure(text=get_translation("lbl_duration"))
+        self.label_seccion_adv_tiempo.configure(text=get_translation("lbl_sec_time"))
+        self.checkbox_offset_auto.configure(text=get_translation("chk_offset_auto"))
+        
+        # 5. Apartado BPM y Speeds
+        self.label_seccion_adv_bpm.configure(text=get_translation("lbl_sec_bpm"))
+        self.checkbox_bpm.configure(text=get_translation("chk_double_bpm"))
+        self.checkbox_bpm_dinamico.configure(text=get_translation("chk_dynamic_bpm"))
+        self.label_min_bpm_dinamico.configure(text=get_translation("lbl_min_bpm"))
+        self.label_max_bpm_dinamico.configure(text=get_translation("lbl_max_bpm"))
+        self.label_seccion_adv_speed.configure(text=get_translation("lbl_sec_speed"))
+        self.checkbox_speeds_dinamico.configure(text=get_translation("chk_dynamic_speed"))
+        
+        # 6. Apartado Trampas y FX
+        self.label_seccion_adv_trampas.configure(text=get_translation("lbl_sec_fx"))
+        self.checkbox_efectos_rms.configure(text=get_translation("chk_fx_rms"))
+        
+        # 7. Apartado Filtros y Dificultad
+        self.label_seccion_adv_holders.configure(text=get_translation("lbl_sec_holders"))
+        self.checkbox_postprocesar.configure(text=get_translation("chk_postprocess"))
+        self.checkbox_secciones_saltos.configure(text=get_translation("chk_jumps"))
+        self.label_seccion_adv_dificultad.configure(text=get_translation("lbl_sec_diff"))
+        self.checkbox_recalcular_diff.configure(text=get_translation("chk_recalc_diff"))
+        self.label_seccion_adv_compas.configure(text=get_translation("lbl_sec_extra_diff"))
+        self.label_seccion_muestreo_adv.configure(text=get_translation("lbl_sec_sampling"))
+        self.checkbox_muestreo.configure(text=get_translation("chk_sampling"))
+        
+        # Refrescar los textos calculados por sliders activos
+        self.actualizar_texto_offset(self.slider_offset.get())
+        self.actualizar_texto_extension(self.slider_extension.get())
+        self.actualizar_texto_amortiguador_bpm(self.slider_bpm_amortiguador.get())
+        self.actualizar_texto_umbral_speed(self.slider_speed_umbral.get())
+        self.actualizar_valores_interfaz()
+        self.actualizar_valores_compas()
+        
+        # Cambiar placeholders de entradas de texto de forma segura
+        self.label_temp.configure(text=f"{get_translation("lbl_temp")} {self.slider_temp.get():.2f}")
+
+        self.actualizar_consola_gui(get_translation("txt_console_wait"))
+
 
     def aplicar_preset_config(self, seleccion):
         """
         Carga configuraciones automáticas calibradas con valores reales estables
         para evaluar el sistema de ráfagas de saltos y el presupuesto de trampas.
         """
-        if seleccion == "Seleccionar Preset (Manual)":
+        if seleccion == get_translation("preset_0"):
             return
 
         # Limpieza obligatoria de buffers rítmicos dinámicos
         self.entry_min_bpm_dinamico.delete(0, "end")
         self.entry_max_bpm_dinamico.delete(0, "end")
 
-        if seleccion == "1. Visualmente dinámico.":
+        if seleccion == get_translation("preset_1"):
             # --- PRIORIDAD: Activación balanceada de coexistencia rítmica ---
             self.checkbox_bpm_dinamico.select()
             self.checkbox_speeds_dinamico.select()
@@ -1992,7 +2424,7 @@ class StepHybridUI(ctk.CTk):
 
             self.slider_max_hold.set(4)
 
-        elif seleccion == "2. Más Saltos":
+        elif seleccion == get_translation("preset_2"):
             # --- PRIORIDAD: Liberación espectral de ráfagas (Jumpstreams) ---
             self.checkbox_bpm_dinamico.deselect()
             self.checkbox_speeds_dinamico.deselect()
@@ -2012,7 +2444,7 @@ class StepHybridUI(ctk.CTk):
             self.slider_max_lifts.set(0)
             self.slider_max_hiddens.set(0)
 
-        elif seleccion == "3. Velocidad caótica.":
+        elif seleccion == get_translation("preset_3"):
             # --- PRIORIDAD: Gimmicks de scroll agresivos y cortes rígidos ---
             self.checkbox_bpm_dinamico.deselect()
             self.checkbox_speeds_dinamico.select()
@@ -2030,7 +2462,7 @@ class StepHybridUI(ctk.CTk):
             self.slider_prob_minas.set(30)
             self.slider_max_minas.set(1)
 
-        elif seleccion == "4. Marea Flotante (Flujo de Olas y Smooth Scroll)":
+        elif seleccion == get_translation("preset_4"):
             # --- ENFOQUE: Experiencia competitiva fluida sin fatiga visual ---
             self.checkbox_bpm_dinamico.select()
             self.checkbox_speeds_dinamico.select()
@@ -2051,7 +2483,7 @@ class StepHybridUI(ctk.CTk):
             self.slider_max_hold.set(12)
             self.slider_holds_sim.set(2)
 
-        elif seleccion == "5. Gimmick Caótico (Cortes Abruptos y Trampas de Impacto)":
+        elif seleccion == get_translation("preset_5"):
             # --- ENFOQUE: Carta técnica avanzada con control de saturación ---
             self.checkbox_bpm_dinamico.select()
             self.checkbox_speeds_dinamico.select()
@@ -2074,7 +2506,7 @@ class StepHybridUI(ctk.CTk):
             self.slider_max_hold.set(6)
             self.slider_holds_sim.set(2)
 
-        elif seleccion == "6. Inferencia de Densidad Pura (Filtros Espectrales sin Modificadores)":
+        elif seleccion == get_translation("preset_6"):
             # --- ENFOQUE: Red Neuronal nativa pura sobre corrientes rítmicas ---
             self.checkbox_bpm_dinamico.deselect()
             self.checkbox_speeds_dinamico.deselect()
@@ -2093,7 +2525,7 @@ class StepHybridUI(ctk.CTk):
             self.slider_max_hold.set(8)
             self.slider_holds_sim.set(2)
 
-        elif seleccion == "7. Tormenta Hardcore (Deathstream Máximo y Modificadores Coexistentes)":
+        elif seleccion == get_translation("preset_7"):
             # --- ENFOQUE: Máxima subdivisión competitiva y ráfagas infinitas ---
             self.checkbox_bpm_dinamico.deselect()
             self.checkbox_speeds_dinamico.select()
@@ -2122,23 +2554,23 @@ class StepHybridUI(ctk.CTk):
 
         # --- REFRESCO INMEDIATO DE LA INTERFAZ ---
         self.actualizar_texto_amortiguador_bpm(self.slider_bpm_amortiguador.get())
-        self.label_speed_trans.configure(text=f"Duración de Transición: {self.slider_speed_trans.get():.1f} Beats" if self.slider_speed_trans.get() > 0 else "Duración de Transición: Inmediata (0.0)")
+        self.label_speed_trans.configure(text=f"{get_translation("lbl_speed_trans")} {self.slider_speed_trans.get():.1f} Beats" if self.slider_speed_trans.get() > 0 else "Duración de Transición: Inmediata (0.0)")
         self.actualizar_texto_umbral_speed(self.slider_speed_umbral.get())
         
-        self.label_temp.configure(text=f"Temperatura IA (Caos): {self.slider_temp.get():.2f}")
-        self.label_max_hold.configure(text=f"Duración Máxima de Hold: {int(self.slider_max_hold.get())} líneas")
-        self.label_holds_sim.configure(text=f"Máximo de Holds simultáneos: {int(self.slider_holds_sim.get())}")
-        self.label_prob_minas.configure(text=f"Probabilidad de Minas por compás: {int(self.slider_prob_minas.get())}%")
-        self.label_max_minas.configure(text=f"Máximo Minas por Compás: {int(self.slider_max_minas.get())}")
-        self.label_prob_fakes.configure(text=f"Probabilidad de Fakes por compás: {int(self.slider_prob_fakes.get())}%")
-        self.label_max_fakes.configure(text=f"Máximo Fakes por Compás: {int(self.slider_max_fakes.get())}")
+        self.label_temp.configure(text=f"{get_translation("lbl_temp")} {self.slider_temp.get():.2f}")
+        self.label_max_hold.configure(text=f"{get_translation("lbl_max_hold")} {int(self.slider_max_hold.get())} líneas")
+        self.label_holds_sim.configure(text=f"{get_translation("lbl_sim_holds")} {int(self.slider_holds_sim.get())}")
+        self.label_prob_minas.configure(text=f"{get_translation("lbl_prob_mines")} {int(self.slider_prob_minas.get())}%")
+        self.label_max_minas.configure(text=f"{get_translation("lbl_max_mines")} {int(self.slider_max_minas.get())}")
+        self.label_prob_fakes.configure(text=f"{get_translation("lbl_prob_fakes")} {int(self.slider_prob_fakes.get())}%")
+        self.label_max_fakes.configure(text=f"{get_translation("lbl_max_fakes")} {int(self.slider_max_fakes.get())}")
         
         # Sincronizar estados de visibilidad en los contenedores
         self.gestionar_exclusividad_ritmo()
         self.gestionar_exclusividad_saltos()
         self.actualizar_valores_compas()
         
-        self.label_status.configure(text=f"Preset Cargado: {seleccion[3:]}", text_color="#1abc9c")
+        self.label_status.configure(text=f"{get_translation("lbl_present_status")} {seleccion[3:]}", text_color="#1abc9c")
     
     def restablecer_valores(self):
         """ Devuelve todos los sliders avanzados a sus valores nativos por defecto """
@@ -2148,9 +2580,9 @@ class StepHybridUI(ctk.CTk):
         self.banner_file_path = ""
         self.video_file_path = ""
         
-        self.label_audio_path.configure(text="Ningún archivo seleccionado", text_color="gray")
-        self.label_banner_path.configure(text="Ningún banner seleccionado", text_color="gray")
-        self.label_video_path.configure(text="Ningún video seleccionado", text_color="gray")
+        self.label_audio_path.configure(text=get_translation("lbl_no_audio"), text_color="gray")
+        self.label_banner_path.configure(text=get_translation("btn_banner"), text_color="gray")
+        self.label_video_path.configure(text=get_translation("btn_video"), text_color="gray")
         
         self.entry_title.delete(0, "end")
         self.entry_artist_name.delete(0, "end")
@@ -2162,7 +2594,7 @@ class StepHybridUI(ctk.CTk):
 
         # Reset de ui de BPM
         self.slider_bpm.set(0)
-        self.label_bpm.configure(text="Configuración de BPM: Auto (Detección DSP)")
+        self.label_bpm.configure(text=f"{get_translation("lbl_bpm_config")} {get_translation("lbl_bpm_auto")}")
         self.check_auto_bpm.select()
         self.slider_bpm.configure(state="disabled")
         self.btn_bpm_menos.configure(state="disabled")
@@ -2176,151 +2608,153 @@ class StepHybridUI(ctk.CTk):
         self.entry_max_bpm_dinamico.delete(0, "end")
 
         self.slider_rms_min_bpm.set(0.50)
-        self.label_rms_min_bpm.configure(text="Sensibilidad RMS Mínimo BPM: 0.50")
+        self.label_rms_min_bpm.configure(text=f"{get_translation("lbl_rms_min_bpm")} 0.50")
         self.slider_rms_max_bpm.set(1.50)
-        self.label_rms_max_bpm.configure(text="Sensibilidad RMS Máximo BPM: 1.50")
+        self.label_rms_max_bpm.configure(text=f"{get_translation("lbl_rms_max_bpm")} 1.50")
 
-        self.label_bpm_amortiguador.configure("Amortiguador de Marea BPM: 0.12 (Atenuado)")
+        self.label_bpm_amortiguador.configure(text=f"{get_translation("lbl_bpm_damping")} 0.12")
         self.slider_bpm_amortiguador.set(0.12)
 
         # Reset de ui de scrolls speeds
         self.checkbox_speeds_dinamico.deselect()
         self.checkbox_speeds_dinamico.configure(state="normal")
 
-        self.label_speed_offset_time.configure(text="Duración Extendida por Pérdida: 0.65% (Recomendado)")
-        self.slider_speed_offset_time.set(0.65)
+        self.label_speed_offset_time.configure(text=f"{get_translation("lbl_speed_loss")} 0.15%")
+        self.slider_speed_offset_time.set(0.15)
 
-        self.label_rms_min_speed.configure(text="Sensibilidad RMS Mínimo Scroll: 0.50")
+        self.label_rms_min_speed.configure(text=f"{get_translation("lbl_rms_min_speed")} 0.50")
         self.slider_rms_min_speed.set(0.50)
-        self.label_rms_max_speed.configure(text="Sensibilidad RMS Máximo Scroll: 1.50")
+        self.label_rms_max_speed.configure(text=f"{get_translation("lbl_rms_max_speed")} 1.50")
         self.slider_rms_max_speed.set(1.50)
 
         self.slider_speed_min.set(0.70)
         self.slider_speed_min.configure(state="normal")
-        self.label_speed_min.configure(text="Velocidad en Mínimos (Calma): 0.70x")
+        self.label_speed_min.configure(text=f"{get_translation("lbl_speed_min")} 0.70x")
         self.slider_speed_max.set(1.40)
         self.slider_speed_max.configure(state="normal")
-        self.label_speed_max.configure(text="Velocidad en Máximos (Drop): 1.40x")
+        self.label_speed_max.configure(text=f"{get_translation("lbl_speed_max")} 1.40x")
 
         self.slider_speed_trans.set(2.0)
         self.slider_speed_trans.configure(state="normal")
-        self.label_speed_trans.configure(text="Duración de Transición: 2.0 Beats (Suave)")
+        self.label_speed_trans.configure(text=f"{get_translation("lbl_speed_trans")} 2.0 Beats")
 
         self.slider_speed_umbral.set(0.50)
-        self.label_speed_umbral.configure(text="Filtro Anti-Mareo (Umbral): 0.50 (Estable Óptimo)")
+        self.label_speed_umbral.configure(text=f"{get_translation("lbl_speed_anti_dizzy")} 0.50")
 
         self.checkbox_postprocesar.select()
         self.checkbox_recalcular_diff.select() # Reset a activado
         
         self.slider_offset.set(0.000)
-        self.label_offset.configure(text="Offset de Inicio: 0.000 s (Por defecto)")
+        self.label_offset.configure(text=f"{get_translation("lbl_offset")} 0.000 s")
 
         self.checkbox_offset_auto.select()
         self.slider_offset.configure(state="disabled")
 
         self.slider_extension.set(0.000)
-        self.label_extension.configure(text="Extensión Final Estética: 0.0 s (Corte normal)")
+        self.label_extension.configure(text=f"{get_translation("lbl_extension")} 0.0 s")
         
         # Resetear Parámetros Avanzados
         self.slider_temp.set(1.3)
-        self.label_temp.configure(text="Temperatura IA (Caos): 1.30")
+        self.label_temp.configure(text=f"{get_translation("lbl_temp")} 1.30")
         
         self.slider_max_hold.set(8)
-        self.label_max_hold.configure(text="Duración Máxima de Hold: 8 líneas")
+        self.label_max_hold.configure(text=f"{get_translation("lbl_max_hold")} 8")
         
         self.slider_holds_sim.set(2)
-        self.label_holds_sim.configure(text="Máximo de Holds simultáneos: 2")
+        self.label_holds_sim.configure(text=f"{get_translation("lbl_sim_holds")} 2")
         
+        # Reseteo de trampas
         self.slider_prob_minas.set(35)
-        self.label_prob_minas.configure(text="Probabilidad de Minas por compás: 35%")
-        
+        self.label_prob_minas.configure(text=f"{get_translation("lbl_prob_mines")} 35%")
         self.slider_max_minas.set(3)
-        self.label_max_minas.configure(text="Máximo Minas por Compás: 3")
+        self.label_max_minas.configure(text=f"{get_translation("lbl_max_mines")} 3")
+        
+        self.slider_prob_fakes.set(25)
+        self.label_prob_fakes.configure(text=f"{get_translation("lbl_prob_fakes")} 25%")
+        self.slider_max_fakes.set(0)
+        self.label_max_fakes.configure(text=f"{get_translation("lbl_max_fakes")} 0")
 
+        self.slider_prob_lifts.set(25)
+        self.label_prob_lifts.configure(text=f"{get_translation("lbl_prob_lifts")} 25%")
+        self.slider_max_lifts.set(0)
+        self.label_max_lifts.configure(text=f"{get_translation("lbl_max_lifts")} 0")
+
+        self.slider_prob_potions.set(15)
+        self.label_prob_potions.configure(text=f"{get_translation("lbl_prob_potions")} 15%")
+        self.slider_max_potions.set(0)
+        self.label_max_potions.configure(text=f"{get_translation("lbl_max_potions")} 0")
+
+        self.slider_prob_shields.set(15)
+        self.label_prob_shields.configure(text=f"{get_translation("lbl_prob_shields")} 15%")
+        self.slider_max_shields.set(0)
+        self.label_max_shields.configure(text=f"{get_translation("lbl_max_shields")} 0")
+
+        self.slider_prob_rayos.set(15)
+        self.label_prob_rayos.configure(text=f"{get_translation("lbl_prob_rayos")} 15%")
+        self.slider_max_rayos.set(0)
+        self.label_max_rayos.configure(text=f"{get_translation("lbl_max_rayos")} 0")
+
+        self.slider_prob_hiddens.set(20)
+        self.label_prob_hiddens.configure(text=f"{get_translation("lbl_prob_hiddens")} 20%")
+        self.slider_max_hiddens.set(0)
+        self.label_max_hiddens.configure(text=f"{get_translation("lbl_max_hiddens")} 0")
+
+        self.label_rms_min_fx.configure(text=f"{get_translation("lbl_rms_min_fx")} 0.50")
+        self.slider_rms_min_fx.set(0.50)
+        self.label_rms_max_fx.configure(text=f"{get_translation("lbl_rms_max_fx")} 1.50")
+        self.slider_rms_max_fx.set(1.50)
+
+        self.checkbox_efectos_rms.select()
+
+        #Reseteo de sección de saltos
         self.checkbox_secciones_saltos.deselect()
 
-        self.label_rms_min_saltos.configure(text="Sensibilidad RMS Mínimo Saltos: 0.50")
+        self.label_rms_min_saltos.configure(text=f"{get_translation("lbl_rms_min_jumps")} 0.50")
         self.slider_rms_min_saltos.set(0.50)
-        self.label_rms_max_saltos.configure(text="Sensibilidad RMS Máximo Saltos: 1.50")
+        self.label_rms_max_saltos.configure(text=f"{get_translation("lbl_rms_max_jumps")} 1.50")
         self.slider_rms_max_saltos.set(1.50)
         
         self.slider_rms_min.set(0.5)
-        self.label_rms_min.configure(text="Sensibilidad RMS Mínimo (Densidad de Notas): 0.50")
+        self.label_rms_min.configure(text=f"{get_translation("lbl_rms_min_density")} 0.50")
         
         self.slider_rms_max.set(1.5)
-        self.label_rms_max.configure(text="Sensibilidad RMS Máximo (Densidad de Notas): 1.50")
+        self.label_rms_max.configure(text=f"{get_translation("lbl_rms_max_density")} 1.50")
         
         # Resetear Techo de Dificultad
         self.slider_level.set(16)
         self.actualizar_valores_interfaz()
         
         #Resetear compas
-        self.label_lineas_por_compas_texto.configure(text="Lineas por compas: Precisión Estándar 12vas/192vas", text_color="#16DB31")
+        self.label_lineas_por_compas_texto.configure(text=f"{get_translation("lbl_compas_lines_sug")} 12vas/192vas", text_color="#16DB31")
         self.lineas_por_compas = 12
-        self.label_max_notas_compas_texto.configure(text="MAX notas por compas: Dificultad Normal/Dificíl 12/192", text_color="#16DB31")
+        self.label_max_notas_compas_texto.configure(text=f"{get_translation("lbl_max_compas_notes_sug")} 12/192", text_color="#16DB31")
         self.max_notas_compas = 12
-        self.label_min_notas_compas_texto.configure(text="MIN notas por compas: 8/192", text_color="#16DB31")
+        self.label_min_notas_compas_texto.configure(text=f"{get_translation("lbl_min_compas_notes_sug")} 8/192", text_color="#16DB31")
         self.min_notas_compas = 8
-
-        self.label_status.configure(text="Estado: Parámetros restablecidos correctamente.", text_color="gray")
 
         self.txt_consola.configure(state="normal")
         self.txt_consola.delete("0.0", "end")
-        self.txt_consola.insert("0.0", "Esperando ejecución para calcular NPS...\n")
+        self.txt_consola.insert("0.0", get_translation("txt_console_wait"))
         self.txt_consola.configure(state="disabled")
 
-        self.slider_prob_fakes.set(25)
-        self.label_prob_fakes.configure(text="Probabilidad de Fakes por compás: 25%")
-        self.slider_max_fakes.set(0)
-        self.label_max_fakes.configure(text="Máximo Fakes por Compás: 0")
-
-        self.slider_prob_lifts.set(25)
-        self.label_prob_lifts.configure(text="Probabilidad de Lifts por compás: 25%")
-        self.slider_max_lifts.set(0)
-        self.label_max_lifts.configure(text="Máximo Lifts por Compás: 0")
-        
-        self.slider_prob_potions.set(15)
-        self.label_prob_potions.configure(text="Probabilidad de Potions por compás: 15%")
-        self.slider_max_potions.set(0)
-        self.label_max_potions.configure(text="Máximo Potions por Compás: 0")
-
-        self.slider_prob_shields.set(15)
-        self.label_prob_shields.configure(text="Probabilidad de Shields por compás: 15%")
-        self.slider_max_shields.set(0)
-        self.label_max_shields.configure(text="Máximo Shields por Compás: 0")
-
-        self.slider_prob_rayos.set(15)
-        self.label_prob_rayos.configure(text="Probabilidad de Rayos por compás: 15%")
-        self.slider_max_rayos.set(0)
-        self.label_max_rayos.configure(text="Máximo Rayos por Compás: 0")
-
-        self.slider_prob_hiddens.set(20)
-        self.label_prob_hiddens.configure(text="Probabilidad de Hiddens por compás: 20%")
-        self.slider_max_hiddens.set(0)
-        self.label_max_hiddens.configure(text="Máximo Hiddens por Compás: 0")
-
-        self.checkbox_efectos_rms.select()
-
-        self.label_rms_min_fx.configure(text="Sensibilidad RMS Mínimo Trampas: 0.50")
-        self.slider_rms_min_fx.set(0.50)
-        self.label_rms_max_fx.configure(text="Sensibilidad RMS Máximo Trampas: 1.50")
-        self.slider_rms_max_fx.set(1.50)
-
+        #Reseteo de muestreo
         self.checkbox_muestreo.deselect()
         self.slider_muestreo_min.set(0.95)
         self.slider_muestreo_min.configure(state="disabled")
-        self.label_muestreo_min.configure(text="Muestreo Inicial Mínimo: 95%")
+        self.label_muestreo_min.configure(text=f"{get_translation("lbl_sampling_min")} 95%")
         self.slider_muestreo_num.set(6)
         self.slider_muestreo_num.configure(state="disabled")
-        self.label_muestreo_num.configure(text="Muestras Intermedias Totales: 6 (Hasta el 100%)")
+        self.label_muestreo_num.configure(text=f"{get_translation("lbl_sampling_num")} 6")
         self.frame_sub_muestreo.pack_forget()
+
+        self.label_status.configure(text=get_translation("label_status_reset"), text_color="gray")
 
     def actualizar_texto_bpm(self, valor):
         # Redondeamos al 0.5 más cercano
         bpm = round(float(valor) * 2) / 2
         # Formatear para quitar el .0 si es un número entero
         bpm_texto = int(bpm) if bpm.is_integer() else bpm
-        self.label_bpm.configure(text=f"Configuración de BPM: {bpm_texto} BPM (Manual)")
+        self.label_bpm.configure(text=f"{get_translation("lbl_bpm_config")} {bpm_texto} BPM (Manual)")
 
     def conmutar_auto_bpm(self):
         # Si el checkbox está marcado (Devuelve 1)
@@ -2328,7 +2762,7 @@ class StepHybridUI(ctk.CTk):
             self.slider_bpm.configure(state="disabled")
             self.btn_bpm_menos.configure(state="disabled")
             self.btn_bpm_mas.configure(state="disabled")
-            self.label_bpm.configure(text="Configuración de BPM: Auto (Detección DSP)")
+            self.label_bpm.configure(text=f"{get_translation("lbl_bpm_config")} {get_translation("lbl_bpm_auto")}")
         else:
             self.slider_bpm.configure(state="normal")
             self.btn_bpm_menos.configure(state="normal")
@@ -2372,27 +2806,27 @@ class StepHybridUI(ctk.CTk):
 
     def actualizar_texto_amortiguador_bpm(self, valor):
         if valor <= 0.05:
-            tipo = "Extremo (Flujo de Olas)"
+            tipo = get_translation("lbl_bpm_damping_indicator1")
         elif valor <= 0.15:
-            tipo = "Atenuado (Recomendado)"
+            tipo = get_translation("lbl_bpm_damping_indicator2")
         elif valor <= 0.40:
-            tipo = "Reactivo Progresivo"
+            tipo = get_translation("lbl_bpm_damping_indicator3")
         else:
-            tipo = "Inmediato (Brusco)"
-        self.label_bpm_amortiguador.configure(text=f"Amortiguador de Marea BPM: {valor:.2f} ({tipo})")
+            tipo = get_translation("lbl_bpm_damping_indicator4")
+        self.label_bpm_amortiguador.configure(text=f"{get_translation("lbl_bpm_damping")} {valor:.2f} ({tipo})")
     
     def actualizar_texto_umbral_speed(self, valor):
         # Redondeamos a dos decimales para mantener limpia la UI
         valor = round(float(valor), 2)
         if valor >= 0.50:
-            tipo = "Estable Óptimo (Cero Mareos)"
+            tipo = get_translation("lbl_speed_anti_dizzy_indicator1")
         elif valor >= 0.30:
-            tipo = "Sensible (Riesgo de Mareo)"
+            tipo = get_translation("lbl_speed_anti_dizzy_indicator2")
         elif valor >= 0.20:
-            tipo = "Cambios Bruscos / Gimmick"
+            tipo = get_translation("lbl_speed_anti_dizzy_indicator3")
         else:
-            tipo = "Hiper-Reactivo (Inestable)"
-        self.label_speed_umbral.configure(text=f"Filtro Anti-Mareo (Umbral): {valor:.2f} ({tipo})")
+            tipo = get_translation("lbl_speed_anti_dizzy_indicator4")
+        self.label_speed_umbral.configure(text=f"{get_translation("lbl_speed_anti_dizzy")} {valor:.2f} ({tipo})")
 
     def gestionar_exclusividad_saltos(self):
         if self.checkbox_secciones_saltos.get():
@@ -2401,7 +2835,7 @@ class StepHybridUI(ctk.CTk):
             self.frame_saltos_dinamico.forget()
 
     def actualizar_texto_offset(self, valor):
-        self.label_offset.configure(text=f"Offset de Inicio: {valor:.3f} s")
+        self.label_offset.configure(text=f"{get_translation("lbl_offset")} {valor:.3f} s")
 
     def incrementar_offset(self):
         # Incrementa en un paso del slider (16.0 / 400 = 0.04s)
@@ -2421,7 +2855,7 @@ class StepHybridUI(ctk.CTk):
             self.slider_offset.configure(state="disabled")
             self.btn_offset_menos.configure(state="disabled")
             self.btn_offset_mas.configure(state="disabled")
-            self.label_offset.configure(text="Offset de Inicio: [Automático Activo]")
+            self.label_offset.configure(text=get_translation("lbl_offset_auto_active"))
         else:
             self.slider_offset.configure(state="normal")
             self.btn_offset_menos.configure(state="normal")
@@ -2440,22 +2874,22 @@ class StepHybridUI(ctk.CTk):
 
     def actualizar_texto_muestreo_min(self, valor):
         pct = int(float(valor) * 100)
-        self.label_muestreo_min.configure(text=f"Muestreo Inicial Mínimo: {pct}%")
+        self.label_muestreo_min.configure(text=f"{get_translation("lbl_sampling_min")} {pct}%")
 
     def actualizar_texto_muestreo_num(self, valor):
         muestras = int(valor)
-        self.label_muestreo_num.configure(text=f"Muestras Intermedias Totales: {muestras} (Hasta el 100%)")
+        self.label_muestreo_num.configure(text=f"{get_translation("lbl_sampling_num")} {muestras}")
     #----------------------------------------------------
     
     def actualizar_texto_extension(self, valor):
-        self.label_extension.configure(text=f"Extensión Final Estética: {valor:.1f} s")
+        self.label_extension.configure(text=f"{get_translation("lbl_extension")} {valor:.1f} s")
 
     def actualizar_valores_interfaz(self, *args):
         level = int(self.slider_level.get())
         e = max(1, int(level * 0.25))
         m = max(2, int(level * 0.50))
         h = max(3, int(level * 0.75))
-        self.label_nivel_texto.configure(text=f"Dificultad Techo: Nivel {level}\nEscala: [Easy {e} | Med {m} | Hard {h} | Chal {level}]")
+        self.label_nivel_texto.configure(text=f"{get_translation("lbl_diff_ceiling")} {level}\n [Easy {e} | Med {m} | Hard {h} | Chal {level}]")
 
     def incrementar_lineas_por_compas_one(self):
         self.lineas_por_compas = min(192, self.lineas_por_compas + 1)
@@ -2513,52 +2947,52 @@ class StepHybridUI(ctk.CTk):
             self.max_notas_compas = self.lineas_por_compas
 
         if(self.lineas_por_compas < 12):
-            self.label_lineas_por_compas_texto.configure(text=f"Lineas por compas: Precisión Simple {self.lineas_por_compas}vas/192vas", text_color="#11CCDB")
+            self.label_lineas_por_compas_texto.configure(text=f"{get_translation("lbl_compas_lines_low")} {self.lineas_por_compas}vas/192vas", text_color="#11CCDB")
             #Corrección de congruencia entre mínimo y máximo de notas
             if(self.min_notas_compas >= 12 or self.max_notas_compas >= 12 or self.max_notas_compas < self.min_notas_compas):
                 self.min_notas_compas = 2
                 self.max_notas_compas = self.lineas_por_compas
-                self.label_min_notas_compas_texto.configure(text=f"MIN notas por compas: {self.min_notas_compas}/192", text_color="#11CCDB")
-                self.label_max_notas_compas_texto.configure(text=f"MAX notas por compas: Dificultad Baja/Normal {self.max_notas_compas}/192", text_color="#11CCDB")
+                self.label_min_notas_compas_texto.configure(text=f"{get_translation("lbl_min_compas_notes")} {self.min_notas_compas}/192", text_color="#11CCDB")
+                self.label_max_notas_compas_texto.configure(text=f"{get_translation("lbl_max_compas_notes_low")} {self.max_notas_compas}/192", text_color="#11CCDB")
             else:
-                self.label_min_notas_compas_texto.configure(text=f"MIN notas por compas: {self.min_notas_compas}/192", text_color="#11CCDB")
-                self.label_max_notas_compas_texto.configure(text=f"MAX notas por compas: Dificultad Baja/Normal {self.max_notas_compas}/192", text_color="#11CCDB")
+                self.label_min_notas_compas_texto.configure(text=f"{get_translation("lbl_min_compas_notes")} {self.min_notas_compas}/192", text_color="#11CCDB")
+                self.label_max_notas_compas_texto.configure(text=f"{get_translation("lbl_max_compas_notes_low")} {self.max_notas_compas}/192", text_color="#11CCDB")
         elif(self.lineas_por_compas <= 16):
-            self.label_lineas_por_compas_texto.configure(text=f"Lineas por compas: Precisión Estándar {self.lineas_por_compas}vas/192vas", text_color="#16DB31")
+            self.label_lineas_por_compas_texto.configure(text=f"{get_translation("lbl_compas_lines_sug")} {self.lineas_por_compas}vas/192vas", text_color="#16DB31")
             #Corrección de congruencia entre mínimo y máximo de notas
             if(self.min_notas_compas > 16 or self.max_notas_compas > 16 or self.max_notas_compas < self.min_notas_compas):
                 self.min_notas_compas = 2
                 self.max_notas_compas = self.lineas_por_compas
-                self.label_min_notas_compas_texto.configure(text=f"MIN notas por compas: {self.min_notas_compas}/192", text_color="#16DB31")
-                self.label_max_notas_compas_texto.configure(text=f"MAX notas por compas: Dificultad Normal/Dificíl {self.max_notas_compas}/192", text_color="#16DB31")
+                self.label_min_notas_compas_texto.configure(text=f"{get_translation("lbl_min_compas_notes")} {self.min_notas_compas}/192", text_color="#16DB31")
+                self.label_max_notas_compas_texto.configure(text=f"{get_translation("lbl_max_compas_notes_sug")} {self.max_notas_compas}/192", text_color="#16DB31")
             else:
-                self.label_min_notas_compas_texto.configure(text=f"MIN notas por compas: {self.min_notas_compas}/192", text_color="#16DB31")
-                self.label_max_notas_compas_texto.configure(text=f"MAX notas por compas: Dificultad Normal/Dificíl {self.max_notas_compas}/192", text_color="#16DB31")
+                self.label_min_notas_compas_texto.configure(text=f"{get_translation("lbl_min_compas_notes")} {self.min_notas_compas}/192", text_color="#16DB31")
+                self.label_max_notas_compas_texto.configure(text=f"{get_translation("lbl_max_compas_notes_sug")} {self.max_notas_compas}/192", text_color="#16DB31")
         elif(self.lineas_por_compas <= 64):
-            self.label_lineas_por_compas_texto.configure(text=f"Lineas por compas: Precisión Alta {self.lineas_por_compas}vas/192vas", text_color="#C600DB")
+            self.label_lineas_por_compas_texto.configure(text=f"{get_translation("lbl_compas_lines_high")} {self.lineas_por_compas}vas/192vas", text_color="#C600DB")
             #Corrección de congruencia entre mínimo y máximo de notas
             if(self.min_notas_compas > 64 or self.max_notas_compas > 64 or self.max_notas_compas < self.min_notas_compas):
                 self.min_notas_compas = 2
                 self.max_notas_compas = self.lineas_por_compas
-                self.label_min_notas_compas_texto.configure(text=f"MIN notas por compas: {self.min_notas_compas}/192", text_color="#FF9C00")
-                self.label_max_notas_compas_texto.configure(text=f"MAX notas por compas: Dificultad Dificíl/Experto {self.max_notas_compas}/192", text_color="#FF9C00")
+                self.label_min_notas_compas_texto.configure(text=f"{get_translation("lbl_min_compas_notes")} {self.min_notas_compas}/192", text_color="#FF9C00")
+                self.label_max_notas_compas_texto.configure(text=f"{get_translation("lbl_max_compas_notes_high")} {self.max_notas_compas}/192", text_color="#FF9C00")
             else:
-                self.label_min_notas_compas_texto.configure(text=f"MIN notas por compas: {self.min_notas_compas}/192", text_color="#FF9C00")
-                self.label_max_notas_compas_texto.configure(text=f"MAX notas por compas: Dificultad Dificíl/Experto {self.max_notas_compas}/192", text_color="#FF9C00")
+                self.label_min_notas_compas_texto.configure(text=f"{get_translation("lbl_min_compas_notes")} {self.min_notas_compas}/192", text_color="#FF9C00")
+                self.label_max_notas_compas_texto.configure(text=f"{get_translation("lbl_max_compas_notes_high")} {self.max_notas_compas}/192", text_color="#FF9C00")
         else:
-            self.label_lineas_por_compas_texto.configure(text=f"Lineas por compas: Precisión Milimétrica {self.lineas_por_compas}vas/192vas", text_color="#FF7200")
+            self.label_lineas_por_compas_texto.configure(text=f"{get_translation("lbl_compas_lines_madness")} {self.lineas_por_compas}vas/192vas", text_color="#FF7200")
             #Corrección de congruencia entre mínimo y máximo de notas
             if(self.max_notas_compas < self.min_notas_compas):
                 self.min_notas_compas = 2
                 self.max_notas_compas = self.lineas_por_compas
-                self.label_min_notas_compas_texto.configure(text=f"MIN notas por compas: {self.min_notas_compas}/192", text_color="#FF0000")
-                self.label_max_notas_compas_texto.configure(text=f"MAX notas por compas: Dificultad Experto/Máquina {self.max_notas_compas}/192", text_color="#FF0000")
+                self.label_min_notas_compas_texto.configure(text=f"{get_translation("lbl_min_compas_notes")} {self.min_notas_compas}/192", text_color="#FF0000")
+                self.label_max_notas_compas_texto.configure(text=f"{get_translation("lbl_max_compas_notes_madness")} {self.max_notas_compas}/192", text_color="#FF0000")
             else:
-                self.label_min_notas_compas_texto.configure(text=f"MIN notas por compas: {self.min_notas_compas}/192", text_color="#FF0000")
-                self.label_max_notas_compas_texto.configure(text=f"MAX notas por compas: Dificultad Experto/Máquina {self.max_notas_compas}/192", text_color="#FF0000")
+                self.label_min_notas_compas_texto.configure(text=f"{get_translation("lbl_min_compas_notes")} {self.min_notas_compas}/192", text_color="#FF0000")
+                self.label_max_notas_compas_texto.configure(text=f"{get_translation("lbl_max_compas_notes_madness")} {self.max_notas_compas}/192", text_color="#FF0000")
         
     def buscar_audio(self):
-        file_path = filedialog.askopenfilename(filetypes=[("Archivos de Audio", "*.mp3 *.wav *.ogg *.flac")])
+        file_path = filedialog.askopenfilename(filetypes=[(get_translation("lbl_audio_selection"), "*.mp3 *.wav *.ogg *.flac")])
         if file_path:
             self.audio_file_path = file_path
             self.label_audio_path.configure(text=os.path.basename(file_path), text_color="#1abc9c")
@@ -2568,7 +3002,7 @@ class StepHybridUI(ctk.CTk):
     def abrir_visualizador_audio(self):
         """Abre la subventana gráfica interactiva de Matplotlib usando Blitting estático."""
         if not self.audio_file_path:
-            messagebox.showwarning("Falta Archivo", "Por favor selecciona primero un archivo de audio válido en el paso 1.")
+            messagebox.showwarning(get_translation("vis_msg_missing_title"), get_translation("vis_msg_missing_audio")) # 🟢 Advertencia traducida
             return
             
         duracion_manual = 0.0
@@ -2589,24 +3023,25 @@ class StepHybridUI(ctk.CTk):
             self.label_checkpoint_path.configure(text=os.path.basename(file_path), text_color="#1abc9c")
 
     def buscar_banner(self):
-        file_path = filedialog.askopenfilename(filetypes=[("Gráficos de Banner", "*.png *.jpg *.jpeg *.bpm")])
+        file_path = filedialog.askopenfilename(filetypes=[(get_translation("lbl_banner_selection"), "*.png *.jpg *.jpeg *.bpm")])
         if file_path:
             self.banner_file_path = file_path
             self.label_banner_path.configure(text=os.path.basename(file_path), text_color="#1abc9c")
 
     def buscar_video(self):
-        file_path = filedialog.askopenfilename(filetypes=[("Archivos de Video", "*.mp4 *.avi *.mkv *.flv *.mpg")])
+        file_path = filedialog.askopenfilename(filetypes=[(get_translation("lbl_video_selection"), "*.mp4 *.avi *.mkv *.flv *.mpg")])
         if file_path:
             self.video_file_path = file_path
             self.label_video_path.configure(text=os.path.basename(file_path), text_color="#1abc9c")
 
     def iniciar_generacion(self):
+        # 🟢 Reemplazo en los controles lógicos de iniciar_generacion:
         if not self.audio_file_path or not self.checkpoint_file_path:
-            messagebox.showerror("Error", "Debes cargar obligatoriamente el audio y el checkpoint (.pt) de la IA.")
+            messagebox.showerror("Error", get_translation("msg_error_missing"))
             return
         titulo = self.entry_title.get().strip()
         if not titulo:
-            messagebox.showerror("Error", "El título del simfile no puede estar vacío.")
+            messagebox.showerror("Error", get_translation("msg_error_title"))
             return
 
         duracion_texto = self.entry_duracion.get().strip()
@@ -2616,7 +3051,7 @@ class StepHybridUI(ctk.CTk):
                 duracion_manual = float(duracion_texto)
                 if duracion_manual < 0: raise ValueError
             except ValueError:
-                messagebox.showerror("Error", "La duración debe ser un número válido.")
+                messagebox.showerror("Error", get_translation("msg_error_duration"))
                 return
         
         seed_raw = self.entry_seed.get().strip()
@@ -2641,7 +3076,7 @@ class StepHybridUI(ctk.CTk):
                 max_bpm_dinamico = int(max_bpm_dinamico_text)
                 if min_bpm_dinamico < 30 or max_bpm_dinamico > 300 or max_bpm_dinamico == 0 or min_bpm_dinamico == 0: raise ValueError
             except ValueError:
-                messagebox.showerror("Error", "El BPM del mínimo o máximo no es válido, no puede ser superior a 300 o menor a 30") 
+                messagebox.showerror("Error", get_translation("msg_error_bpm_range")) 
                 return
 
         params_usuario = {
@@ -2703,7 +3138,7 @@ class StepHybridUI(ctk.CTk):
             "seed_value": seed_final
         }
 
-        self.btn_generar.configure(state="disabled", text="Ejecutando Inferencia Híbrida ⚡...")
+        self.btn_generar.configure(state="disabled", text=get_translation("txt_inference_wait"))
         self.label_status.configure(text="Estado: Procesando matrices y DSP...", text_color="#f1c40f")
         
         threading.Thread(target=self.ejecutar_proceso, args=(titulo, duracion_manual, params_usuario)).start()
@@ -2747,24 +3182,25 @@ class StepHybridUI(ctk.CTk):
             if params_usuario.get("recalcular_dificultad", False):
                 self.after(0, self.actualizar_consola_gui, reporte_nps)
             else:
-                self.after(0, self.actualizar_consola_gui, "Recálculo desactivado. Se usaron niveles base del GUI.\n")
+                self.after(0, self.actualizar_consola_gui, get_translation("console_recalc_disabled")) # 🟢 Alerta de la consola traducida
 
-            self.label_status.configure(text="¡ÉXITO: Archivos creados! ✅", text_color="#2ecc71")
-            messagebox.showinfo("Proceso Completado", f"Pack Híbrido Creado con Éxito.\n\nArchivos .sm y .ssc listos.\nBPM: {bpm:.2f} | Duración: {duracion:.1f}s")
+            # 🟢 Bloque final de éxito:
+            self.label_status.configure(text=get_translation("status_success"), text_color="#2ecc71")
+            messagebox.showinfo("StepMania AI", f"{get_translation("msg_success_box")}\nBPM: {bpm:.2f} | Dur: {duracion:.1f}s")
 
         except Exception as e:
-            self.label_status.configure(text="Error Crítico ❌", text_color="#e74c3c")
-            messagebox.showerror("Error de Inferencia", str(e))
+            self.label_status.configure(text=get_translation("status_error"), text_color="#e74c3c")
+            messagebox.showerror(get_translation("msg_error_inference"), str(e))
         finally:
-            self.btn_generar.configure(state="normal", text="¡Procesar y Exportar Dual Pack! 🚀")
+            self.btn_generar.configure(state="normal", text=get_translation("btn_generate"))
         
         #Limpieza de ciertos campos
         self.audio_file_path = ""
         self.banner_file_path = ""
         self.video_file_path = ""
-        self.label_audio_path.configure(text="Ningún archivo seleccionado", text_color="gray")
-        self.label_banner_path.configure(text="Ningún banner seleccionado", text_color="gray")
-        self.label_video_path.configure(text="Ningún video seleccionado", text_color="gray")
+        self.label_audio_path.configure(text=get_translation("lbl_no_audio"), text_color="gray")
+        self.label_banner_path.configure(text=get_translation("lbl_no_banner"), text_color="gray")
+        self.label_video_path.configure(text=get_translation("lbl_no_video"), text_color="gray")
 
 if __name__ == "__main__":
     app = StepHybridUI()
