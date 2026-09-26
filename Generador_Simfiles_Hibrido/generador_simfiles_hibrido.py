@@ -66,6 +66,7 @@ TEXTOS = {
         "btn_reset": "Restablecer Parámetros",
         "label_status_reset": "Estado: Parámetros restablecidos correctamente.",
         "btn_generate": "¡Procesar y Exportar Dual Pack! 🚀",
+        "btn_cancel_gen": "🔴 Cancelar Generación",
         "lbl_status_wait": "Estado: Esperando archivos mínimos...",
         "lbl_monitor": "🖥️ Monitor de Densidad en Tiempo Real",
         "txt_console_wait": "Esperando ejecución para calcular NPS...\n",
@@ -134,6 +135,7 @@ TEXTOS = {
         "lbl_rms_min_fx": "Sensibilidad RMS Mínimo Trampas:",
         "lbl_rms_max_fx": "Sensibilidad RMS Máximo Trampas:",
         # Sub-Apartado Filtros/Dificultad
+        "lbl_umbral_silencio": "Volumen Mínimo Para Silencios:",
         "lbl_sec_holders": "--- Parámetros de Holders ---",
         "lbl_max_hold": "Duración Máxima de Hold (líneas):",
         "lbl_sim_holds": "Máximo de Holds simultáneos:",
@@ -175,6 +177,12 @@ TEXTOS = {
         "status_processing": "Estado: Procesando matrices y DSP...",
         "status_success": "¡ÉXITO: Archivos creados! ✅",
         "status_error": "Error Crítico ❌",
+        "status_cancel": "Estado: Proceso cancelado.",
+        "btn_cancel_status_processing": "Cancelando Proceso...",
+        "lbl_cancel_status_processing": "Estado: Deteniendo algoritmos...",
+        "msg_interrupted_cancel": "Generación cancelada por el usuario.",
+        "msg_error_cancel": "Proceso Interrumpido",
+        "msg_error_cancel_desc": "La generación del Simfile fue forzada a detenerse de forma segura.",
         "msg_error_dsp": "Error en Análisis DSP:",
         "msg_error_inference": "Error de Inferencia",
         "msg_error_missing": "Debes cargar obligatoriamente el audio y el checkpoint (.pt) de la IA.",
@@ -230,6 +238,7 @@ TEXTOS = {
         "btn_reset": "Reset Parameters",
         "label_status_reset": "Status: Parameters per Default.",
         "btn_generate": "Process and Export Dual Pack! 🚀",
+        "btn_cancel_gen": "🔴 Generation Cancel",
         "lbl_status_wait": "Status: Waiting for minimum required files...",
         "lbl_monitor": "🖥️ Real-Time Density Monitor",
         "txt_console_wait": "Waiting for execution to calculate NPS...\n",
@@ -298,6 +307,7 @@ TEXTOS = {
         "lbl_rms_min_fx": "Minimum Traps RMS Sensitivity:",
         "lbl_rms_max_fx": "Maximum Traps RMS Sensitivity:",
         # Filters/Difficulty Sub-Apartado
+        "lbl_umbral_silencio": "Minimum Volume for Silences:",
         "lbl_sec_holders": "--- Holders Parameters ---",
         "lbl_max_hold": "Maximum Hold Duration (lines):",
         "lbl_sim_holds": "Max Simultaneous Holds:",
@@ -339,6 +349,12 @@ TEXTOS = {
         "status_processing": "Status: Processing matrices and DSP...",
         "status_success": "SUCCESS: Files created! ✅",
         "status_error": "Critical Error ❌",
+        "status_cancel": "Status: Canceled.",
+        "btn_cancel_status_processing": "Canceling Process...",
+        "lbl_cancel_status_processing": "Status: Stopping Process...",
+        "msg_interrupted_cancel": "Generation interrumped by user.",
+        "msg_error_cancel": "Interrumpted Process",
+        "msg_error_cancel_desc": "The Simfile Generation Stop Success.",
         "msg_error_dsp": "Error in DSP Analysis:",
         "msg_error_inference": "Inference Error",
         "msg_error_missing": "You must strictly load both the audio and the AI checkpoint (.pt).",
@@ -919,7 +935,7 @@ def ejecutar_bucle_sincrono(config_dificultad, compases_totales, bpm, val_offset
                             dinamico_activo, speeds_activo, custom_params, aplicar_post, max_level_chosen,
                             rms_bpm, rms_medio_bpm, hop_bpm, rms_speed, rms_medio_speed, hop_speed,
                             rms_saltos, rms_medio_saltos, hop_saltos, lista_rms, rms_medio, lista_centroide,
-                            centroide_medio, mel_db, modelo, dispositivo, tokenizer, PostProcesadorStepMania):
+                            centroide_medio, mel_db, modelo, dispositivo, tokenizer, PostProcesadorStepMania, evento_cancelar=None):
     """
     Bucle principal reestructurado para la generación híbrida de flechas en tiempo real.
     Unifica la inferencia de la IA con el análisis DSP paso a paso para garantizar sincronía.
@@ -989,6 +1005,10 @@ def ejecutar_bucle_sincrono(config_dificultad, compases_totales, bpm, val_offset
         conteo_compas_fx = {"M": 0, "F": 0, "L": 0, "P": 0, "D": 0, "S": 0, "H": 0}
 
         for paso_idx in range(total_pasos_dificultad):
+
+            if evento_cancelar and evento_cancelar.is_set():
+                raise InterruptedError(get_translation("msg_interrupted_cancel"))
+
             beats_por_paso = 4.0 / lineas_objetivo
             
             # --- REINICIO AUTOMÁTICO DE PRESUPUESTO POR COMPÁS ---
@@ -1019,18 +1039,27 @@ def ejecutar_bucle_sincrono(config_dificultad, compases_totales, bpm, val_offset
             segundos_por_paso = (60.0 / ultimo_bpm_aplicado) * beats_por_paso
 
             # -----------------------------------------------------------------
-            # FASE 1: INFERENCIA DE LA IA (Transformador Causal)
+            # 🔥 FASE 0.5 Y 1 UNIFICADAS: FILTRO DE SILENCIO E INFERENCIA IA 🔥
             # -----------------------------------------------------------------
             frame_idx = min(int((segundo_actual / duracion) * total_frames), total_frames - 1)
+            f_rms_eval = max(0, min(frame_idx, len(lista_rms) - 1))
             
-            # Control adaptativo de densidad nativo de la IA
-            # Recuperamos el estado del checkbox de saltos desde los parámetros del usuario
+            # Calculamos la energía relativa en este instante exacto de la canción
+            ratio_energia_actual = lista_rms[f_rms_eval] / rms_medio if len(lista_rms) > 0 else 1.0
+            
+            # Umbral de silencio configurado desde la interfaz gráfica
+            UMBRAL_SILENCIO = custom_params.get("umbral_silencios", 0.05)
             saltos_activos = custom_params.get("activar_secciones_saltos", False)
-
-            # (Solo si el checkbox está encendido)
-            if saltos_activos and cooldown_saltos > 0:
+            
+            if ratio_energia_actual < UMBRAL_SILENCIO:
+                # [CORRECCIÓN CRÍTICA]: Si el volumen está por debajo del umbral, forzamos silencio absoluto
                 paso_elegido = "0000"
-                cooldown_saltos -= 1  # Decrementar el enfriamiento de forma segura paso a paso
+                cooldown_saltos = 0  # Reseteamos cooldown en zonas muertas
+            
+            elif saltos_activos and cooldown_saltos > 0:
+                # Respetamos el enfriamiento por ráfaga de saltos
+                paso_elegido = "0000"
+                cooldown_saltos -= 1
             else:
                 # Si desactivan el checkbox, purgamos cualquier cooldown colgado
                 cooldown_saltos = 0 
@@ -1165,7 +1194,7 @@ def ejecutar_bucle_sincrono(config_dificultad, compases_totales, bpm, val_offset
 # CORE DE GENERACIÓN HÍBRIDA DUAL (.SM y .SSC)
 # =====================================================================
 def generar_simfiles_hibridos(audio_path, checkpoint_path, song_title, max_level_chosen, 
-                              carpeta_salida, artist_name="", banner_path="", video_path="", duracion_limite=0.0, custom_params=None):
+                              carpeta_salida, artist_name="", banner_path="", video_path="", duracion_limite=0.0, custom_params=None, evento_cancelar=None):
 
     # Recuperar y fijar la semilla de forma estricta antes de que la IA o el DSP hagan algo
     seed_actual = custom_params.get("seed_value", 42)
@@ -1436,6 +1465,10 @@ def generar_simfiles_hibridos(audio_path, checkpoint_path, song_title, max_level
     log_metricas_acumulado = ""
     
     for idx_m, pct in enumerate(porcentajes_muestreo):
+        # 🔥 NUEVA COMPROBACIÓN ANTES DE CADA CAPA 🔥
+        if evento_cancelar and evento_cancelar.is_set():
+            raise InterruptedError(get_translation("msg_interrupted_cancel"))
+
         custom_params["porcentaje_tamano"] = pct
         # Generar las matrices de pasos reducidas/completas de forma síncrona
         mapa_pasos_por_dificultad, bpms_string_line, speeds_string_line, log_metricas_diff = ejecutar_bucle_sincrono(config_dificultad=config_dificultad, compases_totales=compases_totales,
@@ -1689,6 +1722,9 @@ class StepHybridUI(ctk.CTk):
         self.video_file_path = ""
         self.minas_rms_activa = False
 
+         # 🔥 NUEVA BANDERA DE CONTROL DE HILOS 🔥
+        self.cancelar_generacion = threading.Event() 
+
         self.label_titulo = ctk.CTkLabel(self, text=get_translation("main_title"), font=ctk.CTkFont(size=16, weight="bold")) # 🟢 Título dinámico
         self.label_titulo.pack(pady=10, fill="x")
         self.scroll_frame = ctk.CTkScrollableFrame(self, fg_color="transparent")
@@ -1764,6 +1800,14 @@ class StepHybridUI(ctk.CTk):
         self.slider_temp = ctk.CTkSlider(self.contenedor_vertical, from_=0.5, to=1.5, number_of_steps=20, width=340, command=lambda v: self.label_temp.configure(text=f"{get_translation("lbl_temp")} {v:.2f}"))
         self.slider_temp.set(1.3)
 
+        # Selección de umbral de silencios
+        self.label_umbral_silencios = ctk.CTkLabel(self.contenedor_vertical, text=f"{get_translation("lbl_umbral_silencio")} 0.0", font=ctk.CTkFont(weight="bold"))
+        #self.label_umbral_silencios.pack(pady=2, padx=5)
+        self.slider_umbral_silencios = ctk.CTkSlider(self.contenedor_vertical, from_=0, to=0.5, number_of_steps=50, width=340, 
+            command=lambda v: self.label_umbral_silencios.configure(text=f"{get_translation("lbl_umbral_silencio")} {v:.2f}"))
+        self.slider_umbral_silencios.set(0.0)
+        #self.slider_umbral_silencios.pack(pady=2, padx=5)
+
         # Campo para el nombre del Song Pack
         self.label_pack_name = ctk.CTkLabel(self.contenedor_vertical, text=get_translation("lbl_pack_name"), font=ctk.CTkFont(weight="bold"))
         self.entry_pack_name = ctk.CTkEntry(self.contenedor_vertical, placeholder_text="Ex: Mi_AI_Pack_Vol1", width=340)
@@ -1777,7 +1821,7 @@ class StepHybridUI(ctk.CTk):
             self.btn_audio, self.label_audio_path, self.btn_checkpoint, self.label_checkpoint_path,
             self.label_name, self.entry_title, self.label_artist_name, self.entry_artist_name, self.btn_banner, self.label_banner_path,
             self.btn_video, self.label_video_path, self.checkbox_rename, 
-            self.label_seccion_adv, self.label_temp, self.slider_temp, 
+            self.label_seccion_adv, self.label_temp, self.slider_temp, self.label_umbral_silencios, self.slider_umbral_silencios,
             self.label_pack_name, self.entry_pack_name,
             self.label_seed, self.entry_seed
         ]
@@ -2280,6 +2324,19 @@ class StepHybridUI(ctk.CTk):
 
         self.btn_resetear = ctk.CTkButton(self.contenedor_vertical, text=get_translation("btn_reset"), fg_color="#c0392b", hover_color="#962d22", command=self.restablecer_valores)
         self.btn_generar = ctk.CTkButton(self.contenedor_vertical, text=get_translation("btn_generate"), fg_color="#2ecc71", hover_color="#27ae60", height=45, font=ctk.CTkFont(size=14, weight="bold"), command=self.iniciar_generacion)
+        
+        # 🔥 NUEVO BOTÓN DE CANCELAR FORZADO 🔥
+        self.btn_cancelar = ctk.CTkButton(
+            self.contenedor_vertical, 
+            text=get_translation("btn_cancel_gen"), 
+            fg_color="#7f8c8d",          # Color gris apagado por defecto
+            hover_color="#e74c3c",       # Cambia a rojo brillante al pasar el cursor
+            height=35, 
+            font=ctk.CTkFont(size=12, weight="bold"), 
+            command=self.solicitar_cancelacion
+        )
+        self.btn_cancelar.configure(state="disabled") # Inicia desactivado
+
         self.label_status = ctk.CTkLabel(self.contenedor_vertical, text=get_translation("lbl_status_wait"), font=ctk.CTkFont(size=12, weight="bold"), text_color="gray")
 
         # --- PANEL CONSOLA DE MÉTRICAS REALES ---
@@ -2290,7 +2347,7 @@ class StepHybridUI(ctk.CTk):
 
         # Empaquetado lineal descendente y ordenado para scroll seguro
         componentes_ui = [
-            self.btn_resetear, self.btn_generar, self.label_status, self.label_consola, self.txt_consola
+            self.btn_resetear, self.btn_generar, self.btn_cancelar, self.label_status, self.label_consola, self.txt_consola
             ]
         for widget in componentes_ui:
             widget.pack(pady=5, fill="x" if "Button" in type(widget).__name__ else None, padx=20)
@@ -2342,6 +2399,7 @@ class StepHybridUI(ctk.CTk):
         self.menu_presets.configure(values=[get_translation("preset_0"), get_translation("preset_1"), get_translation("preset_2"), get_translation("preset_3"), get_translation("preset_4"), get_translation("preset_5"), get_translation("preset_6"), get_translation("preset_7")])
         self.label_menu_apartados.configure(text=get_translation("lbl_adv_settings"))
         self.menu_apartados.configure(values=[get_translation("menu_opt_hide"), get_translation("menu_opt_time"), get_translation("menu_opt_bpm"), get_translation("menu_opt_fx"), get_translation("menu_opt_filters")])
+        self.btn_cancelar.configure(text=get_translation("btn_cancel_gen"))
         self.btn_resetear.configure(text=get_translation("btn_reset"))
         self.btn_generar.configure(text=get_translation("btn_generate"))
         self.label_consola.configure(text=get_translation("lbl_monitor"))
@@ -2360,10 +2418,34 @@ class StepHybridUI(ctk.CTk):
         self.label_max_bpm_dinamico.configure(text=get_translation("lbl_max_bpm"))
         self.label_seccion_adv_speed.configure(text=get_translation("lbl_sec_speed"))
         self.checkbox_speeds_dinamico.configure(text=get_translation("chk_dynamic_speed"))
-        
+        self.label_rms_min_bpm.configure(text=f"{get_translation("lbl_rms_min_bpm")} {self.slider_rms_min_bpm.get()}")
+        self.label_rms_max_bpm.configure(text=f"{get_translation("lbl_rms_max_bpm")} {self.slider_rms_max_bpm.get()}")
+        self.label_speed_offset_time.configure(text=f"{get_translation("lbl_speed_loss")} {self.slider_speed_offset_time.get():.2f}")
+        self.label_rms_min_speed.configure(text=f"{get_translation("lbl_rms_min_speed")} {self.slider_rms_min_speed.get()}")
+        self.label_rms_max_speed.configure(text=f"{get_translation("lbl_rms_max_speed")} {self.slider_rms_max_speed.get()}")
+        self.label_speed_min.configure(text=f"{get_translation("lbl_speed_min")} {self.slider_speed_min.get()}x")
+        self.label_speed_max.configure(text=f"{get_translation("lbl_speed_max")} {self.slider_speed_max.get()}x")
+        self.label_speed_trans.configure(text=f"{get_translation("lbl_speed_trans")} {self.slider_speed_trans.get()}")
+
         # 6. Apartado Trampas y FX
         self.label_seccion_adv_trampas.configure(text=get_translation("lbl_sec_fx"))
         self.checkbox_efectos_rms.configure(text=get_translation("chk_fx_rms"))
+        self.label_prob_minas.configure(text=f"{get_translation("lbl_prob_mines")} {self.slider_prob_minas.get()}")
+        self.label_max_minas.configure(text=f"{get_translation("lbl_max_mines")} {self.slider_max_minas.get()}")
+        self.label_prob_fakes.configure(text=f"{get_translation("lbl_prob_fakes")} {self.slider_prob_fakes.get()}")
+        self.label_max_fakes.configure(text=f"{get_translation("lbl_max_fakes")} {self.slider_max_fakes.get()}")
+        self.label_prob_lifts.configure(text=f"{get_translation("lbl_prob_lifts")} {self.slider_prob_lifts.get()}")
+        self.label_max_lifts.configure(text=f"{get_translation("lbl_max_lifts")} {self.slider_max_lifts.get()}")
+        self.label_prob_potions.configure(text=f"{get_translation("lbl_prob_potions")} {self.slider_prob_potions.get()}")
+        self.label_max_potions.configure(text=f"{get_translation("lbl_max_potions")} {self.slider_max_potions.get()}")
+        self.label_prob_shields.configure(text=f"{get_translation("lbl_prob_shields")} {self.slider_prob_shields.get()}")
+        self.label_max_shields.configure(text=f"{get_translation("lbl_max_shields")} {self.slider_max_shields.get()}")
+        self.label_prob_rayos.configure(text=f"{get_translation("lbl_prob_rayos")} {self.slider_prob_rayos.get()}")
+        self.label_max_rayos.configure(text=f"{get_translation("lbl_max_rayos")} {self.slider_max_rayos.get()}")
+        self.label_prob_hiddens.configure(text=f"{get_translation("lbl_prob_hiddens")} {self.slider_prob_hiddens.get()}")
+        self.label_max_hiddens.configure(text=f"{get_translation("lbl_max_hiddens")} {self.slider_max_hiddens.get()}")
+        self.label_rms_min_fx.configure(text=f"{get_translation("lbl_rms_min_fx")} {self.slider_rms_min_fx.get()}")
+        self.label_rms_max_fx.configure(text=f"{get_translation("lbl_rms_max_fx")} {self.slider_rms_max_fx.get()}")
         
         # 7. Apartado Filtros y Dificultad
         self.label_seccion_adv_holders.configure(text=get_translation("lbl_sec_holders"))
@@ -2374,7 +2456,15 @@ class StepHybridUI(ctk.CTk):
         self.label_seccion_adv_compas.configure(text=get_translation("lbl_sec_extra_diff"))
         self.label_seccion_muestreo_adv.configure(text=get_translation("lbl_sec_sampling"))
         self.checkbox_muestreo.configure(text=get_translation("chk_sampling"))
-        
+        self.label_muestreo_min.configure(text=f"{get_translation("lbl_sampling_min")} {self.slider_muestreo_min.get()}")
+        self.label_muestreo_num.configure(text=f"{get_translation("lbl_sampling_num")} {self.slider_muestreo_num.get()}")
+        self.label_max_hold.configure(text=f"{get_translation("lbl_max_hold")} {self.slider_max_hold.get()}")
+        self.label_holds_sim.configure(text=f"{get_translation("lbl_sim_holds")} {self.slider_holds_sim.get()}")
+        self.label_rms_min_saltos.configure(text=f"{get_translation("lbl_rms_min_jumps")} {self.slider_rms_min_saltos.get()}")
+        self.label_rms_max_saltos.configure(text=f"{get_translation("lbl_rms_max_jumps")} {self.slider_rms_max_saltos.get()}")
+        self.label_rms_min.configure(text=f"{get_translation("lbl_rms_min_density")} {self.slider_rms_min.get()}")
+        self.label_rms_max.configure(text=f"{get_translation("lbl_rms_max_density")} {self.slider_rms_max.get()}")
+
         # Refrescar los textos calculados por sliders activos
         self.actualizar_texto_offset(self.slider_offset.get())
         self.actualizar_texto_extension(self.slider_extension.get())
@@ -2385,7 +2475,7 @@ class StepHybridUI(ctk.CTk):
         
         # Cambiar placeholders de entradas de texto de forma segura
         self.label_temp.configure(text=f"{get_translation("lbl_temp")} {self.slider_temp.get():.2f}")
-
+        self.label_umbral_silencios.configure(text=f"{get_translation("lbl_umbral_silencio")} {self.slider_umbral_silencios.get()}")
         self.actualizar_consola_gui(get_translation("txt_console_wait"))
 
 
@@ -2747,6 +2837,9 @@ class StepHybridUI(ctk.CTk):
         self.label_muestreo_num.configure(text=f"{get_translation("lbl_sampling_num")} 6")
         self.frame_sub_muestreo.pack_forget()
 
+        self.label_umbral_silencios.configure(text=f"{get_translation("lbl_umbral_silencio")} 0.0")
+        self.slider_umbral_silencios.set(0.0)
+
         self.label_status.configure(text=get_translation("label_status_reset"), text_color="gray")
 
     def actualizar_texto_bpm(self, valor):
@@ -3034,6 +3127,12 @@ class StepHybridUI(ctk.CTk):
             self.video_file_path = file_path
             self.label_video_path.configure(text=os.path.basename(file_path), text_color="#1abc9c")
 
+    def solicitar_cancelacion(self):
+        """Activa la señal de cancelación y actualiza el texto de advertencia."""
+        self.cancelar_generacion.set() # Levanta la bandera de detenerse
+        self.btn_cancelar.configure(state="disabled", text=get_translation("btn_cancel_status_processing"))
+        self.label_status.configure(text=get_translation("lbl_cancel_status_processing"), text_color="#e74c3c")
+
     def iniciar_generacion(self):
         # 🟢 Reemplazo en los controles lógicos de iniciar_generacion:
         if not self.audio_file_path or not self.checkpoint_file_path:
@@ -3135,12 +3234,16 @@ class StepHybridUI(ctk.CTk):
             "activar_muestreo_multicapa": bool(self.checkbox_muestreo.get()),
             "muestreo_pct_min": float(self.slider_muestreo_min.get()),
             "muestreo_num_muestras": int(self.slider_muestreo_num.get()),
+            "umbral_silencios": float(self.slider_umbral_silencios.get()),
             "seed_value": seed_final
         }
 
+        # 🔥 MODIFICACIÓN: Configuración de botones al arrancar el proceso 🔥
+        self.cancelar_generacion.clear() # Limpia cualquier señal de cancelación previa
         self.btn_generar.configure(state="disabled", text=get_translation("txt_inference_wait"))
-        self.label_status.configure(text="Estado: Procesando matrices y DSP...", text_color="#f1c40f")
-        
+        self.btn_cancelar.configure(state="normal", fg_color="#c0392b") # Activa el botón de cancelar en rojo
+        self.label_status.configure(text=get_translation("status_processing"), text_color="#f1c40f")
+
         threading.Thread(target=self.ejecutar_proceso, args=(titulo, duracion_manual, params_usuario)).start()
 
     def actualizar_consola_gui(self, texto):
@@ -3175,7 +3278,8 @@ class StepHybridUI(ctk.CTk):
                 banner_path=self.banner_file_path,
                 video_path=self.video_file_path,
                 duracion_limite=duracion_manual,
-                custom_params=params_usuario
+                custom_params=params_usuario,
+                evento_cancelar=self.cancelar_generacion 
             )
             
             # Enviar el reporte de texto a la GUI de manera segura
@@ -3188,11 +3292,17 @@ class StepHybridUI(ctk.CTk):
             self.label_status.configure(text=get_translation("status_success"), text_color="#2ecc71")
             messagebox.showinfo("StepMania AI", f"{get_translation("msg_success_box")}\nBPM: {bpm:.2f} | Dur: {duracion:.1f}s")
 
+        except InterruptedError: # 🔥 CAPTURA DE CANCELACIÓN EXITOSA
+            self.label_status.configure(text=get_translation, text_color="gray")
+            messagebox.showwarning(get_translation("msg_error_cancel"), get_translation("msg_error_cancel_desc"))
+
         except Exception as e:
             self.label_status.configure(text=get_translation("status_error"), text_color="#e74c3c")
             messagebox.showerror(get_translation("msg_error_inference"), str(e))
         finally:
+            # 🔥 MODIFICACIÓN EN FINALLY 🔥
             self.btn_generar.configure(state="normal", text=get_translation("btn_generate"))
+            self.btn_cancelar.configure(state="disabled", fg_color="#7f8c8d", text=get_translation("btn_cancel_gen"))
         
         #Limpieza de ciertos campos
         self.audio_file_path = ""
