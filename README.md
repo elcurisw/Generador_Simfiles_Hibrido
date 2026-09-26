@@ -9,7 +9,9 @@ Riesgo de Archivo: Dado que el programa está diseñado para crear, modificar y 
 
 Este programa está diseñado para generar archivos de pasos (*.sm y *.ssc) dinámicos y detallados, optimizados para juegos de ritmo como StepMania. Sigue esta guía para garantizar una instalación correcta y la mejor experiencia de uso posible.
 
-[Tutorial] (https://vimeo.com/1230576481?fl=pl&fe=cm)
+<p align="center">
+  <video src="https://vimeo.com/1230576481?fl=pl&fe=cm" width="80%" controls></video>
+</p>
 
 ### I. Requisitos Previos e Instalación Técnica
 
