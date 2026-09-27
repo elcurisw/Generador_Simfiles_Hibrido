@@ -97,6 +97,7 @@ TEXTOS = {
         "lbl_max_bpm": "BPM Máximo (Campo vacío=Auto):",
         "lbl_rms_min_bpm": "Sensibilidad RMS Mínimo BPM:",
         "lbl_rms_max_bpm": "Sensibilidad RMS Máximo BPM:",
+        "lbl_bpm_umbral" : "Umbral de Lectura de BPM Para Aplicar un Cambio:",
         "lbl_bpm_damping": "Amortiguador de Marea BPM:",
         "lbl_bpm_damping_indicator1": "Extremo (Flujo de Olas)",
         "lbl_bpm_damping_indicator2": "Atenuado (Recomendado)",
@@ -136,6 +137,7 @@ TEXTOS = {
         "lbl_rms_max_fx": "Sensibilidad RMS Máximo Trampas:",
         # Sub-Apartado Filtros/Dificultad
         "lbl_umbral_silencio": "Volumen Mínimo Para Silencios:",
+        "chk_umbral_silencio": "Activar Función de Silencios",
         "lbl_sec_holders": "--- Parámetros de Holders ---",
         "lbl_max_hold": "Duración Máxima de Hold (líneas):",
         "lbl_sim_holds": "Máximo de Holds simultáneos:",
@@ -269,6 +271,7 @@ TEXTOS = {
         "lbl_max_bpm": "Maximum BPM (Empty=Auto):",
         "lbl_rms_min_bpm": "Minimum BPM RMS Sensitivity:",
         "lbl_rms_max_bpm": "Maximum BPM RMS Sensitivity:",
+        "lbl_bpm_umbral" : "MIN BPM per BPM Change:",
         "lbl_bpm_damping": "BPM Tide Damping:",
         "lbl_bpm_damping_indicator1": "Extreme (Very soft)",
         "lbl_bpm_damping_indicator2": "Soft (Suggested)",
@@ -308,6 +311,7 @@ TEXTOS = {
         "lbl_rms_max_fx": "Maximum Traps RMS Sensitivity:",
         # Filters/Difficulty Sub-Apartado
         "lbl_umbral_silencio": "Minimum Volume for Silences:",
+        "chk_umbral_silencio": "Activate Silence Function",
         "lbl_sec_holders": "--- Holders Parameters ---",
         "lbl_max_hold": "Maximum Hold Duration (lines):",
         "lbl_sim_holds": "Max Simultaneous Holds:",
@@ -764,6 +768,7 @@ def procesar_ritmo_dinamico(segundo_actual, beat_actual, paso_idx, lineas_objeti
     r_med = config_bpm["r_med"]
     umbral_c = config_bpm["umbral_c"]
     umbral_d = config_bpm["umbral_d"]
+    umbral_disparo = config_bpm["umbral_disparo_custom_bpm"]
     
     # Determinar el BPM ideal al que la música "quiere" llegar
     if ratio <= r_min:
@@ -785,7 +790,7 @@ def procesar_ritmo_dinamico(segundo_actual, beat_actual, paso_idx, lineas_objeti
         bpm_calc = MIN_BPM
 
     # Filtro de histéresis: Solo registramos el cambio en el Simfile si la marea se desplazó más de 1.5 BPM
-    if abs(bpm_calc - ultimo_bpm) > 1.5:
+    if abs(bpm_calc - ultimo_bpm) > umbral_disparo:
         return round(bpm_calc, 3), f"{beat_actual:.3f}={bpm_calc:.3f}"
         
     return ultimo_bpm, None
@@ -935,7 +940,8 @@ def ejecutar_bucle_sincrono(config_dificultad, compases_totales, bpm, val_offset
                             dinamico_activo, speeds_activo, custom_params, aplicar_post, max_level_chosen,
                             rms_bpm, rms_medio_bpm, hop_bpm, rms_speed, rms_medio_speed, hop_speed,
                             rms_saltos, rms_medio_saltos, hop_saltos, lista_rms, rms_medio, lista_centroide,
-                            centroide_medio, mel_db, modelo, dispositivo, tokenizer, PostProcesadorStepMania, evento_cancelar=None):
+                            centroide_medio, mel_db, modelo, dispositivo, tokenizer, PostProcesadorStepMania, percent_aditional_time=0.0,
+                            evento_cancelar=None):
     """
     Bucle principal reestructurado para la generación híbrida de flechas en tiempo real.
     Unifica la inferencia de la IA con el análisis DSP paso a paso para garantizar sincronía.
@@ -967,7 +973,8 @@ def ejecutar_bucle_sincrono(config_dificultad, compases_totales, bpm, val_offset
             "bajo": BPM_ESTRATO_BAJO, "medio": BPM_ESTRATO_MEDIO, "alto": BPM_ESTRATO_ALTO,
             "media_baja": media_baja, "media_alta": media_alta, "r_min": r_min_bpm, 
             "r_med": r_medio_bpm, "umbral_c": umbral_calma, "umbral_d": umbral_drop,
-            "amortiguador_custom": custom_params.get("bpm_amortiguador_custom", 0.12) 
+            "amortiguador_custom": custom_params.get("bpm_amortiguador_custom", 0.12),
+            "umbral_disparo_custom_bpm" : custom_params.get("umbral_disparo_custom_bpm", 4.0)
         }
 
     dicc_config_speed = {}
@@ -993,7 +1000,19 @@ def ejecutar_bucle_sincrono(config_dificultad, compases_totales, bpm, val_offset
         porcentaje = custom_params.get("porcentaje_tamano", 1.0)
 
         total_pasos_dificultad = int((compases_totales * lineas_objetivo) * porcentaje)
-        
+
+        '''
+        Sección adicional para controlar los pasos de inferencia artificial, es decir fuera del límite de lo que 
+        dura la canción original, debido a la pérdida por los aceleradores de BPM y Scroll Speed Dinámicos
+
+        Del total se agregó un porcentaje si se configuró la opción en la sección de Scroll Speeds, además se 
+        ve influidó por el tamaño de la muestra si también se usa este modificador.
+
+        Estos pasos adicionales, no deben ser tratados por los silencios ya que se omiten por defecto al no ser 
+        interprétados usando música, siempre son silencios, sino inferidos fuera de ella.
+        '''
+        total_pasos_adicionales = int(total_pasos_dificultad * percent_aditional_time * porcentaje)
+
         segundo_actual = val_offset 
         beat_actual = 0.0
         ultimo_bpm_aplicado = bpm
@@ -1049,13 +1068,14 @@ def ejecutar_bucle_sincrono(config_dificultad, compases_totales, bpm, val_offset
             
             # Umbral de silencio configurado desde la interfaz gráfica
             UMBRAL_SILENCIO = custom_params.get("umbral_silencios", 0.05)
+            activate_umbral_silencio = custom_params.get("activar_umbral_silencios", False)
             saltos_activos = custom_params.get("activar_secciones_saltos", False)
             
-            if ratio_energia_actual < UMBRAL_SILENCIO:
+            if activate_umbral_silencio == True and ratio_energia_actual < UMBRAL_SILENCIO and paso_idx < abs(total_pasos_dificultad - total_pasos_adicionales):
                 # [CORRECCIÓN CRÍTICA]: Si el volumen está por debajo del umbral, forzamos silencio absoluto
+                # Además no debe pertencer al rango de inferencia artificial
                 paso_elegido = "0000"
                 cooldown_saltos = 0  # Reseteamos cooldown en zonas muertas
-            
             elif saltos_activos and cooldown_saltos > 0:
                 # Respetamos el enfriamiento por ráfaga de saltos
                 paso_elegido = "0000"
@@ -1301,7 +1321,7 @@ def generar_simfiles_hibridos(audio_path, checkpoint_path, song_title, max_level
 
     speeds_activo = custom_params.get("aplicar_speeds_dinamicos", False) if custom_params else False
     # Verificamos si existe una ampliación en la duración por aplicar scroll speeds
-    percent_speed_offset_time = custom_params["speed_offset_time"] if custom_params and speeds_activo else 0
+    percent_speed_offset_time = custom_params["percent_aditional_time"] if custom_params and speeds_activo else 0
     
     # Si utilizamos la duración dada por el usuario > 0
     if duracion_limite > 0.0:
@@ -1475,7 +1495,7 @@ def generar_simfiles_hibridos(audio_path, checkpoint_path, song_title, max_level
             bpm=bpm, val_offset=val_offset, duracion=duracion, total_frames=total_frames, dinamico_activo=dinamico_activo, speeds_activo=speeds_activo, custom_params=custom_params,
             aplicar_post=aplicar_post, max_level_chosen=max_level_chosen, rms_bpm=rms_bpm, rms_medio_bpm=rms_medio_bpm, hop_bpm=hop_bpm, rms_speed=rms_speed, rms_medio_speed=rms_medio_speed,
             hop_speed=hop_speed, rms_saltos=rms_saltos, rms_medio_saltos=rms_medio_saltos, hop_saltos=hop_saltos, lista_rms=lista_rms, rms_medio=rms_medio, lista_centroide=lista_centroide,
-            centroide_medio=centroide_medio, mel_db=mel_db, modelo=modelo, dispositivo=dispositivo, tokenizer=tokenizer, PostProcesadorStepMania=post)
+            centroide_medio=centroide_medio, mel_db=mel_db, modelo=modelo, dispositivo=dispositivo, tokenizer=tokenizer, PostProcesadorStepMania=post, percent_aditional_time=percent_speed_offset_time)
 
     # =====================================================================
     # 📁 PLANTILLA DE EMPAQUETADO AUTOMÁTICO PARA STEPMANIA / OUTFOX
@@ -1807,6 +1827,8 @@ class StepHybridUI(ctk.CTk):
             command=lambda v: self.label_umbral_silencios.configure(text=f"{get_translation("lbl_umbral_silencio")} {v:.2f}"))
         self.slider_umbral_silencios.set(0.0)
         #self.slider_umbral_silencios.pack(pady=2, padx=5)
+        self.checkbox_activar_umbral_silencios = ctk.CTkCheckBox(self.contenedor_vertical, text=get_translation("chk_umbral_silencio")) 
+        self.checkbox_activar_umbral_silencios.deselect()
 
         # Campo para el nombre del Song Pack
         self.label_pack_name = ctk.CTkLabel(self.contenedor_vertical, text=get_translation("lbl_pack_name"), font=ctk.CTkFont(weight="bold"))
@@ -1821,7 +1843,7 @@ class StepHybridUI(ctk.CTk):
             self.btn_audio, self.label_audio_path, self.btn_checkpoint, self.label_checkpoint_path,
             self.label_name, self.entry_title, self.label_artist_name, self.entry_artist_name, self.btn_banner, self.label_banner_path,
             self.btn_video, self.label_video_path, self.checkbox_rename, 
-            self.label_seccion_adv, self.label_temp, self.slider_temp, self.label_umbral_silencios, self.slider_umbral_silencios,
+            self.label_seccion_adv, self.label_temp, self.slider_temp, self.label_umbral_silencios, self.slider_umbral_silencios, self.checkbox_activar_umbral_silencios,
             self.label_pack_name, self.entry_pack_name,
             self.label_seed, self.entry_seed
         ]
@@ -1893,7 +1915,7 @@ class StepHybridUI(ctk.CTk):
 
         # === Extensión final de la canción ===
         self.label_extension = ctk.CTkLabel(self.apartado_tiempo, text=f"{get_translation("lbl_extension")} 0.0 s", font=ctk.CTkFont(weight="bold"))
-        self.slider_extension = ctk.CTkSlider(self.apartado_tiempo, from_=0.0, to=30.0, number_of_steps=60, width=340, command=self.actualizar_texto_extension)
+        self.slider_extension = ctk.CTkSlider(self.apartado_tiempo, from_=0.0, to=30.0, number_of_steps=300, width=340, command=self.actualizar_texto_extension)
         self.slider_extension.set(0.0)
 
         widgets_tiempo = [
@@ -2017,6 +2039,13 @@ class StepHybridUI(ctk.CTk):
         self.slider_rms_max_bpm.pack(pady=2, padx=5)
         #self.slider_rms_max_bpm.grid(row=5, column=0, columnspan=2, padx=5, pady=5)
         self.slider_rms_max_bpm.set(1.50)
+
+        self.label_bpm_umbral = ctk.CTkLabel(self.frame_bpm_dinamico, text=f"{get_translation("lbl_bpm_umbral")} 4.0", font=ctk.CTkFont(weight="bold"), anchor="w")
+        self.label_bpm_umbral.pack(pady=2, padx=5)
+        self.slider_bpm_umbral = ctk.CTkSlider(self.frame_bpm_dinamico, from_=3.0, to=30.0, number_of_steps=108, width=320, 
+                                                command=lambda v: self.label_bpm_umbral.configure(text=f"{get_translation("lbl_bpm_umbral")} {v:.2f}"))
+        self.slider_bpm_umbral.pack(pady=2, padx=5)
+        self.slider_bpm_umbral.set(4.0)
 
         # Slider nuevo para la amortiguación del BPM
         self.label_bpm_amortiguador = ctk.CTkLabel(self.frame_bpm_dinamico, text=f"{get_translation("lbl_bpm_damping")} 0.12", font=ctk.CTkFont(weight="bold"), anchor="w")
@@ -2416,6 +2445,7 @@ class StepHybridUI(ctk.CTk):
         self.checkbox_bpm_dinamico.configure(text=get_translation("chk_dynamic_bpm"))
         self.label_min_bpm_dinamico.configure(text=get_translation("lbl_min_bpm"))
         self.label_max_bpm_dinamico.configure(text=get_translation("lbl_max_bpm"))
+        self.label_bpm_umbral.configure(text=f"{get_translation("lbl_bpm_umbral")} {self.slider_bpm_umbral.get()}")
         self.label_seccion_adv_speed.configure(text=get_translation("lbl_sec_speed"))
         self.checkbox_speeds_dinamico.configure(text=get_translation("chk_dynamic_speed"))
         self.label_rms_min_bpm.configure(text=f"{get_translation("lbl_rms_min_bpm")} {self.slider_rms_min_bpm.get()}")
@@ -2476,6 +2506,7 @@ class StepHybridUI(ctk.CTk):
         # Cambiar placeholders de entradas de texto de forma segura
         self.label_temp.configure(text=f"{get_translation("lbl_temp")} {self.slider_temp.get():.2f}")
         self.label_umbral_silencios.configure(text=f"{get_translation("lbl_umbral_silencio")} {self.slider_umbral_silencios.get()}")
+        self.checkbox_activar_umbral_silencios.configure(text=get_translation("chk_umbral_silencio"))
         self.actualizar_consola_gui(get_translation("txt_console_wait"))
 
 
@@ -2702,6 +2733,9 @@ class StepHybridUI(ctk.CTk):
         self.slider_rms_max_bpm.set(1.50)
         self.label_rms_max_bpm.configure(text=f"{get_translation("lbl_rms_max_bpm")} 1.50")
 
+        self.label_bpm_umbral.configure(text=f"{get_translation("lbl_bpm_umbral")} 4.0")
+        self.slider_bpm_umbral.set(4.0)
+
         self.label_bpm_amortiguador.configure(text=f"{get_translation("lbl_bpm_damping")} 0.12")
         self.slider_bpm_amortiguador.set(0.12)
 
@@ -2839,6 +2873,8 @@ class StepHybridUI(ctk.CTk):
 
         self.label_umbral_silencios.configure(text=f"{get_translation("lbl_umbral_silencio")} 0.0")
         self.slider_umbral_silencios.set(0.0)
+
+        self.checkbox_activar_umbral_silencios.deselect()
 
         self.label_status.configure(text=get_translation("label_status_reset"), text_color="gray")
 
@@ -3085,7 +3121,7 @@ class StepHybridUI(ctk.CTk):
                 self.label_max_notas_compas_texto.configure(text=f"{get_translation("lbl_max_compas_notes_madness")} {self.max_notas_compas}/192", text_color="#FF0000")
         
     def buscar_audio(self):
-        file_path = filedialog.askopenfilename(filetypes=[(get_translation("lbl_audio_selection"), "*.mp3 *.wav *.ogg *.flac")])
+        file_path = filedialog.askopenfilename(filetypes=[(get_translation("lbl_audio_selection"), "*.mp3 *.wav *.ogg *.flac *.opus")])
         if file_path:
             self.audio_file_path = file_path
             self.label_audio_path.configure(text=os.path.basename(file_path), text_color="#1abc9c")
@@ -3188,9 +3224,10 @@ class StepHybridUI(ctk.CTk):
             "max_bpm_dinamico" : max_bpm_dinamico,
             "bpm_dinamico_rms_min": float(self.slider_rms_min_bpm.get()),
             "bpm_dinamico_rms_max": float(self.slider_rms_max_bpm.get()),
+            "umbral_disparo_custom_bpm": float(self.slider_bpm_umbral.get()),
             "bpm_amortiguador_custom": float(self.slider_bpm_amortiguador.get()), # Marea BPM
             "aplicar_speeds_dinamicos": bool(self.checkbox_speeds_dinamico.get()),
-            "speed_offset_time": float(self.slider_speed_offset_time.get()),
+            "percent_aditional_time": float(self.slider_speed_offset_time.get()),
             "speed_rms_min": float(self.slider_rms_min_speed.get()),
             "speed_rms_max": float(self.slider_rms_max_speed.get()),
             "speed_min_custom": float(self.slider_speed_min.get()),  
@@ -3235,6 +3272,7 @@ class StepHybridUI(ctk.CTk):
             "muestreo_pct_min": float(self.slider_muestreo_min.get()),
             "muestreo_num_muestras": int(self.slider_muestreo_num.get()),
             "umbral_silencios": float(self.slider_umbral_silencios.get()),
+            "activar_umbral_silencios": bool(self.checkbox_activar_umbral_silencios.get()),
             "seed_value": seed_final
         }
 
