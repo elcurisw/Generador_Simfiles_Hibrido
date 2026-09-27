@@ -91,6 +91,7 @@ Estos campos definen qué se va a generar.
 | 7 | **Renombrar archivos** | Checkbox/Campo Op. |	Permite forzar el nombre del archivo de pasos con el título proporcionado. | Útil para organizar el pack final. |
 | 8 | **Temperatura IA** |	Control Numérico | Determina cuán "libre" o creativa puede ser la Inteligencia Artificial al generar los pasos. | Un valor alto = más experimentación; bajo = más conservador y predecible. |
 | 9 | **Volumen Mínimo Para Silencios**| Determina el rango mínimo para considerar un silencio en el audio. | Sirve para evitar dibujar notas en estas secciones. |
+| 9* | **Activar Función de Silencios**| Checkbox | Activa la función para detectar y anular notas en las partes silenciosas. | Activalo si necesitas usar está opción. |
 | 10 | **Nombre del Pack** | Texto | Nombra la carpeta en donde se almacenaran tus archivos. | Se reemplazo la función original ahora se copian los archivos de generación a este espacio. |
 | 11 | **Semilla de Generación (Seed)**	| Número | Si introduces un número, el generador intentará crear exactamente los mismos pasos. | Guardar la semilla es útil para reproducir resultados perfectos o deseados. |
 | 12 | **Plantillas** | Menú desplegable | Configuraciones para inspirarse o aplicar a tus pasos antes de generarlos. | Opcionales. Recordatorio, aplicar reset cada que quieras cambiar plantilla. |
@@ -134,6 +135,7 @@ Controla el pulso y la velocidad de respuesta del generador basándose en el son
 | 29 | **BPM Máximo** | Texto | Configura el BPM máximo para la función dinámica (punto 24). | Ajuste avanzado de ritmo, opcional. En caso de no configurarlo se toma la siguiente medida BPM + 30 |
 | 30 | **Sensibilidad RMS Mínimo BPM** | Control Numérico |	Establece el parámetro mínimo (RMS) que debe tener una sección para ser considerada rítmicamente notable por la IA. | Avanzado. Impacto en secciones suaves. Especializado para el BPM. |
 | 31 | **Sensibilidad RMS Máximo BPM** | Control Numérico |	Establece el parámetro mínimo (RMS) que define el pico de impacto rítmico más fuerte de la canción. | Avanzado. Impacto en picos intensos. Especializado para el BPM. |
+| 31* | **Umbral de Lectura de BPM Para Aplicar un Cambio | Control Númerico | Determina el BPM mínimo que se debe leer para considerar un cambio de BPM en la función de BPM dinámico. | Controla y evita que el archivo final rompa el juego por tantos cambios. | 
 | 32 | **Amortiguador de Marea BPM** | Control Numérico | Establece el valor de aproximación a los cambios de BPM. | Entre más alto más brusco y exacto es el cambio de BPM pero puede causar mareo o distorsiones. |
 | 33 | **Adaptar Velocidad Visual** | Checkbox | Habilita un espectro basado en el RMS (lectura de picos altos y bajos de audio) para aplicar cambios de velocidad. | Nueva opción. Función experimental. Ajuste avanzado de ritmo. Activar esta opción requerira un ajuste manual por parte del usuario. |
 | 34 | **Duración extendida por pérdida** | Control Numérico | Establece un reajuste en la duración del mapa al aplicar cambios de velocidad. | Avanzado. Requiere que el usuario verifique este valor para que se abarque la duración esperada de la canción. |
