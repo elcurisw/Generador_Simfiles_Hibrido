@@ -87,6 +87,7 @@ These fields define what will be generated in terms of file names, artist, and b
 | 7 | **Rename Files** | Checkbox/Opt. Field | Allows you to force the step file name using the provided title. | Useful for organizing the final pack structure. |
 | 8 | **AI Temperature** | Number Control | Determines how "free" or creative the Artificial Intelligence can be when generating steps. | High value = more experimentation; Low value = more conservative and predictable. |
 | 9 | **Minimum Volume for Silences** | Number Control| Determines how apply notes in silence sections. | Useful for omiting this sections. |
+| 9* | **Activate Silence Function**| Checkbox | Activate the silence function. | Recommended if you can use this option. |
 | 10 | **Pack Name** | Text Input | Names the folder where your generated files will be stored. | The generator copies all output files into this specified location. |
 | 11 | **Generation Seed (Seed)** | Number Input | If you enter a number, the generator attempts to create exactly the same steps every time. | Saving the seed is useful for reproducing perfect or desired results. |
 | 12 | **Presets Template** | Dropdown Menu | Configuration settings to reference or apply to your generated steps. | Optional. Remember to apply a reset whenever you change templates. |
