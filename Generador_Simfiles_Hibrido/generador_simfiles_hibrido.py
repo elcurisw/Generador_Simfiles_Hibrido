@@ -62,6 +62,12 @@ TEXTOS = {
         "lbl_pack_name": "Nombre del Pack (Grupo):",
         "lbl_seed": "Semilla de Generación (Vacío = Aleatorio):",
         "lbl_presets": "🧪 Plantillas (Presets):",
+        "lbl_custom_preset_name": "Nombre del Preset Personalizado:",
+        "btn_save_preset": "💾 Guardar Preset",
+        "btn_delete_preset": "🗑️ Eliminar Preset",
+        "msg_preset_saved": "Preset '{}' guardado correctamente.",
+        "msg_preset_deleted": "Preset '{}' eliminado.",
+        "msg_preset_empty": "El nombre del preset no puede estar vacío.",
         "lbl_adv_settings": "⚙️ Ajustes Avanzados del Motor:",
         "btn_reset": "Restablecer Parámetros",
         "label_status_reset": "Estado: Parámetros restablecidos correctamente.",
@@ -84,6 +90,7 @@ TEXTOS = {
         "lbl_offset": "Offset de Inicio:",
         "chk_offset_auto": "Detectar Offset Automáticamente (DSP Vol)",
         "lbl_extension": "Extensión Final Estética (Relativa):",
+        "lbl_extension_mode": "Extender por Holders? Minas por default.",
         "lbl_offset_auto_active": "Offset de Inicio: [Automático Activo]",
         "lbl_synchronize_values_graph": "Calcular y Sincronizar Valores",
         # Sub-Apartado BPM
@@ -192,6 +199,7 @@ TEXTOS = {
         "msg_error_duration": "La duración debe ser un número válido.",
         "msg_error_bpm_range": "El BPM del mínimo o máximo no es válido, no puede ser superior a 300 o menor a 30",
         "msg_success_box": "Pack Híbrido Creado con Éxito.\n\nArchivos .sm y .ssc listos.",
+        "lbl_warning": "⚠ Advertencia",
         # Nuevas claves para el Visualizador de Audio (Matplotlib)
         "vis_window_title": "Límites de Audio Asimétricos",
         "vis_lbl_info": "Arrastra las líneas: Offset (Izq) y Duración (Centro) frenan en el límite. Extensión (Der) puede expandirse.",
@@ -236,6 +244,12 @@ TEXTOS = {
         "lbl_pack_name": "Pack Name (Group):",
         "lbl_seed": "Generation Seed (Empty = Random):",
         "lbl_presets": "🧪 Presets Template:",
+        "lbl_custom_preset_name": "Custom Preset Name:",
+        "btn_save_preset": "💾 Save Preset",
+        "btn_delete_preset": "🗑️ Delete Preset",
+        "msg_preset_saved": "Preset '{}' saved successfully.",
+        "msg_preset_deleted": "Preset '{}' deleted.",
+        "msg_preset_empty": "Preset name cannot be empty.",
         "lbl_adv_settings": "⚙️ Advanced Engine Settings:",
         "btn_reset": "Reset Parameters",
         "label_status_reset": "Status: Parameters per Default.",
@@ -258,6 +272,7 @@ TEXTOS = {
         "lbl_offset": "Starting Offset:",
         "chk_offset_auto": "Auto-Detect Offset (DSP Vol)",
         "lbl_extension": "Aesthetic Final Extension (Relative):",
+        "lbl_extension_mode": "Extension by Holders? Mines by Default",
         "lbl_offset_auto_active": "Starting Offset: [Automatic Active]",
         "lbl_synchronize_values_graph": "Calculate and Synchronize Values",
         # BPM Sub-Apartado
@@ -366,6 +381,7 @@ TEXTOS = {
         "msg_error_duration": "Duration must be a valid number.",
         "msg_error_bpm_range": "The minimum or maximum BPM is invalid, it cannot exceed 300 or be lower than 30",
         "msg_success_box": "Hybrid Pack Successfully Created.\n\n.sm and .ssc files ready.",
+        "lbl_warning": "⚠ Warning",
         #Matplot graphic
         "vis_window_title": "Asymmetric Audio Limits",
         "vis_lbl_info": "Drag lines: Offset (Left) & Duration (Center) stop at boundary. Extension (Right) can expand.",
@@ -1160,15 +1176,6 @@ def ejecutar_bucle_sincrono(config_dificultad, compases_totales, bpm, val_offset
         # -----------------------------------------------------------------
         # FASE 4: EXTENSIÓN ESTÉTICA Y CORRECCIÓN ANATÓMICA
         # -----------------------------------------------------------------
-        extension_final = custom_params.get("extension_final", 0.0) if custom_params else 0.0
-        if extension_final > 0:
-            compases_extras = math.ceil(extension_final / ((60.0 / ultimo_bpm_aplicado) * 4.0))
-            for l_idx in range(compases_extras * lineas_objetivo):
-                if l_idx == (compases_extras * lineas_objetivo) - 1:
-                    pasos_finales_ia.append("M00M")
-                else:
-                    pasos_finales_ia.append("0000")
-
         if aplicar_post:
             pasos_finales_ia = PostProcesadorStepMania.corregir_sintaxis_holds(
                 pasos_finales_ia, 
@@ -1176,6 +1183,24 @@ def ejecutar_bucle_sincrono(config_dificultad, compases_totales, bpm, val_offset
                 lineas_por_compas=lineas_objetivo,
                 max_holds_simultaneos=custom_params.get("holds_simultaneos", 2),
             )
+
+        extension_final = custom_params.get("extension_final", 0.0) if custom_params else 0.0
+        if extension_final > 0:
+            compases_extras = math.ceil(extension_final / ((60.0 / ultimo_bpm_aplicado) * 4.0))
+            extension_mode_by = custom_params.get("extension_mode_by", False) if custom_params else False
+            for l_idx in range(compases_extras * lineas_objetivo):
+                if extension_mode_by == True:
+                    if l_idx == 0:
+                        pasos_finales_ia.append("2002")
+                    elif l_idx == (compases_extras * lineas_objetivo) - 1:
+                        pasos_finales_ia.append("3003")
+                    else:
+                        pasos_finales_ia.append("0000")
+                else:
+                    if l_idx == (compases_extras * lineas_objetivo) - 1:
+                        pasos_finales_ia.append("M00M")
+                    else:
+                        pasos_finales_ia.append("0000")
 
         # Formateo de los bloques de medidas rítmicas del Simfile
         bloque_pasos_texto = ""
@@ -1587,6 +1612,10 @@ class AudioVisualizerSubWindow(ctk.CTkToplevel):
         self.background = None  
         self.last_update_time = 0
 
+        # --- ANÁLISIS ESPECTRAL DEL AUDIO ---
+        # Extraemos el BPM real detectado por el motor híbrido para pintarlo en la gráfica
+        bpm_detectado, _, _, _, _, _ = analizar_audio_hibrido(audio_path)
+
         # Cargar espectro rápido de audio
         self.y, self.sr = librosa.load(audio_path, sr=11025, mono=True)
         self.duration = float(current_duration if current_duration > 0 else librosa.get_duration(y=self.y, sr=self.sr))
@@ -1613,6 +1642,21 @@ class AudioVisualizerSubWindow(ctk.CTkToplevel):
         
         self.ax.set_xlim(-5, self.duration + 20)
         self.ax.grid(True, alpha=0.2, color="gray")
+
+        # --- 📌 INYECTAR ETIQUETA FIJA DE BPM ---
+        # Colocamos un cuadro de texto flotante arriba a la derecha usando coordenadas relativas a los ejes (transform=ax.transAxes)
+        bbox_bpm_props = dict(boxstyle="square,pad=0.4", fc="#2c3e50", ec="#1abc9c", lw=1.5, alpha=0.95)
+        self.ax.text(
+            0.95, 0.92, 
+            f"🎵 BPM: {bpm_detectado:.2f}", 
+            color="#1abc9c", 
+            transform=self.ax.transAxes, 
+            ha="right", 
+            va="top", 
+            fontsize=11, 
+            weight="bold", 
+            bbox=bbox_bpm_props
+        )
 
         # Inicializar Marcadores Inteligentes
         init_pos = [self.duration * 0.15, self.duration * 0.80, self.duration * 0.95]
@@ -1865,6 +1909,29 @@ class StepHybridUI(ctk.CTk):
         )
         self.menu_presets.pack(pady=5, padx=20, fill="x")
 
+        # === 🧪 MODIFICACIÓN: SUB-PANEL DE CREACIÓN DE PRESETS PERSONALIZADOS ===
+        self.frame_custom_presets = ctk.CTkFrame(self.contenedor_vertical, fg_color="#2c3e50")
+        self.frame_custom_presets.pack(pady=8, padx=20, fill="x")
+
+        self.lbl_custom_preset = ctk.CTkLabel(self.frame_custom_presets, text=get_translation("lbl_custom_preset_name"), font=ctk.CTkFont(size=11, weight="bold"))
+        self.lbl_custom_preset.pack(pady=2, padx=5)
+
+        self.entry_custom_preset_name = ctk.CTkEntry(self.frame_custom_presets, placeholder_text="Ej: Mis_Gimmicks_Pro", height=24)
+        self.entry_custom_preset_name.pack(pady=4, padx=10, fill="x")
+
+        self.frame_custom_presets_botones = ctk.CTkFrame(self.frame_custom_presets, fg_color="transparent")
+        self.frame_custom_presets_botones.pack(pady=4, padx=5, fill="x")
+
+        self.btn_guardar_preset = ctk.CTkButton(self.frame_custom_presets_botones, text=get_translation("btn_save_preset"), fg_color="#27ae60", hover_color="#219a52", height=26, command=self.guardar_preset_personalizado)
+        self.btn_guardar_preset.pack(side="left", expand=True, padx=5, fill="x")
+
+        self.btn_eliminar_preset = ctk.CTkButton(self.frame_custom_presets_botones, text=get_translation("btn_delete_preset"), fg_color="#2980b9", hover_color="#c0392b", height=26, command=self.eliminar_preset_personalizado)
+        self.btn_eliminar_preset.pack(side="right", expand=True, padx=5, fill="x")
+
+        # Llamada inicial para poblar el OptionMenu con lo que haya en disco duro
+        self.actualizar_menu_presets_opciones()
+
+
         # =====================================================================
         # SELECTOR DESPLEGABLE PARA APARTADOS CONFIGURACIÓN AVANZADA
         # =====================================================================
@@ -1896,7 +1963,7 @@ class StepHybridUI(ctk.CTk):
 
         self.label_seccion_adv_tiempo = ctk.CTkLabel(self.apartado_tiempo, text=get_translation("lbl_sec_time"), font=ctk.CTkFont(size=13, weight="bold", slant="italic"), text_color="#40FFEE")
         self.label_offset = ctk.CTkLabel(self.apartado_tiempo, text=get_translation("lbl_offset_auto_active"), font=ctk.CTkFont(weight="bold"))
-        self.slider_offset = ctk.CTkSlider(self.apartado_tiempo, from_=0.0, to=16.0, number_of_steps=400, width=340, command=self.actualizar_texto_offset)
+        self.slider_offset = ctk.CTkSlider(self.apartado_tiempo, from_=0.0, to=30.0, number_of_steps=750, width=340, command=self.actualizar_texto_offset)
         self.slider_offset.set(0.000)
 
         self.frame_offset_botones = ctk.CTkFrame(self.apartado_tiempo, fg_color="transparent")
@@ -1918,10 +1985,16 @@ class StepHybridUI(ctk.CTk):
         self.slider_extension = ctk.CTkSlider(self.apartado_tiempo, from_=0.0, to=30.0, number_of_steps=300, width=340, command=self.actualizar_texto_extension)
         self.slider_extension.set(0.0)
 
+        self.checkbox_extension_mode = ctk.CTkCheckBox(
+            self.apartado_tiempo, 
+            text=get_translation("lbl_extension_mode"),
+            text_color="#1abc9c"
+        )
+
         widgets_tiempo = [
             self.btn_visualizar_grafico, self.label_duracion, self.entry_duracion,
             self.label_seccion_adv_tiempo, self.label_offset, self.slider_offset, self.frame_offset_botones, self.checkbox_offset_auto,
-            self.label_extension, self.slider_extension
+            self.label_extension, self.slider_extension, self.checkbox_extension_mode
             ]
         for w in widgets_tiempo: 
             w.pack(pady=4, padx=20)
@@ -1969,8 +2042,8 @@ class StepHybridUI(ctk.CTk):
         self.btn_bpm_mas.configure(state="disabled")
 
         #Doble BPM
-        self.checkbox_bpm = ctk.CTkCheckBox(self.apartado_bpm, text=get_translation("chk_double_bpm")) 
-        self.checkbox_bpm.deselect()
+        self.checkbox_bpm_doble = ctk.CTkCheckBox(self.apartado_bpm, text=get_translation("chk_double_bpm")) 
+        self.checkbox_bpm_doble.deselect()
 
         self.checkbox_bpm_dinamico = ctk.CTkCheckBox(self.apartado_bpm, text=get_translation("chk_dynamic_bpm"), command=self.gestionar_exclusividad_ritmo)
         self.checkbox_bpm_dinamico.deselect()
@@ -2042,8 +2115,8 @@ class StepHybridUI(ctk.CTk):
 
         self.label_bpm_umbral = ctk.CTkLabel(self.frame_bpm_dinamico, text=f"{get_translation("lbl_bpm_umbral")} 4.0", font=ctk.CTkFont(weight="bold"), anchor="w")
         self.label_bpm_umbral.pack(pady=2, padx=5)
-        self.slider_bpm_umbral = ctk.CTkSlider(self.frame_bpm_dinamico, from_=3.0, to=30.0, number_of_steps=108, width=320, 
-                                                command=lambda v: self.label_bpm_umbral.configure(text=f"{get_translation("lbl_bpm_umbral")} {v:.2f}"))
+        self.slider_bpm_umbral = ctk.CTkSlider(self.frame_bpm_dinamico, from_=1.5, to=30.0, number_of_steps=114, width=320, 
+                                                command=lambda v: self.label_bpm_umbral.configure(text=f"{get_translation("lbl_bpm_umbral")} {v:.2f}" if v >= 3.0 else f"{get_translation("lbl_bpm_umbral")} {v:.2f} {get_translation("lbl_warning")}" ))
         self.slider_bpm_umbral.pack(pady=2, padx=5)
         self.slider_bpm_umbral.set(4.0)
 
@@ -2066,7 +2139,7 @@ class StepHybridUI(ctk.CTk):
         self.frame_scroll_speed_dinamico = ctk.CTkFrame(self.apartado_bpm, fg_color="transparent")
         self.label_speed_offset_time = ctk.CTkLabel(self.frame_scroll_speed_dinamico, text=f"{get_translation("lbl_speed_loss")} 0.15%", font=ctk.CTkFont(weight="bold"))
         self.label_speed_offset_time.pack(pady=2, padx=5)
-        self.slider_speed_offset_time = ctk.CTkSlider(self.frame_scroll_speed_dinamico, from_=0, to=5, number_of_steps=500, width=340, command=lambda v: self.label_speed_offset_time.configure(text=f"{get_translation("lbl_speed_loss")} {v:.2f}%" if v > 0 else f"{get_translation("lbl_speed_loss")} 0%"))
+        self.slider_speed_offset_time = ctk.CTkSlider(self.frame_scroll_speed_dinamico, from_=0.0, to=5.0, number_of_steps=500, width=340, command=lambda v: self.label_speed_offset_time.configure(text=f"{get_translation("lbl_speed_loss")} {v:.2f}%" if v > 0 else f"{get_translation("lbl_speed_loss")} 0%"))
         self.slider_speed_offset_time.pack(pady=2, padx=5)
         self.slider_speed_offset_time.set(0.15)
 
@@ -2115,7 +2188,7 @@ class StepHybridUI(ctk.CTk):
         self.slider_speed_umbral.set(0.50)
 
         widgets_bpm = [
-            self.label_seccion_adv_bpm, self.label_bpm, self.frame_controles_bpm, self.frame_bpm_botones, self.checkbox_bpm, self.checkbox_bpm_dinamico, #self.frame_bpm_dinamico,
+            self.label_seccion_adv_bpm, self.label_bpm, self.frame_controles_bpm, self.frame_bpm_botones, self.checkbox_bpm_doble, self.checkbox_bpm_dinamico, #self.frame_bpm_dinamico,
             self.label_seccion_adv_speed, self.checkbox_speeds_dinamico
             ]
         for w in widgets_bpm: 
@@ -2432,16 +2505,22 @@ class StepHybridUI(ctk.CTk):
         self.btn_resetear.configure(text=get_translation("btn_reset"))
         self.btn_generar.configure(text=get_translation("btn_generate"))
         self.label_consola.configure(text=get_translation("lbl_monitor"))
+        # Traducir sub-panel de presets personalizados
+        self.lbl_custom_preset.configure(text=get_translation("lbl_custom_preset_name"))
+        self.btn_guardar_preset.configure(text=get_translation("btn_save_preset"))
+        self.btn_eliminar_preset.configure(text=get_translation("btn_delete_preset"))
+        self.actualizar_menu_presets_opciones()
         
         # 4. Apartado Tiempo
         self.btn_visualizar_grafico.configure(text=get_translation("btn_graph"))
         self.label_duracion.configure(text=get_translation("lbl_duration"))
         self.label_seccion_adv_tiempo.configure(text=get_translation("lbl_sec_time"))
         self.checkbox_offset_auto.configure(text=get_translation("chk_offset_auto"))
+        self.checkbox_extension_mode.configure(text=get_translation("lbl_extension_mode"))
         
         # 5. Apartado BPM y Speeds
         self.label_seccion_adv_bpm.configure(text=get_translation("lbl_sec_bpm"))
-        self.checkbox_bpm.configure(text=get_translation("chk_double_bpm"))
+        self.checkbox_bpm_doble.configure(text=get_translation("chk_double_bpm"))
         self.checkbox_bpm_dinamico.configure(text=get_translation("chk_dynamic_bpm"))
         self.label_min_bpm_dinamico.configure(text=get_translation("lbl_min_bpm"))
         self.label_max_bpm_dinamico.configure(text=get_translation("lbl_max_bpm"))
@@ -2509,13 +2588,159 @@ class StepHybridUI(ctk.CTk):
         self.checkbox_activar_umbral_silencios.configure(text=get_translation("chk_umbral_silencio"))
         self.actualizar_consola_gui(get_translation("txt_console_wait"))
 
-
+    # -----------------------------------------PRESENTS SECTION---------------------------------------------------------------
     def aplicar_preset_config(self, seleccion):
         """
         Carga configuraciones automáticas calibradas con valores reales estables
         para evaluar el sistema de ráfagas de saltos y el presupuesto de trampas.
         """
         if seleccion == get_translation("preset_0"):
+            return
+
+        # --- DETECCIÓN Y CARGA DE PRESETS PERSONALIZADOS DEL USUARIO ---
+        presets_usuario = self.cargar_lista_presets_json()
+        if seleccion in presets_usuario:
+            data = presets_usuario[seleccion]
+            
+            # Asignación segura de valores guardados a los controles del GUI
+            self.slider_temp.set(data.get("temperatura", 1.3))
+            self.label_temp.configure(text=f"{get_translation("lbl_temp")} {self.slider_temp.get()}")
+            self.slider_umbral_silencios.set(data.get("umbral_silencios", 0.0))
+            self.label_umbral_silencios.configure(text=f"{get_translation("lbl_umbral_silencio")} {self.slider_umbral_silencios.get()}")
+            
+            if data.get("activar_umbral_silencios", False): self.checkbox_activar_umbral_silencios.select()
+            else: self.checkbox_activar_umbral_silencios.deselect()
+            
+            #Aplicando presents de BPM
+            if data.get("bpm_automatico", False): 
+                self.check_auto_bpm.select()
+                self.label_bpm.configure(text=f"{get_translation("lbl_bpm_config")} {get_translation("lbl_bpm_auto")}")
+            else: 
+                self.check_auto_bpm.deselect()
+
+            if data.get("double_bpm", False): self.checkbox_bpm_doble.select()
+            else: self.checkbox_bpm_doble.deselect()
+            
+            if data.get("aplicar_bpm_dinamico", False): self.checkbox_bpm_dinamico.select()
+            else: self.checkbox_bpm_dinamico.deselect()
+            
+            self.slider_rms_min_bpm.set(data.get("bpm_dinamico_rms_min", 0.5))
+            self.label_rms_min_bpm.configure(text=f"{get_translation("lbl_rms_min_bpm")} {self.slider_rms_min_bpm.get():.2f}")
+            self.slider_rms_max_bpm.set(data.get("bpm_dinamico_rms_max", 1.5))
+            self.label_rms_max_bpm.configure(text=f"{get_translation("lbl_rms_max_bpm")} {self.slider_rms_max_bpm.get():.2f}")
+            self.slider_bpm_umbral.set(data.get("umbral_disparo_custom_bpm", 4.0))
+            self.label_bpm_umbral.configure(text=f"{get_translation("lbl_bpm_umbral")} {self.slider_bpm_umbral.get()}")
+            self.slider_bpm_amortiguador.set(data.get("bpm_amortiguador_custom", 0.12))
+            self.label_bpm_amortiguador.configure(text=f"{get_translation("lbl_bpm_damping")} {self.slider_bpm_amortiguador.get():.2f}")
+            
+            #Aplicando presents de scroll speeds
+            if data.get("aplicar_speeds_dinamicos", False): self.checkbox_speeds_dinamico.select()
+            else: self.checkbox_speeds_dinamico.deselect()
+            
+            self.slider_speed_offset_time.set(data.get("percent_aditional_time", 0.15))
+            self.label_speed_offset_time.configure(text=f"{get_translation("lbl_speed_loss")} {self.slider_speed_offset_time.get():.2f}%")
+            self.slider_rms_min_speed.set(data.get("speed_rms_min", 0.5))
+            self.label_rms_min_speed.configure(text=f"{get_translation("lbl_rms_min_speed")} {self.slider_rms_min_speed.get():.2f}")
+            self.slider_rms_max_speed.set(data.get("speed_rms_max", 1.5))
+            self.label_rms_max_speed.configure(text=f"{get_translation("lbl_rms_max_speed")} {self.slider_rms_max_speed.get():.2f}")
+            self.slider_speed_min.set(data.get("speed_min_custom", 0.70))
+            self.label_speed_min.configure(text=f"{get_translation("lbl_speed_min")} {self.slider_speed_min.get():.2f}")
+            self.slider_speed_max.set(data.get("speed_max_custom", 1.40))
+            self.label_speed_max.configure(text=f"{get_translation("lbl_speed_max")} {self.slider_speed_max.get():.2f}x")
+            self.slider_speed_trans.set(data.get("speed_trans_custom", 2.0))
+            self.label_speed_trans.configure(text=f"{get_translation("lbl_speed_trans")} {self.slider_speed_trans.get()} Beats")
+            self.slider_speed_umbral.set(data.get("speed_umbral_disparo", 0.50))
+            self.label_speed_umbral.configure(text=f"{get_translation("lbl_speed_anti_dizzy")} {self.slider_speed_umbral.get():.2f}")
+            
+            #Aplicando presents de trampas
+            self.slider_prob_minas.set(data.get("probabilidad_minas", 35.0))
+            self.label_prob_minas.configure(text=f"{get_translation("lbl_prob_mines")} {self.slider_prob_minas.get()}%")
+            self.slider_max_minas.set(data.get("max_minas_compas", 3))
+            self.label_max_minas.configure(text=f"{get_translation("lbl_max_mines")} {self.slider_max_minas.get()}")
+            self.slider_prob_fakes.set(data.get("probabilidad_fakes", 25.0))
+            self.label_prob_fakes.configure(text=f"{get_translation("lbl_prob_fakes")} {self.slider_prob_fakes.get()}%")
+            self.slider_max_fakes.set(data.get("max_fakes_compas", 0))
+            self.label_max_fakes.configure(text=f"{get_translation("lbl_max_fakes")} {self.slider_max_fakes.get()}")
+            self.slider_prob_lifts.set(data.get("probabilidad_lifts", 25.0))
+            self.label_prob_lifts.configure(text=f"{get_translation("lbl_prob_lifts")} {self.slider_prob_lifts.get()}%")
+            self.slider_max_lifts.set(data.get("max_lifts_compas", 0))
+            self.label_max_lifts.configure(text=f"{get_translation("lbl_max_lifts")} {self.slider_max_lifts.get()}")
+            self.slider_prob_potions.set(data.get("probabilidad_potions", 15.0))
+            self.label_prob_potions.configure(text=f"{get_translation("lbl_prob_potions")} {self.slider_prob_potions.get()}%")
+            self.slider_max_potions.set(data.get("max_potions_compas", 0))
+            self.label_max_potions.configure(text=f"{get_translation("lbl_max_potions")} {self.slider_max_potions.get()}")
+            self.slider_prob_shields.set(data.get("probabilidad_shields", 15.0))
+            self.label_prob_shields.configure(text=f"{get_translation("lbl_prob_fakes")} {self.slider_prob_shields.get()}%")
+            self.slider_max_shields.set(data.get("max_shields_compas", 0))
+            self.label_max_shields.configure(text=f"{get_translation("lbl_max_shields")} {self.slider_max_shields.get()}")
+            self.slider_prob_rayos.set(data.get("probabilidad_rayos", 15.0))
+            self.label_prob_rayos.configure(text=f"{get_translation("lbl_prob_rayos")} {self.slider_prob_rayos.get()}%")
+            self.slider_max_rayos.set(data.get("max_rayos_compas", 0))
+            self.label_max_rayos.configure(text=f"{get_translation("lbl_max_rayos")} {self.slider_max_rayos.get()}")
+            self.slider_prob_hiddens.set(data.get("probabilidad_hiddens", 15.0))
+            self.label_prob_hiddens.configure(text=f"{get_translation("lbl_prob_hiddens")} {self.slider_prob_hiddens.get()}%")
+            self.slider_max_hiddens.set(data.get("max_hiddens_compas", 0))
+            self.label_max_hiddens.configure(text=f"{get_translation("lbl_max_hiddens")} {self.slider_max_hiddens.get()}")
+            
+            if data.get("efectos_por_rms", False): self.checkbox_efectos_rms.select()
+            else: self.checkbox_efectos_rms.deselect()
+
+            self.slider_rms_min_fx.set(data.get("fx_rms_min"), 0.50)
+            self.label_rms_min_fx.configure(text=f"{get_translation("lbl_rms_min_fx")} {self.slider_rms_min_fx.get():.2f}")
+            self.slider_rms_max_fx.set(data.get("fx_rms_max"), 1.50)
+            self.label_rms_max_fx.configure(text=f"{get_translation("lbl_rms_max_fx")} {self.slider_rms_max_fx.get():.2f}")          
+
+            #Aplicando presents a los holds
+            self.slider_max_hold.set(data.get("max_hold", 8))
+            self.label_max_hold.configure(text=f"{get_translation("lbl_max_hold")} {self.slider_max_hold.get()}")
+            self.slider_holds_sim.set(data.get("holds_simultaneos", 2))
+            self.label_holds_sim.configure(text=f"{get_translation("lbl_sim_holds")} {self.slider_holds_sim.get()}")
+            
+            #Aplicando presets a los saltos
+            if data.get("activar_secciones_saltos", False): self.checkbox_secciones_saltos.select()
+            else: self.checkbox_secciones_saltos.deselect()
+            
+            self.slider_rms_min_saltos.set(data.get("saltos_rms_min", 0.5))
+            self.label_rms_min_saltos.configure(text=f"{get_translation("lbl_rms_min_jumps")} {self.slider_rms_min_saltos.get()}")
+            self.slider_rms_max_saltos.set(data.get("saltos_rms_max", 1.5))
+            self.label_rms_max_saltos.configure(text=f"{get_translation("lbl_rms_max_jumps")} {self.slider_rms_max_saltos.get()}")
+            
+            # Variables numéricas internas de la estructura de compases
+            self.lineas_por_compas = data.get("lineas_por_compas", 12)
+            self.max_notas_compas = data.get("max_notas_compas", 12)
+            self.min_notas_compas = data.get("min_notas_compas", 8)
+
+            self.slider_rms_min.set(data.get("ratio_min_energia", 0.5))
+            self.label_rms_min.configure(text=f"{get_translation("lbl_rms_min_density")} {self.slider_rms_min.get()}")
+            self.slider_rms_max.set(data.get("ratio_max_energia",1.5))
+            self.label_rms_max.configure(text=f"{get_translation("lbl_rms_max_density")} {self.slider_rms_max.get()}")
+
+            self.slider_level.set(data.get("max_nivel",16))
+            self.actualizar_valores_interfaz()
+
+            #Presents para variables de muestreo
+            if data.get("activar_muestreo_multicapa", False): self.checkbox_muestreo.select()
+            else: self.checkbox_muestreo.deselect()
+
+            self.slider_muestreo_min.set(data.get("muestreo_pct_min", 0.95))
+            self.label_muestreo_min.configure(text=f"{get_translation("lbl_sampling_min")} {self.slider_muestreo_min.get()}%")
+            self.slider_muestreo_num.set(data.get("muestreo_num_muestras", 6))
+            self.label_muestreo_num.configure(text=f"{get_translation("lbl_sampling_num")} {self.slider_muestreo_num.get()}")
+
+            # Refrescar interfaz de texto
+            self.actualizar_texto_amortiguador_bpm(self.slider_bpm_amortiguador.get())
+            self.actualizar_texto_umbral_speed(self.slider_speed_umbral.get())
+            self.label_temp.configure(text=f"{get_translation('lbl_temp')} {self.slider_temp.get():.2f}")
+            self.label_max_hold.configure(text=f"{get_translation('lbl_max_hold')} {int(self.slider_max_hold.get())}")
+            self.label_holds_sim.configure(text=f"{get_translation('lbl_sim_holds')} {int(self.slider_holds_sim.get())}")
+            self.label_prob_minas.configure(text=f"{get_translation('lbl_prob_mines')} {int(self.slider_prob_minas.get())}%")
+            self.label_max_minas.configure(text=f"{get_translation('lbl_max_mines')} {int(self.slider_max_minas.get())}")
+            
+            self.gestionar_exclusividad_ritmo()
+            self.gestionar_exclusividad_saltos()
+            self.actualizar_valores_compas()
+
+            self.label_status.configure(text=f"{get_translation('lbl_present_status')}: {seleccion}", text_color="#2ecc71")
             return
 
         # Limpieza obligatoria de buffers rítmicos dinámicos
@@ -2693,6 +2918,140 @@ class StepHybridUI(ctk.CTk):
         
         self.label_status.configure(text=f"{get_translation("lbl_present_status")} {seleccion[3:]}", text_color="#1abc9c")
     
+    def obtener_ruta_presets_json(self):
+        '''Define la ruta del archivo JSON en la carpeta del script.'''
+        import sys
+        if getattr(sys, 'frozen', False):
+            carpeta = os.path.dirname(sys.executable)
+        else:
+            carpeta = os.path.dirname(os.path.abspath(__file__))
+        return os.path.join(carpeta, "presets_personalizados.json")
+
+    def cargar_lista_presets_json(self):
+        """Lee los presets del archivo JSON de forma segura."""
+        ruta = self.obtener_ruta_presets_json()
+        if os.path.exists(ruta):
+            try:
+                with open(ruta, "r", encoding="utf-8") as f:
+                    return json.load(f)
+            except Exception:
+                return {}
+        return {}
+
+    def actualizar_menu_presets_opciones(self):
+        """Refresca las opciones del OptionMenu combinando los de fábrica y los personalizados."""
+        presets_fabrica = [
+            get_translation("preset_0"), get_translation("preset_1"), get_translation("preset_2"),
+            get_translation("preset_3"), get_translation("preset_4"), get_translation("preset_5"),
+            get_translation("preset_6"), get_translation("preset_7")
+        ]
+        self.presets_usuario_dict = self.cargar_lista_presets_json()
+        opciones_totales = presets_fabrica + list(self.presets_usuario_dict.keys())
+        self.menu_presets.configure(values=opciones_totales)
+
+    def guardar_preset_personalizado(self):
+        """Captura el estado actual de los controles de la UI redondeando los flotantes y lo guarda en el JSON."""
+        nombre_preset = self.entry_custom_preset_name.get().strip()
+        if not nombre_preset:
+            messagebox.showerror("Error", get_translation("msg_preset_empty"))
+            return
+
+        # Diccionario con el estado exacto aplicando round() según la precisión requerida
+        config_actual = {
+            "temperatura": round(self.slider_temp.get(), 2),
+            "umbral_silencios": round(self.slider_umbral_silencios.get(), 2),
+            "activar_umbral_silencios": self.checkbox_activar_umbral_silencios.get(),
+            "bpm_automatico": self.check_auto_bpm.get(),
+            "double_bpm": self.checkbox_bpm_doble.get(),
+            "aplicar_bpm_dinamico": self.checkbox_bpm_dinamico.get(),
+            
+            # Ajustes RMS de BPM (Redondeados a 2 decimales)
+            "bpm_dinamico_rms_min": round(self.slider_rms_min_bpm.get(), 2),
+            "bpm_dinamico_rms_max": round(self.slider_rms_max_bpm.get(), 2),
+            "umbral_disparo_custom_bpm": round(self.slider_bpm_umbral.get(), 1),
+            "bpm_amortiguador_custom": round(self.slider_bpm_amortiguador.get(), 2),
+            
+            "aplicar_speeds_dinamicos": self.checkbox_speeds_dinamico.get(),
+            "percent_aditional_time": round(self.slider_speed_offset_time.get(), 2),
+            
+            # Ajustes RMS de Scroll Speeds (Redondeados a 2 decimales)
+            "speed_rms_min": round(self.slider_rms_min_speed.get(), 2),
+            "speed_rms_max": round(self.slider_rms_max_speed.get(), 2),
+            "speed_min_custom": round(self.slider_speed_min.get(), 2),
+            "speed_max_custom": round(self.slider_speed_max.get(), 2),
+            "speed_trans_custom": round(self.slider_speed_trans.get(), 1),
+            "speed_umbral_disparo": round(self.slider_speed_umbral.get(), 2),
+            
+            # Modificadores de notas
+            "probabilidad_minas": round(self.slider_prob_minas.get(), 1),
+            "max_minas_compas": int(self.slider_max_minas.get()),
+            "probabilidad_fakes": round(self.slider_prob_fakes.get(), 1),
+            "max_fakes_compas": int(self.slider_max_fakes.get()),
+            "probabilidad_lifts": round(self.slider_prob_lifts.get(), 1),
+            "max_lifts_compas": int(self.slider_max_lifts.get()),
+            "probabilidad_potions": round(self.slider_prob_potions.get(), 1),
+            "max_potions_compas": int(self.slider_max_potions.get()),
+            "probabilidad_shields": round(self.slider_prob_shields.get(), 1),
+            "max_shields_compas": int(self.slider_max_shields.get()),
+            "probabilidad_rayos": round(self.slider_prob_rayos.get(), 1),
+            "max_rayos_compas": int(self.slider_max_rayos.get()),
+            "probabilidad_hiddens": round(self.slider_prob_hiddens.get(), 1),
+            "max_hiddens_compas": int(self.slider_max_hiddens.get()),
+            "max_hold": int(self.slider_max_hold.get()),
+            "holds_simultaneos": int(self.slider_holds_sim.get()),
+            
+            # Ajustes RMS de Saltos y FX (Redondeados a 2 decimales)
+            "activar_secciones_saltos": self.checkbox_secciones_saltos.get(),
+            "saltos_rms_min": round(self.slider_rms_min_saltos.get(), 2),
+            "saltos_rms_max": round(self.slider_rms_max_saltos.get(), 2),
+            "efectos_por_rms": self.checkbox_efectos_rms.get(),
+            "fx_rms_min": round(self.slider_rms_min_fx.get(), 2),
+            "fx_rms_max": round(self.slider_rms_max_fx.get(), 2),
+            
+            # Variables de compás (Enteros planos)
+            "lineas_por_compas": int(self.lineas_por_compas),
+            "max_notas_compas": int(self.max_notas_compas),
+            "min_notas_compas": int(self.min_notas_compas),
+
+            # Variables de muestreo
+            "activar_muestreo_multicapa": self.checkbox_muestreo.get(),
+            "muestreo_pct_min": round(self.slider_muestreo_min.get(), 2),
+            "muestreo_num_muestras": int(self.slider_muestreo_num.get()),
+
+            # Ajustes RMS de notas
+            "ratio_min_energia": round(self.slider_rms_min.get(), 2),
+            "ratio_max_energia": round(self.slider_rms_max.get(), 2),
+
+            #Configuración de nivel
+            "max_nivel": int(self.slider_level.get())
+        }
+
+        presets = self.cargar_lista_presets_json()
+        presets[nombre_preset] = config_actual
+
+        with open(self.obtener_ruta_presets_json(), "w", encoding="utf-8") as f:
+            json.dump(presets, f, indent=4, ensure_ascii=False)
+
+        self.actualizar_menu_presets_opciones()
+        self.entry_custom_preset_name.delete(0, "end")
+        messagebox.showinfo("StepMania AI", get_translation("msg_preset_saved").format(nombre_preset))
+
+    def eliminar_preset_personalizado(self):
+        """Elimina el preset seleccionado en el OptionMenu si pertenece al usuario."""
+        seleccion = self.menu_presets.get()
+        presets = self.cargar_lista_presets_json()
+
+        if seleccion in presets:
+            del presets[seleccion]
+            with open(self.obtener_ruta_presets_json(), "w", encoding="utf-8") as f:
+                json.dump(presets, f, indent=4, ensure_ascii=False)
+            
+            self.actualizar_menu_presets_opciones()
+            self.menu_presets.set(get_translation("preset_0"))
+            messagebox.showinfo("StepMania AI", get_translation("msg_preset_deleted").format(seleccion))
+
+    #----------------------------------END PRESENTS SECTION-------------------------------------
+
     def restablecer_valores(self):
         """ Devuelve todos los sliders avanzados a sus valores nativos por defecto """
         # --- LIMPIEZA DE RUTAS Y CAMPOS DE ARCHIVOS ---
@@ -2721,7 +3080,7 @@ class StepHybridUI(ctk.CTk):
         self.btn_bpm_menos.configure(state="disabled")
         self.btn_bpm_mas.configure(state="disabled")
 
-        self.checkbox_bpm.deselect() 
+        self.checkbox_bpm_doble.deselect() 
 
         self.checkbox_bpm_dinamico.deselect() 
         self.checkbox_bpm_dinamico.configure(state="normal")
@@ -2776,6 +3135,7 @@ class StepHybridUI(ctk.CTk):
 
         self.slider_extension.set(0.000)
         self.label_extension.configure(text=f"{get_translation("lbl_extension")} 0.0 s")
+        self.checkbox_extension_mode.deselect()
         
         # Resetear Parámetros Avanzados
         self.slider_temp.set(1.3)
@@ -3152,7 +3512,7 @@ class StepHybridUI(ctk.CTk):
             self.label_checkpoint_path.configure(text=os.path.basename(file_path), text_color="#1abc9c")
 
     def buscar_banner(self):
-        file_path = filedialog.askopenfilename(filetypes=[(get_translation("lbl_banner_selection"), "*.png *.jpg *.jpeg *.bpm")])
+        file_path = filedialog.askopenfilename(filetypes=[(get_translation("lbl_banner_selection"), "*.png *.jpg *.jpeg *.bpm *.svg *.wepg")])
         if file_path:
             self.banner_file_path = file_path
             self.label_banner_path.configure(text=os.path.basename(file_path), text_color="#1abc9c")
@@ -3218,7 +3578,7 @@ class StepHybridUI(ctk.CTk):
             "renombrar_archivos": bool(self.checkbox_rename.get()),
             "bpm_manual": float(self.slider_bpm.get()),
             "bpm_automatico": bool(self.check_auto_bpm.get()),
-            "double_bpm": bool(self.checkbox_bpm.get()),
+            "double_bpm": bool(self.checkbox_bpm_doble.get()),
             "aplicar_bpm_dinamico": bool(self.checkbox_bpm_dinamico.get()), 
             "min_bpm_dinamico" : min_bpm_dinamico,
             "max_bpm_dinamico" : max_bpm_dinamico,
@@ -3239,6 +3599,7 @@ class StepHybridUI(ctk.CTk):
             "offset_automatico": bool(self.checkbox_offset_auto.get()),
             "offset_manual": float(self.slider_offset.get()),
             "extension_final": float(self.slider_extension.get()),
+            "extension_mode_by": bool(self.checkbox_extension_mode.get()),
             "temperatura": float(self.slider_temp.get()),
             "max_hold": int(self.slider_max_hold.get()),
             "holds_simultaneos": int(self.slider_holds_sim.get()),
