@@ -116,6 +116,7 @@ Determina cuánto va a durar el mapa de pasos y dónde debe empezar exactamente.
 | 21 | **Offset de Inicio** | Selector y botones | Permite definir manualmente el punto exacto donde debe comenzar la generación de pasos, distinto a la duración total. Se pueden ajustar con botones incrementales (-0.04s y +0.04s). | Útil si el inicio es silencioso o no rítmico. |
 | 22 | **Detectar Offset Automáticamente** | Checkbox | Si está desactivado, debes especificar un offset manual (punto 15 y 16). | Se recomienda deshabilitar si se conoce el punto de inicio preciso. |
 | 23 | **Extensión Final Estética** | Control Numérico | Permite extender el audio sin generar pasos rítmicos adicionales. | Ideal para escuchar la "desvanencia" final del track. |
+| 23* | **Extender por Holder?** | Checkbox | Varía la forma de extender la duración del sm file usando holders o el método tradicional por minas. | Avanzado. Requiere analizar el resultado para coordinar está función. |
 
 ### C. Análisis Rítmico y Velocidad Maestra (Configuración de BPM y Ritmo)
 
