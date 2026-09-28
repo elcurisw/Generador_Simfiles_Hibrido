@@ -112,6 +112,7 @@ These controls determine the duration of the step map and exactly where the gene
 | 21 | **Starting Offset** | Selector/Buttons | Allows manual definition of the exact point where step generation should begin, separate from the total duration. Adjustable with incremental buttons (-0.04s and +0.04s). | Useful if the track starts quietly or without a clear beat. |
 | 22 | **Auto-Detect Offset** | Checkbox | If unchecked, you must specify an offset manually (points 15 and 16). | Recommended to disable this if you know the precise starting point of the rhythm. |
 | 23 | **Aesthetic Final Extension** | Number Control | Allows extending the audio file *without* generating additional rhythmic steps. | Ideal for creating a smooth "fade out" effect at the end of the track. |
+| 23* | **Extension by Holders?** | Checkbox | There are different ways to extend the duration of the .sm file, such as using holders or the traditional method involving mines. | Advanced. Requires analyzing the results to coordinate this function. |
 
 #### C. Master Rhythm and Speed Analysis (BPM & Flow Configuration)
 
