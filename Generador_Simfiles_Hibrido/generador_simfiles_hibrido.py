@@ -4768,7 +4768,7 @@ class StepHybridUI(ctk.CTk):
         self.label_banner_path.configure(text=get_translation("lbl_no_banner"), text_color="gray")
         self.label_video_path.configure(text=get_translation("lbl_no_video"), text_color="gray")
         self.label_background_path.configure(text=get_translation("lbl_no_background"), text_color="gray")
-        self.label_cdtitle_path.configure(text=get_tranlation("lbl_no_cdtitle"), text_color="gray")
+        self.label_cdtitle_path.configure(text=get_translation("lbl_no_cdtitle"), text_color="gray")
 
 if __name__ == "__main__":
     app = StepHybridUI()
