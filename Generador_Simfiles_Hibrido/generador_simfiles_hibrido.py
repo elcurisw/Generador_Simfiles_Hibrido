@@ -56,6 +56,12 @@ TEXTOS = {
         "btn_video": "Seleccionar Video de Fondo (Opcional)",
         "lbl_video_selection": "Archivo de Video",
         "lbl_no_video": "Ningún video seleccionado",
+        "btn_background": "Selecciona Background (Opcional)",
+        "lbl_background_selection": "Archivo de Background",
+        "lbl_no_background": "Ningún background seleccionado",
+        "btn_cdtitle": "Selecciona CdTitle Graphic (Opcional)",
+        "lbl_cdtitle_selection": "Archivo de CdTitle",
+        "lbl_no_cdtitle": "Ningún CdTitle seleccionado",
         "chk_rename": "Renombrar archivos (Título de la Canción)",
         "lbl_sec_adv": "--- Parámetros del Motor de Pasos (Originalidad) ---",
         "lbl_temp": "Temperatura IA (Caos):",
@@ -77,13 +83,11 @@ TEXTOS = {
         "lbl_monitor": "🖥️ Monitor de Densidad en Tiempo Real",
         "txt_console_wait": "Esperando ejecución para calcular NPS...\n",
         "txt_inference_wait": "Ejecutando Inferencia Híbrida ⚡...",
-        # Menus
         "menu_opt_hide": "Ocultar Parámetros",
         "menu_opt_time": "Settings de Tiempo",
         "menu_opt_bpm": "Configuración de BPM y Ritmo",
         "menu_opt_fx": "Efectos, Minas y Trampas",
         "menu_opt_filters": "Filtros Espectrales y Dificultad",
-        # Sub-Apartado Tiempo
         "btn_graph": "Ajustar Límites en Gráfica Interactiva 📊",
         "lbl_duration": "Duración Máxima (Segundos / 0=Full):",
         "lbl_sec_time": "--- Parámetros Adicionales de la Canción ---",
@@ -93,18 +97,18 @@ TEXTOS = {
         "lbl_extension_mode": "Extender por Holders? Minas por default.",
         "lbl_offset_auto_active": "Offset de Inicio: [Automático Activo]",
         "lbl_synchronize_values_graph": "Calcular y Sincronizar Valores",
-        # Sub-Apartado BPM
         "lbl_sec_bpm": "--- Parámetros de BPM ---",
         "lbl_bpm_config": "Configuración de BPM:",
         "lbl_bpm_auto": "Auto (Detección DSP)",
         "lbl_bpm_manual": "Manual",
         "chk_double_bpm": "Doble BPM (x2)",
+        "lbl_double_bpm": "Aplicar x2 Apartir de un BPM menor a:",
         "chk_dynamic_bpm": "Aplicar BPM Dinámico (Alteraciones)",
         "lbl_min_bpm": "BPM Mínimo (Campo vacío=Auto):",
         "lbl_max_bpm": "BPM Máximo (Campo vacío=Auto):",
         "lbl_rms_min_bpm": "Sensibilidad RMS Mínimo BPM:",
         "lbl_rms_max_bpm": "Sensibilidad RMS Máximo BPM:",
-        "lbl_bpm_umbral" : "Umbral de Lectura de BPM Para Aplicar un Cambio:",
+        "lbl_bpm_umbral": "Umbral de Lectura de BPM Para Aplicar un Cambio:",
         "lbl_bpm_damping": "Amortiguador de Marea BPM:",
         "lbl_bpm_damping_indicator1": "Extremo (Flujo de Olas)",
         "lbl_bpm_damping_indicator2": "Atenuado (Recomendado)",
@@ -123,7 +127,6 @@ TEXTOS = {
         "lbl_speed_anti_dizzy_indicator2": "Sensible (Riesgo de Mareo)",
         "lbl_speed_anti_dizzy_indicator3": "Cambios Bruscos / Gimmick",
         "lbl_speed_anti_dizzy_indicator4": "Hiper-Reactivo (Inestable)",
-        # Sub-Apartado FX
         "lbl_sec_fx": "--- Parámetros de Efectos y Trampas ---",
         "lbl_prob_mines": "Probabilidad de Minas por compás:",
         "lbl_max_mines": "Máximo Minas por Compás:",
@@ -142,7 +145,6 @@ TEXTOS = {
         "chk_fx_rms": "Potenciar Efectos y Trampas en Drops (Análisis RMS)",
         "lbl_rms_min_fx": "Sensibilidad RMS Mínimo Trampas:",
         "lbl_rms_max_fx": "Sensibilidad RMS Máximo Trampas:",
-        # Sub-Apartado Filtros/Dificultad
         "lbl_umbral_silencio": "Volumen Mínimo Para Silencios:",
         "chk_umbral_silencio": "Activar Función de Silencios",
         "lbl_sec_holders": "--- Parámetros de Holders ---",
@@ -163,16 +165,15 @@ TEXTOS = {
         "lbl_compas_lines_high": "Lineas por compas (Precisión Alta):",
         "lbl_compas_lines_madness": "Lineas por compas (Precisión Milimétrica):",
         "lbl_min_compas_notes": "MIN notas por compas:",
-        "lbl_min_compas_notes_sug" : "MIN notas por compas (Sugerido):",
-        "lbl_max_compas_notes_low" : "MAX notas por compas (Dificultad Baja/Normal):",
-        "lbl_max_compas_notes_sug" : "MAX notas por compas (Dificultad Normal/Dificíl):",
-        "lbl_max_compas_notes_high" : "MAX notas por compas (Dificultad Dificíl/Experto):",
-        "lbl_max_compas_notes_madness" : "MAX notas por compas (Dificultad Experto/Locura):",
+        "lbl_min_compas_notes_sug": "MIN notas por compas (Sugerido):",
+        "lbl_max_compas_notes_low": "MAX notas por compas (Dificultad Baja/Normal):",
+        "lbl_max_compas_notes_sug": "MAX notas por compas (Dificultad Normal/Dificíl):",
+        "lbl_max_compas_notes_high": "MAX notas por compas (Dificultad Dificíl/Experto):",
+        "lbl_max_compas_notes_madness": "MAX notas por compas (Dificultad Experto/Locura):",
         "lbl_sec_sampling": "--- Reducción Adaptativa de Mapas (Muestreo) ---",
         "chk_sampling": "Habilitar Generación de Muestras Multi-Capa",
         "lbl_sampling_min": "Muestreo Inicial Mínimo:",
         "lbl_sampling_num": "Muestras Intermedias Totales (Hasta completar el 100%):",
-        # Presets
         "lbl_present_status": "Present Cargado",
         "preset_0": "Seleccionar Preset (Manual)",
         "preset_1": "1. Visualmente dinámico.",
@@ -182,7 +183,6 @@ TEXTOS = {
         "preset_5": "5. Gimmick Caótico (Cortes Abruptos y Trampas de Impacto)",
         "preset_6": "6. Inferencia de Densidad Pura (Filtros Espectrales sin Modificadores)",
         "preset_7": "7. Tormenta Hardcore (Deathstream Máximo y Modificadores Coexistentes)",
-        # Estado y Alertas
         "status_processing": "Estado: Procesando matrices y DSP...",
         "status_success": "¡ÉXITO: Archivos creados! ✅",
         "status_error": "Error Crítico ❌",
@@ -194,13 +194,13 @@ TEXTOS = {
         "msg_error_cancel_desc": "La generación del Simfile fue forzada a detenerse de forma segura.",
         "msg_error_dsp": "Error en Análisis DSP:",
         "msg_error_inference": "Error de Inferencia",
-        "msg_error_missing": "Debes cargar obligatoriamente el audio y el checkpoint (.pt) de la IA.",
+        "msg_error_missing": "Debes cargar obligatoriia el audio y el checkpoint (.pt) de la IA.",
         "msg_error_title": "El título del simfile no puede estar vacío.",
         "msg_error_duration": "La duración debe ser un número válido.",
+        "msg_error_double_bpm": "El BPM para la opción de x2 es inválido.",
         "msg_error_bpm_range": "El BPM del mínimo o máximo no es válido, no puede ser superior a 300 o menor a 30",
         "msg_success_box": "Pack Híbrido Creado con Éxito.\n\nArchivos .sm y .ssc listos.",
         "lbl_warning": "⚠ Advertencia",
-        # Nuevas claves para el Visualizador de Audio (Matplotlib)
         "vis_window_title": "Límites de Audio Asimétricos",
         "vis_lbl_info": "Arrastra las líneas: Offset (Izq) y Duración (Centro) frenan en el límite. Extensión (Der) puede expandirse.",
         "vis_btn_sync": "Calcular y Sincronizar Valores",
@@ -210,7 +210,6 @@ TEXTOS = {
         "vis_msg_sync_body": "Valores ajustados con límites del motor:\n• Offset: {:.3f}s (Límite Máx 16s)\n• Duración: {:.3f}s\n• Extensión: {:.1f}s (Límite Máx 15s)",
         "vis_msg_missing_audio": "Por favor selecciona primero un archivo de audio válido en el paso 1.",
         "vis_msg_missing_title": "Falta Archivo",
-        # Nuevas claves para el Reporte de Consola NPS
         "console_recalc_disabled": "Recálculo desactivado. Se usaron niveles base del GUI.\n",
         "console_report_header": "📊 [{}] (Capa {}%) NPS Glob: {:.2f}\n",
         "console_report_meter": "🎯 METER DINÁMICO ESCALADO: Nivel {} (Techo Máx Capa: {})\n",
@@ -218,7 +217,32 @@ TEXTOS = {
         "console_report_bpm": "💓 BPM BASE GENERAL: {:.3f} \n",
         "console_report_seed": "🔑 HUELLA DIGITAL (SEED): {}\n",
         "console_report_multi": "🚀 Proceso Multi-Capa completado: se exportaron {} archivos simfiles.\n",
-        "console_report_standard": "🚀 Proceso Estándar completado: se exportaron 2 archivos simfiles.\n"
+        "console_report_standard": "🚀 Proceso Estándar completado: se exportaron 2 archivos simfiles.\n",
+        "lbl_btn_batch_generation": "Procesar Carpetas en Lotes (Masivo)",
+        "lbl_masive_file_origin": "Seleccionar Carpeta con Subcarpetas de Canciones",
+        "lbl_masive_control_dup": "Control de Duplicados",
+        "lbl_msg_masive_control_pt_1": "Se detectó que",
+        "lbl_msg_masive_control_pt_2": "canciones ya existen en el destino.",
+        "lbl_msg_masive_control_pt_3": "¿Deseas SOBRESCRIBIRLOS y regenerar sus pasos?\n",
+        "lbl_msg_masive_control_pt_4": "• [Sí] -> Regenerar y sobrescribir todo.\n",
+        "lbl_msg_masive_control_pt_5": "• [No] -> Saltar y conservar las canciones actuales.\n",
+        "lbl_msg_masive_control_pt_6": "• [Cancelar] -> Detener el proceso masivo.",
+        "lbl_masive_cancel": "\n🔴 Proceso forzado a detenerse de forma segura.\n",
+        "console_masive_msg_status_start": "⚡ INICIANDO MOTOR COMPLETO IA + DSP EN LOTE\n",
+        "console_masive_msg_mode": "📂 Modo Duplicados:",
+        "console_masive_msg_omite": "⏭️ Omitido y conservado:",
+        "console_masive_msg_inference": "🔮 Infiriendo pasos IA:",
+        "console_masive_msg_error_directory": "❌ Error en",
+        "console_masive_msg_warning_omite": "⚠️ Saltado:",
+        "console_masive_msg_warning_omite_audio": "(Sin audio válido)",
+        "console_masive_msg_status_end": "\n🏆 PROCESO TERMINADO:",
+        "console_masive_msg_status_songs_num": "canciones calculadas de forma completa.\n",
+        "console_masive_msg_status_end_succesful": "Estado: Procesamiento por lote completado.",
+        "msg_warning_masive_process_not_ok": "No se encontraron subcarpetas dentro del directorio.",
+        "msg_warning_masive_process_ok": "Procesamiento Masivo",
+        "msg_motor_lotes": "Motor de Lotes IA",
+        "msg_motor_lotes_pt_1": "¡Éxito total!\nSe procesaron y crearon",
+        "msg_motor_lotes_pt_2": "simfiles duales (.sm / .ssc) dentro del pack"
     },
     "en": {
         "window_title": "StepMania AI + DSP Dual Simfile Generator",
@@ -238,6 +262,12 @@ TEXTOS = {
         "btn_video": "Select Background Video (Optional)",
         "lbl_video_selection": "Video File",
         "lbl_no_video": "No video selected",
+        "btn_background": "Select Background File (Optional)",
+        "lbl_background_selection": "Background File",
+        "lbl_no_background": "No background selected",
+        "btn_cdtitle": "Select CdTitle Graphic (Optional)",
+        "lbl_cdtitle_selection": "CdTitle File",
+        "lbl_no_cdtitle": "No CdTitle selected",
         "chk_rename": "Rename files (Song Title)",
         "lbl_sec_adv": "--- Step Engine Parameters (Originality) ---",
         "lbl_temp": "AI Temperature (Chaos):",
@@ -259,13 +289,11 @@ TEXTOS = {
         "lbl_monitor": "🖥️ Real-Time Density Monitor",
         "txt_console_wait": "Waiting for execution to calculate NPS...\n",
         "txt_inference_wait": "Processing Hybrid Inference ⚡...",
-        # Menú options
         "menu_opt_hide": "Hide Parameters",
         "menu_opt_time": "Time Settings",
         "menu_opt_bpm": "BPM & Rhythm Configuration",
         "menu_opt_fx": "Effects, Mines & Traps",
         "menu_opt_filters": "Spectral Filters & Difficulty",
-        # Time Sub-Apartado
         "btn_graph": "Adjust Limits in Interactive Graph 📊",
         "lbl_duration": "Maximum Duration (Seconds / 0=Full):",
         "lbl_sec_time": "--- Additional Song Parameters ---",
@@ -275,18 +303,18 @@ TEXTOS = {
         "lbl_extension_mode": "Extension by Holders? Mines by Default",
         "lbl_offset_auto_active": "Starting Offset: [Automatic Active]",
         "lbl_synchronize_values_graph": "Calculate and Synchronize Values",
-        # BPM Sub-Apartado
         "lbl_sec_bpm": "--- BPM Parameters ---",
         "lbl_bpm_config": "BPM Configuration:",
         "lbl_bpm_auto": "Auto (DSP Detection)",
         "lbl_bpm_manual": "Manual",
         "chk_double_bpm": "Double BPM (x2)",
+        "lbl_double_bpm": "Apply x2 starting at a BPM lower than:",
         "chk_dynamic_bpm": "Apply Dynamic BPM (Alterations)",
         "lbl_min_bpm": "Minimum BPM (Empty=Auto):",
         "lbl_max_bpm": "Maximum BPM (Empty=Auto):",
         "lbl_rms_min_bpm": "Minimum BPM RMS Sensitivity:",
         "lbl_rms_max_bpm": "Maximum BPM RMS Sensitivity:",
-        "lbl_bpm_umbral" : "MIN BPM per BPM Change:",
+        "lbl_bpm_umbral": "MIN BPM per BPM Change:",
         "lbl_bpm_damping": "BPM Tide Damping:",
         "lbl_bpm_damping_indicator1": "Extreme (Very soft)",
         "lbl_bpm_damping_indicator2": "Soft (Suggested)",
@@ -305,7 +333,6 @@ TEXTOS = {
         "lbl_speed_anti_dizzy_indicator2": "Sensitive (Middle Dizzy)",
         "lbl_speed_anti_dizzy_indicator3": "High Sensitive / Gimmick",
         "lbl_speed_anti_dizzy_indicator4": "Hiper-React (Unstable)",
-        # FX Sub-Apartado
         "lbl_sec_fx": "--- Effects & Traps Parameters ---",
         "lbl_prob_mines": "Mines Probability per measure:",
         "lbl_max_mines": "Max Mines per Measure:",
@@ -324,7 +351,6 @@ TEXTOS = {
         "chk_fx_rms": "Boost Effects & Traps in Drops (RMS Analysis)",
         "lbl_rms_min_fx": "Minimum Traps RMS Sensitivity:",
         "lbl_rms_max_fx": "Maximum Traps RMS Sensitivity:",
-        # Filters/Difficulty Sub-Apartado
         "lbl_umbral_silencio": "Minimum Volume for Silences:",
         "chk_umbral_silencio": "Activate Silence Function",
         "lbl_sec_holders": "--- Holders Parameters ---",
@@ -340,21 +366,20 @@ TEXTOS = {
         "lbl_sec_extra_diff": "--- Additional Difficulty Parameters ---",
         "lbl_rms_min_density": "Minimum RMS Sensitivity (Note Density):",
         "lbl_rms_max_density": "Maximum RMS Sensitivity (Note Density):",
-        "lbl_sec_sampling": "--- Adaptive Chart Reduction (Sampling) ---",
         "lbl_compas_lines_low": "Lines per Measure (Low Density):",
         "lbl_compas_lines_sug": "Lines per Measure (Suggested):",
         "lbl_compas_lines_high": "Lines per Measure (High Precision):",
         "lbl_compas_lines_madness": "Lines per Measure (Extreme Precision):",
         "lbl_min_compas_notes": "MIN Notes per Measure: ",
         "lbl_min_compas_notes_sug": "MIN Notes per Measure (Suggested):",
-        "lbl_max_compas_notes_low" : "MAX Notes per Measure (Level Easy/Normal):",
-        "lbl_max_compas_notes_sug" : "MAX Notes per Measures (Level Normal/Hard):",
-        "lbl_max_compas_notes_high" : "MAX Notes per Measure (Level Hard/Challenge):",
-        "lbl_max_compas_notes_madness" : "MAX Notes per Measure (Level Challenge/Madness):",
+        "lbl_max_compas_notes_low": "MAX Notes per Measure (Level Easy/Normal):",
+        "lbl_max_compas_notes_sug": "MAX Notes per Measures (Level Normal/Hard):",
+        "lbl_max_compas_notes_high": "MAX Notes per Measure (Level Hard/Challenge):",
+        "lbl_max_compas_notes_madness": "MAX Notes per Measure (Level Challenge/Madness):",
+        "lbl_sec_sampling": "--- Adaptive Chart Reduction (Sampling) ---",
         "chk_sampling": "Enable Multi-Layer Sample Generation",
         "lbl_sampling_min": "Minimum Initial Sampling:",
         "lbl_sampling_num": "Total Intermediate Samples (To Complete 100%):",
-        # Presets
         "lbl_present_status": "Present Loaded",
         "preset_0": "Select Preset (Manual)",
         "preset_1": "1. Visually dynamic.",
@@ -364,7 +389,6 @@ TEXTOS = {
         "preset_5": "5. Chaotic Gimmick (Abrupt Cuts and Impact Traps)",
         "preset_6": "6. Pure Density Inference (Spectral Filters without Modifiers)",
         "preset_7": "7. Hardcore Storm (Maximum Deathstream and Coexisting Modifiers)",
-        # Status and Alerts
         "status_processing": "Status: Processing matrices and DSP...",
         "status_success": "SUCCESS: Files created! ✅",
         "status_error": "Critical Error ❌",
@@ -379,10 +403,10 @@ TEXTOS = {
         "msg_error_missing": "You must strictly load both the audio and the AI checkpoint (.pt).",
         "msg_error_title": "The simfile title cannot be empty.",
         "msg_error_duration": "Duration must be a valid number.",
+        "msg_error_double_bpm": "The BPM x2 entry option is invalid.",
         "msg_error_bpm_range": "The minimum or maximum BPM is invalid, it cannot exceed 300 or be lower than 30",
         "msg_success_box": "Hybrid Pack Successfully Created.\n\n.sm and .ssc files ready.",
         "lbl_warning": "⚠ Warning",
-        #Matplot graphic
         "vis_window_title": "Asymmetric Audio Limits",
         "vis_lbl_info": "Drag lines: Offset (Left) & Duration (Center) stop at boundary. Extension (Right) can expand.",
         "vis_btn_sync": "Calculate and Sync Values",
@@ -392,7 +416,6 @@ TEXTOS = {
         "vis_msg_sync_body": "Values adjusted within engine limits:\n• Offset: {:.3f}s (Max Limit 16s)\n• Duration: {:.3f}s\n• Extension: {:.1f}s (Max Limit 15s)",
         "vis_msg_missing_audio": "Please select a valid audio file in step 1 first.",
         "vis_msg_missing_title": "Missing File",
-        # New keys for NPS Console Report
         "console_recalc_disabled": "Recalculation disabled. Default GUI levels applied.\n",
         "console_report_header": "📊 [{}] (Layer {}%) Glob NPS: {:.2f}\n",
         "console_report_meter": "🎯 SCALED DYNAMIC METER: Level {} (Max Layer Ceiling: {})\n",
@@ -400,9 +423,652 @@ TEXTOS = {
         "console_report_bpm": "💓 GENERAL BASE BPM: {:.3f} \n",
         "console_report_seed": "🔑 DIGITAL FINGERPRINT (SEED): {}\n",
         "console_report_multi": "🚀 Multi-Layer Process completed: {} simfiles exported.\n",
-        "console_report_standard": "🚀 Standard Process completed: 2 simfiles exported.\n"
-        }
+        "console_report_standard": "🚀 Standard Process completed: 2 simfiles exported.\n",
+        "lbl_btn_batch_generation": "Processing Files per Batch (Massive)",
+        "lbl_masive_file_origin": "Select Folder with Song Subfolders",
+        "lbl_masive_control_dup": "Duplicate Control",
+        "lbl_msg_masive_control_pt_1": "It was detected that",
+        "lbl_msg_masive_control_pt_2": "songs already exist in the destination.",
+        "lbl_msg_masive_control_pt_3": "¿Do you want to OVERWRITE them and regenerate their steps?\n",
+        "lbl_msg_masive_control_pt_4": "• [Yes] -> Regenerate and overwrite everything.\n",
+        "lbl_msg_masive_control_pt_5": "• [No] -> Skip and keep the current songs.\n",
+        "lbl_msg_masive_control_pt_6": "• [Cancel] -> Stop the batch process.",
+        "lbl_masive_cancel": "\n🔴 Process forced to stop safely.\n",
+        "console_masive_msg_status_start": "⚡ STARTING COMPLETE AI + DSP BATCH ENGINE\n",
+        "console_masive_msg_mode": "📂 Duplicate Mode:",
+        "console_masive_msg_omite": "⏭️ Skipped and kept:",
+        "console_masive_msg_inference": "🔮 Inferring AI steps:",
+        "console_masive_msg_error_directory": "❌ Error in",
+        "console_masive_msg_warning_omite": "⚠️ Skipped:",
+        "console_masive_msg_warning_omite_audio": "(Without valid audio)",
+        "console_masive_msg_status_end": "\n🏆 PROCESS COMPLETE:",
+        "console_masive_msg_status_songs_num": "all songs processed completely.\n",
+        "console_masive_msg_status_end_succesful": "Status: Batch processing completed.",
+        "msg_warning_masive_process_not_ok": "No subfolders were found within the directory.",
+        "msg_warning_masive_process_ok": "Batch Processing",
+        "msg_motor_lotes": "AI Batch Engine",
+        "msg_motor_lotes_pt_1": "Total success!\nProcessed and created",
+        "msg_motor_lotes_pt_2": "dual simfiles (.sm / .ssc) within the pack"
+    },
+    "pt": {
+        "window_title": "Gerador de Simfiles Dual StepMania AI + DSP",
+        "main_title": "Gerador de Gráficos AI + DSP (Dual SM/SSC)",
+        "select_lang": "Idioma / Language:",
+        "btn_audio": "1. Selecionar Música (.mp3, .wav)",
+        "lbl_audio_selection": "Arquivo de Áudio",
+        "lbl_no_audio": "Nenhum arquivo selecionado",
+        "btn_checkpoint": "2. Selecionar Checkpoint IA (.pt)",
+        "lbl_checkpoint_default": "📦 Carregando pesos do checkpoint histórico:",
+        "lbl_no_model": "Nenhum modelo carregado",
+        "lbl_title": "Título da Música:",
+        "lbl_artist": "Nome do Artista:",
+        "btn_banner": "Selecionar Gráfico de Banner (Opcional)",
+        "lbl_banner_selection": "Imagem de Banner",
+        "lbl_no_banner": "Nenhum banner selecionado",
+        "btn_video": "Selecionar Vídeo de Fundo (Opcional)",
+        "lbl_video_selection": "Arquivo de Vídeo",
+        "lbl_no_video": "Nenhum vídeo selecionado",
+        "btn_background": "Selecionar Imagem de Fundo (Opcional)",
+        "lbl_background_selection": "Arquivo de Fundo",
+        "lbl_no_background": "Nenhum fundo selecionado",
+        "btn_cdtitle": "Selecionar Gráfico CdTitle (Opcional)",
+        "lbl_cdtitle_selection": "Arquivo de CdTitle",
+        "lbl_no_cdtitle": "Nenhum CdTitle selecionado",
+        "chk_rename": "Renomear arquivos (Título da Música)",
+        "lbl_sec_adv": "--- Parâmetros do Motor de Passos (Originalidade) ---",
+        "lbl_temp": "Temperatura IA (Caos):",
+        "lbl_pack_name": "Nome do Pack (Grupo):",
+        "lbl_seed": "Semente de Geração (Vazio = Aleatório):",
+        "lbl_presets": "🧪 Modelos (Presets):",
+        "lbl_custom_preset_name": "Nome do Preset Personalizado:",
+        "btn_save_preset": "💾 Salvar Preset",
+        "btn_delete_preset": "🗑️ Excluir Preset",
+        "msg_preset_saved": "Preset '{}' salvo com sucesso.",
+        "msg_preset_deleted": "Preset '{}' excluído.",
+        "msg_preset_empty": "O nome do preset não pode estar vazio.",
+        "lbl_adv_settings": "⚙️ Configurações Avançadas do Motor:",
+        "btn_reset": "Redefinir Parâmetros",
+        "label_status_reset": "Status: Parâmetros redefinidos com sucesso.",
+        "btn_generate": "Processar e Exportar Dual Pack! 🚀",
+        "btn_cancel_gen": "🔴 Cancelar Geração",
+        "lbl_status_wait": "Status: Aguardando arquivos mínimos...",
+        "lbl_monitor": "🖥️ Monitor de Densidade em Tempo Real",
+        "txt_console_wait": "Aguardando execução para calcular NPS...\n",
+        "txt_inference_wait": "Executando Inferência Híbrida ⚡...",
+        "menu_opt_hide": "Ocultar Parâmetros",
+        "menu_opt_time": "Configurações de Tempo",
+        "menu_opt_bpm": "Configuração de BPM e Ritmo",
+        "menu_opt_fx": "Efeitos, Minas e Armadilhas",
+        "menu_opt_filters": "Filtros Espectrais e Dificuldade",
+        "btn_graph": "Ajustar Limites no Gráfico Interativo 📊",
+        "lbl_duration": "Duração Máxima (Segundos / 0=Full):",
+        "lbl_sec_time": "--- Parámetros Adicionais da Música ---",
+        "lbl_offset": "Offset de Início:",
+        "chk_offset_auto": "Detectar Offset Automaticamente (DSP Vol)",
+        "lbl_extension": "Extensão Final Estética (Relativa):",
+        "lbl_extension_mode": "Estender por Holders? Minas por padrão.",
+        "lbl_offset_auto_active": "Offset de Início: [Automático Ativo]",
+        "lbl_synchronize_values_graph": "Calcular e Sincronizar Valores",
+        "lbl_sec_bpm": "--- Parâmetros de BPM ---",
+        "lbl_bpm_config": "Configuração de BPM:",
+        "lbl_bpm_auto": "Auto (Detecção DSP)",
+        "lbl_bpm_manual": "Manual",
+        "chk_double_bpm": "Dobro de BPM (x2)",
+        "lbl_double_bpm": "Aplicar x2 a partir de um BPM menor que:",
+        "chk_dynamic_bpm": "Aplicar BPM Dinâmico (Alterações)",
+        "lbl_min_bpm": "BPM Mínimo (Campo vazio=Auto):",
+        "lbl_max_bpm": "BPM Máximo (Campo vazio=Auto):",
+        "lbl_rms_min_bpm": "Sensibilidade RMS Mínimo BPM:",
+        "lbl_rms_max_bpm": "Sensibilidad RMS Máximo BPM:",
+        "lbl_bpm_umbral": "Limiar de Leitura de BPM para Aplicar Mudança:",
+        "lbl_bpm_damping": "Amortecedor de Maré BPM:",
+        "lbl_bpm_damping_indicator1": "Extremo (Fluxo de Ondas)",
+        "lbl_bpm_damping_indicator2": "Atenuado (Recomendado)",
+        "lbl_bpm_damping_indicator3": "Reativo Progressivo",
+        "lbl_bpm_damping_indicator4": "Imediato (Brusco)",
+        "lbl_sec_speed": "--- Parâmetros de Scroll Speeds ---",
+        "chk_dynamic_speed": "Adaptar Velocidade Visual (Scroll Speeds)",
+        "lbl_speed_loss": "Duração de Tempo Estendida por Perda:",
+        "lbl_rms_min_speed": "Sensibilidade RMS Mínimo Scroll:",
+        "lbl_rms_max_speed": "Sensibilidade RMS Máximo Scroll:",
+        "lbl_speed_min": "Velocidade no Mínimo (Calma):",
+        "lbl_speed_max": "Velocidade no Máximo (Drop):",
+        "lbl_speed_trans": "Duração da Transição:",
+        "lbl_speed_anti_dizzy": "Filtro Anti-Tontura (Limiar de Disparo):",
+        "lbl_speed_anti_dizzy_indicator1": "Estável Ótimo (Sem Tonturas)",
+        "lbl_speed_anti_dizzy_indicator2": "Sensível (Risco de Tontura)",
+        "lbl_speed_anti_dizzy_indicator3": "Mudanças Bruscas / Gimmick",
+        "lbl_speed_anti_dizzy_indicator4": "Hiper-Reativo (Instável)",
+        "lbl_sec_fx": "--- Parâmetros de Efeitos e Armadilhas ---",
+        "lbl_prob_mines": "Probabilidade de Minas por compasso:",
+        "lbl_max_mines": "Máximo de Minas por Compasso:",
+        "lbl_prob_fakes": "Probabilidade de Fakes por compasso:",
+        "lbl_max_fakes": "Máximo de Fakes por Compasso:",
+        "lbl_prob_lifts": "Probabilidade de Lifts por compasso:",
+        "lbl_max_lifts": "Máximo de Lifts por Compasso:",
+        "lbl_prob_potions": "Probabilidade de Potions por compasso:",
+        "lbl_max_potions": "Máximo de Potions por Compasso:",
+        "lbl_prob_shields": "Probabilidade de Shields por compasso:",
+        "lbl_max_shields": "Máximo de Shields por Compasso:",
+        "lbl_prob_rayos": "Probabilidade de Shock por compasso:",
+        "lbl_max_rayos": "Máximo de Shock por Compasso:",
+        "lbl_prob_hiddens": "Probabilidade de Hiddens por compasso:",
+        "lbl_max_hiddens": "Máximo de Hiddens por Compasso:",
+        "chk_fx_rms": "Potencializar Efeitos em Drops (Análise RMS)",
+        "lbl_rms_min_fx": "Sensibilidade RMS Mínimo Armadilhas:",
+        "lbl_rms_max_fx": "Sensibilidade RMS Máximo Armadilhas:",
+        "lbl_umbral_silencio": "Volume Mínimo para Silêncios:",
+        "chk_umbral_silencio": "Ativar Função de Silêncios",
+        "lbl_sec_holders": "--- Parâmetros de Holders ---",
+        "lbl_max_hold": "Duração Máxima de Hold (linhas):",
+        "lbl_sim_holds": "Máximo de Holds simultâneos:",
+        "chk_postprocess": "Aplicar Pós-processamento Rítmico aos Holders",
+        "chk_jumps": "Gerar Seções de Saltos (Filtro RMS)",
+        "lbl_rms_min_jumps": "Sensibilidade RMS Mínimo Saltos:",
+        "lbl_rms_max_jumps": "Sensibilidade RMS Máximo Saltos:",
+        "lbl_sec_diff": "--- Parámetros de Dificuldade ---",
+        "lbl_diff_ceiling": "Dificuldade Teto do Pack: Nível",
+        "chk_recalc_diff": "Recalcular Dificuldade Dinamicamente (NPS)",
+        "lbl_sec_extra_diff": "--- Parámetros de Dificuldade Adicional ---",
+        "lbl_rms_min_density": "Sensibilidade RMS Mínimo (Densidade):",
+        "lbl_rms_max_density": "Sensibilidade RMS Máximo (Densidade):",
+        "lbl_compas_lines_low": "Linhas por compasso (Baixa Densidade):",
+        "lbl_compas_lines_sug": "Linhas por compasso (Recomendado):",
+        "lbl_compas_lines_high": "Linhas por compasso (Alta Precisão):",
+        "lbl_compas_lines_madness": "Linhas por compasso (Precisão Milimétrica):",
+        "lbl_min_compas_notes": "MÍN notas por compasso:",
+        "lbl_min_compas_notes_sug": "MÍN notas por compasso (Sugerido):",
+        "lbl_max_compas_notes_low": "MÁX notas por compasso (Dificuldade Baixa/Normal):",
+        "lbl_max_compas_notes_sug": "MÁX notas por compasso (Dificuldade Normal/Difícil):",
+        "lbl_max_compas_notes_high": "MÁX notas por compasso (Dificuldade Difícil/Experto):",
+        "lbl_max_compas_notes_madness": "MÁX notas por compasso (Dificuldade Experto/Loucura):",
+        "lbl_sec_sampling": "--- Redução Adaptativa de Mapas (Amostragem) ---",
+        "chk_sampling": "Habilitar Geração de Amostras Multi-Camada",
+        "lbl_sampling_min": "Amostragem Inicial Mínima:",
+        "lbl_sampling_num": "Amostras Intermediárias Totais (Até 100%):",
+        "lbl_present_status": "Preset Carregado",
+        "preset_0": "Selecionar Preset (Manual)",
+        "preset_1": "1. Visualmente dinâmico.",
+        "preset_2": "2. Mais Saltos",
+        "preset_3": "3. Velocidade caótica.",
+        "preset_4": "4. Maré Flutuante (Fluxo de Ondas e Smooth Scroll)",
+        "preset_5": "5. Gimmick Caótico (Cortes Abruptos e Armadilhas)",
+        "preset_6": "6. Inferência de Densidade Pura (Sem Modificadores)",
+        "preset_7": "7. Tormenta Hardcore (Deathstream Máximo)",
+        "status_processing": "Status: Processando matrizes e DSP...",
+        "status_success": "¡SUCESSO: Arquivos criados! ✅",
+        "status_error": "Erro Crítico ❌",
+        "status_cancel": "Status: Processo cancelado.",
+        "btn_cancel_status_processing": "Cancelando Processo...",
+        "lbl_cancel_status_processing": "Status: Interrompendo algoritmos...",
+        "msg_interrupted_cancel": "Geração cancelada pelo usuário.",
+        "msg_error_cancel": "Processo Interrompido",
+        "msg_error_cancel_desc": "A geração do Simfile foi interrompida de forma segura.",
+        "msg_error_dsp": "Erro na Análise DSP:",
+        "msg_error_inference": "Erro de Inferência",
+        "msg_error_missing": "Você deve obrigatoriamente carregar o áudio e o checkpoint (.pt) da IA.",
+        "msg_error_title": "O título do simfile não pode estar vazio.",
+        "msg_error_duration": "A duração deve ser un número válido.",
+        "msg_error_double_bpm": "O BPM para a opção x2 é inválido.",
+        "msg_error_bpm_range": "O BPM mínimo ou máximo não é válido (deve ser entre 30 e 300).",
+        "msg_success_box": "Pack Híbrido Criado com Sucesso.\n\nArquivos .sm e .ssc prontos.",
+        "lbl_warning": "⚠ Advertência",
+        "vis_window_title": "Limites de Áudio Assimétricos",
+        "vis_lbl_info": "Arraste as linhas: Offset (Esq) e Duração (Centro) param no limite. Extensão (Dir) pode expandir.",
+        "vis_btn_sync": "Calcular e Sincronizar Valores",
+        "vis_axis_time": "Tempo (s)",
+        "vis_axis_amp": "Amplitude",
+        "vis_msg_sync_title": "Sincronização Bem-Sucedida",
+        "vis_msg_sync_body": "Valores ajustados com limites do motor:\n• Offset: {:.3f}s (Limite Máx 16s)\n• Duração: {:.3f}s\n• Extensão: {:.1f}s (Limite Máx 15s)",
+        "vis_msg_missing_audio": "Por favor, selecione primeiro um arquivo de áudio válido no passo 1.",
+        "vis_msg_missing_title": "Arquivo Ausente",
+        "console_recalc_disabled": "Recálculo desativado. Níveis base da GUI utilizados.\n",
+        "console_report_header": "📊 [{}] (Camada {}%) NPS Glob: {:.2f}\n",
+        "console_report_meter": "🎯 METER DINÂMICO ESCALADO: Nível {} (Teto Máx Camada: {})\n",
+        "console_report_offset": "⏱️ OFFSET GERAL: {:.3f} s\n",
+        "console_report_bpm": "💓 BPM BASE GERAL: {:.3f} \n",
+        "console_report_seed": "🔑 PEGADA DIGITAL (SEED): {}\n",
+        "console_report_multi": "🚀 Processo Multi-Camada concluído: {} arquivos simfiles exportados.\n",
+        "console_report_standard": "🚀 Processo Padrão concluído: 2 arquivos simfiles exportados.\n",
+        "lbl_btn_batch_generation": "Processar Pastas em Lotes (Massivo)",
+        "lbl_masive_file_origin": "Selecionar Pasta com Subpastas de Músicas",
+        "lbl_masive_control_dup": "Controle de Duplicados",
+        "lbl_msg_masive_control_pt_1": "Foi detectado que",
+        "lbl_msg_masive_control_pt_2": "músicas já existem no destino.",
+        "lbl_msg_masive_control_pt_3": "¿Deseja SOBRESCREVÊ-LOS e regenerar seus passos?\n",
+        "lbl_msg_masive_control_pt_4": "• [Sim] -> Regenerar e sobrescrever tudo.\n",
+        "lbl_msg_masive_control_pt_5": "• [Não] -> Pular e conservar as músicas atuais.\n",
+        "lbl_msg_masive_control_pt_6": "• [Cancelar] -> Parar o processo massivo.",
+        "lbl_masive_cancel": "\n🔴 Processo forçado a parar de forma segura.\n",
+        "console_masive_msg_status_start": "⚡ INICIANDO MOTOR COMPLETO IA + DSP EM LOTE\n",
+        "console_masive_msg_mode": "📂 Modo Duplicados:",
+        "console_masive_msg_omite": "⏭️ Ignorado e conservado:",
+        "console_masive_msg_inference": "🔮 Inferindo passos IA:",
+        "console_masive_msg_error_directory": "❌ Erro em",
+        "console_masive_msg_warning_omite": "⚠️ Pulado:",
+        "console_masive_msg_warning_omite_audio": "(Sem áudio válido)",
+        "console_masive_msg_status_end": "\n🏆 PROCESSO CONCLUÍDO:",
+        "console_masive_msg_status_songs_num": "músicas calculadas de forma completa.\n",
+        "console_masive_msg_status_end_succesful": "Status: Processamento em lote concluído.",
+        "msg_warning_masive_process_not_ok": "Não foram encontradas subpastas dentro do diretório.",
+        "msg_warning_masive_process_ok": "Processamento Massivo",
+        "msg_motor_lotes": "Motor de Lotes IA",
+        "msg_motor_lotes_pt_1": "¡Sucesso total!\nForam processados e criados",
+        "msg_motor_lotes_pt_2": "simfiles duais (.sm / .ssc) dentro do pack"
+    },
+    "ja": {
+        "window_title": "StepMania AI + DSP デュアルSimfileジェネレーター",
+        "main_title": "AI + DSP 譜面ジェネレーター (Dual SM/SSC)",
+        "select_lang": "言語 / Language:",
+        "btn_audio": "1. 楽曲を選択 (.mp3, .wav)",
+        "lbl_audio_selection": "音声ファイル",
+        "lbl_no_audio": "ファイルが選択されていません",
+        "btn_checkpoint": "2. AIチェックポイントを選択 (.pt)",
+        "lbl_checkpoint_default": "📦 履歴チェックポイントからウェイトを読み込み中:",
+        "lbl_no_model": "モデルが読み込まれていません",
+        "lbl_title": "曲名:",
+        "lbl_artist": "アーティスト名:",
+        "btn_banner": "バナー画像を選択 (オプション)",
+        "lbl_banner_selection": "バナー画像",
+        "lbl_no_banner": "バナーが選択されていません",
+        "btn_video": "背景動画を選択 (オプション)",
+        "lbl_video_selection": "動画ファイル",
+        "lbl_no_video": "動画が選択されていません",
+        "btn_background": "背景画像を選択 (オプション)",
+        "lbl_background_selection": "背景画像ファイル",
+        "lbl_no_background": "背景画像が選択されていません",
+        "btn_cdtitle": "CdTitle画像を選択 (オプション)",
+        "lbl_cdtitle_selection": "CdTitleファイル",
+        "lbl_no_cdtitle": "CdTitleが選択されていません",
+        "chk_rename": "ファイルをリネーム (曲名)",
+        "lbl_sec_adv": "--- ステップエンジンパラメータ (オリジナル性) ---",
+        "lbl_temp": "AI温度 (カオス度):",
+        "lbl_pack_name": "パック名 (グループ):",
+        "lbl_seed": "生成シード (空欄 = ランダム):",
+        "lbl_presets": "🧪 プリセットテンプレート:",
+        "lbl_custom_preset_name": "カスタムプリセット名:",
+        "btn_save_preset": "💾 プリセットを保存",
+        "btn_delete_preset": "🗑️ プリセットを削除",
+        "msg_preset_saved": "プリセット '{}' が正常に保存されました。",
+        "msg_preset_deleted": "プリセット '{}' が削除されました。",
+        "msg_preset_empty": "プリセット名は空欄にできません。",
+        "lbl_adv_settings": "⚙️ エンジンの詳細設定:",
+        "btn_reset": "パラメータをリセット",
+        "label_status_reset": "ステータス: パラメータが正常にリセットされました。",
+        "btn_generate": "処理してデュアルパックをエクスポート！ 🚀",
+        "btn_cancel_gen": "🔴 生成をキャンセル",
+        "lbl_status_wait": "ステータス: 最小限必要なファイルを待機中...",
+        "lbl_monitor": "🖥️ リアルタイム密度モニター",
+        "txt_console_wait": "NPS計算の実行を待機中...\n",
+        "txt_inference_wait": "ハイブリッド推論を実行中 ⚡...",
+        "menu_opt_hide": "パラメータを非表示",
+        "menu_opt_time": "時間設定",
+        "menu_opt_bpm": "BPMとリズムの設定",
+        "menu_opt_fx": "エフェクト・ボム・トラップ",
+        "menu_opt_filters": "スペクトルフィルタと難易度",
+        "btn_graph": "インタラクティブグラフで制限を調整 📊",
+        "lbl_duration": "最大再生時間 (秒 / 0=フル):",
+        "lbl_sec_time": "--- 楽曲の追加パラメータ ---",
+        "lbl_offset": "開始オフセット:",
+        "chk_offset_auto": "オフセットを自動検出 (DSP Vol)",
+        "lbl_extension": "視覚的・美的な終了延長 (相対的):",
+        "lbl_extension_mode": "フリーズで延長？デフォルトはボム。",
+        "lbl_offset_auto_active": "開始オフセット: [自動検出有効]",
+        "lbl_synchronize_values_graph": "値を計算して同期",
+        "lbl_sec_bpm": "--- BPMパラメータ ---",
+        "lbl_bpm_config": "BPM設定:",
+        "lbl_bpm_auto": "自動 (DSP検出)",
+        "lbl_bpm_manual": "手動",
+        "chk_double_bpm": "倍速BPM (x2)",
+        "lbl_double_bpm": "次のBPM未満でx2を適用:",
+        "chk_dynamic_bpm": "动的にBPMを変更 (ギミック)",
+        "lbl_min_bpm": "最小BPM (空欄 = 自動):",
+        "lbl_max_bpm": "最大BPM (空欄 = 自動):",
+        "lbl_rms_min_bpm": "最小BPMのRMS感度:",
+        "lbl_rms_max_bpm": "最大BPMのRMS感度:",
+        "lbl_bpm_umbral": "BPM変更を適用する最小閾値:",
+        "lbl_bpm_damping": "BPM変化の緩和（ダンピング）:",
+        "lbl_bpm_damping_indicator1": "極度 (非常に滑らか)",
+        "lbl_bpm_damping_indicator2": "緩和 (推奨)",
+        "lbl_bpm_damping_indicator3": "追従型アクティブ",
+        "lbl_bpm_damping_indicator4": "即時 (急激な変化)",
+        "lbl_sec_speed": "--- スクロールスピードパラメータ ---",
+        "chk_dynamic_speed": "視覚速度を適応 (スクロールスピード変更)",
+        "lbl_speed_loss": "ロスによる延長時間:",
+        "lbl_rms_min_speed": "最小スクロールのRMS感度:",
+        "lbl_rms_max_speed": "最大スクロールのRMS感度:",
+        "lbl_speed_min": "最低速度 (静かな部分):",
+        "lbl_speed_max": "最高速度 (サビ・ドロップ):",
+        "lbl_speed_trans": "変速の遷移時間:",
+        "lbl_speed_anti_dizzy": "めまい防止フィルタ (発動閾値):",
+        "lbl_speed_anti_dizzy_indicator1": "安定・最適 (めまいなし)",
+        "lbl_speed_anti_dizzy_indicator2": "敏感 (ややめまいのリスクあり)",
+        "lbl_speed_anti_dizzy_indicator3": "急激な変化 / ギミック",
+        "lbl_speed_anti_dizzy_indicator4": "過敏 (不安定)",
+        "lbl_sec_fx": "--- エフェクト＆トラップパラメータ ---",
+        "lbl_prob_mines": "1小節あたりのボム確率:",
+        "lbl_max_mines": "1小節あたりの最大ボム数:",
+        "lbl_prob_fakes": "1小節あたりのフェイク確率:",
+        "lbl_max_fakes": "1小節あたりの最大フェイク数:",
+        "lbl_prob_lifts": "1小節あたりのリフト確率:",
+        "lbl_max_lifts": "1小節あたりの最大リフト数:",
+        "lbl_prob_potions": "1小節あたりのポーション確率:",
+        "lbl_max_potions": "1小節あたりの最大ポーション数:",
+        "lbl_prob_shields": "1小節あたりのシールド確率:",
+        "lbl_max_shields": "1小節あたりの最大シールド数:",
+        "lbl_prob_rayos": "1小節あたりのショック矢印確率:",
+        "lbl_max_rayos": "1小節あたりの最大ショック矢印数:",
+        "lbl_prob_hiddens": "1小節あたりのステルス確率:",
+        "lbl_max_hiddens": "1小節あたりの最大ステルス数:",
+        "chk_fx_rms": "サビ(ドロップ)でエフェクトを強化 (RMS分析)",
+        "lbl_rms_min_fx": "最小トラップのRMS感度:",
+        "lbl_rms_max_fx": "最大トラップのRMS感度:",
+        "lbl_umbral_silencio": "無音判定の最小音量:",
+        "chk_umbral_silencio": "無音カット・セクション機能を有効化",
+        "lbl_sec_holders": "--- フリーズアローパラメータ ---",
+        "lbl_max_hold": "フリーズの最大長 (ライン数):",
+        "lbl_sim_holds": "同時フリーズの最大数:",
+        "chk_postprocess": "フリーズアローにリズム後処理を適用",
+        "chk_jumps": "ジャンプ（同時押し）セクションを生成 (RMSフィルタ)",
+        "lbl_rms_min_jumps": "最小ジャンプのRMS感度:",
+        "lbl_rms_max_jumps": "最大ジャンプのRMS感度:",
+        "lbl_sec_diff": "--- 難易度パラメータ ---",
+        "lbl_diff_ceiling": "パックの上限難易度: レベル",
+        "chk_recalc_diff": "難易度を動的に再計算 (NPS基準)",
+        "lbl_sec_extra_diff": "--- 追加の難易度パラメータ ---",
+        "lbl_rms_min_density": "最小密度のRMS感度 (ノーツ密度):",
+        "lbl_rms_max_density": "最大密度のRMS感度 (ノーツ密度):",
+        "lbl_compas_lines_low": "1小節あたりのライン数 (低密度):",
+        "lbl_compas_lines_sug": "1小節あたりのライン数 (推奨):",
+        "lbl_compas_lines_high": "1小節あたりのライン数 (高精度):",
+        "lbl_compas_lines_madness": "1小節あたりのライン数 (極限精度):",
+        "lbl_min_compas_notes": "1小節あたりの最小ノーツ数:",
+        "lbl_min_compas_notes_sug": "1小節あたりの最小ノーツ数 (推奨):",
+        "lbl_max_compas_notes_low": "1小節あたりの最大ノーツ数 (初級/中級):",
+        "lbl_max_compas_notes_sug": "1小節あたりの最大ノーツ数 (中級/上級):",
+        "lbl_max_compas_notes_high": "1小節あたりの最大ノーツ数 (上級/鬼):",
+        "lbl_max_compas_notes_madness": "1小節あたりの最大ノーツ数 (鬼/悪夢):",
+        "lbl_sec_sampling": "--- 譜面の適応的削減 (サンプリング) ---",
+        "chk_sampling": "マルチレイヤーサンプル生成を有効化",
+        "lbl_sampling_min": "最小初期サンプリング数:",
+        "lbl_sampling_num": "総中間サンプル数 (100%完了まで):",
+        "lbl_present_status": "プリセット読み込み完了",
+        "preset_0": "プリセットを選択 (手動)",
+        "preset_1": "1. 視覚的にダイナミック",
+        "preset_2": "2. ジャンプ多め",
+        "preset_3": "3. カオススピード",
+        "preset_4": "4. フローティングタイド (スムーズスクロール)",
+        "preset_5": "5. カオスギミック (急停止＆変速トラップ)",
+        "preset_6": "6. 純粋密度推論 (モディファイアなしスペクトル)",
+        "preset_7": "7. ハードコアストーム (最大Deathstream)",
+        "status_processing": "ステータas: マトリクスとDSPを処理中...",
+        "status_success": "成功: ファイルが作成されました！ ✅",
+        "status_error": "致命的なエラー ❌",
+        "status_cancel": "ステータス: キャンセルされました。",
+        "btn_cancel_status_processing": "キャンセル中...",
+        "lbl_cancel_status_processing": "ステータス: アルゴリズムを停止中...",
+        "msg_interrupted_cancel": "ユーザーによって生成がキャンセルされました。",
+        "msg_error_cancel": "処理が中断されました",
+        "msg_error_cancel_desc": "Simfile生成は安全に強制停止されました。",
+        "msg_error_dsp": "DSP分析エラー:",
+        "msg_error_inference": "推論エラー",
+        "msg_error_missing": "音声ファイルとAIチェックポイント(.pt)の両方を必ず読み込んでください。",
+        "msg_error_title": "Simfileの曲名は空欄にできません。",
+        "msg_error_duration": "再生時間は有効な数値である必要があります。",
+        "msg_error_double_bpm": "倍速(x2)BPMの設定値が不正です。",
+        "msg_error_bpm_range": "最小または最大BPMが不正です。30から300の間で指定してください。",
+        "msg_success_box": "ハイブリッドパックが正常に作成されました。\n\n.sm および .ssc ファイルの準備が完了しました。",
+        "lbl_warning": "⚠ 警告",
+        "vis_window_title": "非対称オーディオ制限",
+        "vis_lbl_info": "ラインをドラッグ: オフセット(左)と再生時間(中央)は境界で停止。延長(右)は拡大可能。",
+        "vis_btn_sync": "値を計算して同期",
+        "vis_axis_time": "時間 (秒)",
+        "vis_axis_amp": "振幅",
+        "vis_msg_sync_title": "同期成功",
+        "vis_msg_sync_body": "エンジン制限内に調整された値:\n• オフセット: {:.3f}秒 (最大16秒)\n• 再生時間: {:.3f}秒\n• 延長: {:.1f}秒 (最大15秒)",
+        "vis_msg_missing_audio": "最初にステップ1で有効な音声ファイルを選択してください。",
+        "vis_msg_missing_title": "ファイル未検出",
+        "console_recalc_disabled": "再計算は無効です。GUIのベースレベルが適用されました。\n",
+        "console_report_header": "📊 [{}] (レイヤー {}%) 全体NPS: {:.2f}\n",
+        "console_report_meter": "🎯 スケールド・ダイナミックメーター: レベル {} (レイヤー最大上限: {})\n",
+        "console_report_offset": "⏱️ 全体オフセット: {:.3f} 秒\n",
+        "console_report_bpm": "💓 全体ベースBPM: {:.3f} \n",
+        "console_report_seed": "🔑 デジタル指紋 (SEED): {}\n",
+        "console_report_multi": "🚀 画像レイヤー処理完了: {} 個のsimfileがエクスポートされました。\n",
+        "console_report_standard": "🚀 通常処理完了: 2 個のsimfileがエクスポートされました。\n",
+        "lbl_btn_batch_generation": "フォルダを一括処理 (バッチモード)",
+        "lbl_masive_file_origin": "楽曲のサブフォルダを含むフォルダを選択",
+        "lbl_masive_control_dup": "重複コントロール",
+        "lbl_msg_masive_control_pt_1": "以下が検出されました:",
+        "lbl_msg_masive_control_pt_2": "曲は既に宛先に存在します。",
+        "lbl_msg_masive_control_pt_3": "上書きしてステップを再生成しますか？\n",
+        "lbl_msg_masive_control_pt_4": "• [はい] -> すべて再生成して上書き。\n",
+        "lbl_msg_masive_control_pt_5": "• [いいえ] -> スキップして現在の楽曲を維持。\n",
+        "lbl_msg_masive_control_pt_6": "• [キャンセル] -> 一括処理を停止。",
+        "lbl_masive_cancel": "\n🔴 処理は安全に強制停止されました。\n",
+        "console_masive_msg_status_start": "⚡ AI + DSP 一括処理エンジンを起動中\n",
+        "console_masive_msg_mode": "📂 重複モード:",
+        "console_masive_msg_omite": "⏭️ スキップして維持:",
+        "console_masive_msg_inference": "🔮 AIステップを推論中:",
+        "console_masive_msg_error_directory": "❌ エラー検出:",
+        "console_masive_msg_warning_omite": "⚠️ スキップ:",
+        "console_masive_msg_warning_omite_audio": "(有効な音声なし)",
+        "console_masive_msg_status_end": "\n🏆 処理終了:",
+        "console_masive_msg_status_songs_num": "曲の処理が完全に完了しました。\n",
+        "console_masive_msg_status_end_succesful": "ステータス: 一括処理が完了しました。",
+        "msg_warning_masive_process_not_ok": "ディレクトリ内にサブフォルダが見つかりませんでした。",
+        "msg_warning_masive_process_ok": "一括処理",
+        "msg_motor_lotes": "AIバッチエンジン",
+        "msg_motor_lotes_pt_1": "完全な成功！\n以下が処理・作成されました:",
+        "msg_motor_lotes_pt_2": "パック内のデュアルsimfile (.sm / .ssc)"
+    },
+    "zh": {
+        "window_title": "StepMania AI + DSP 双向Simfile生成器",
+        "main_title": "AI + DSP 谱面生成器 (Dual SM/SSC)",
+        "select_lang": "语言 / Language:",
+        "btn_audio": "1. 选择歌曲 (.mp3, .wav)",
+        "lbl_audio_selection": "音频文件",
+        "lbl_no_audio": "未选择任何文件",
+        "btn_checkpoint": "2. 选择 AI 检查点 (.pt)",
+        "lbl_checkpoint_default": "📦 正在从历史检查点加载权重:",
+        "lbl_no_model": "未加载任何模型",
+        "lbl_title": "歌曲标题:",
+        "lbl_artist": "艺术家名称:",
+        "btn_banner": "选择横幅图像 (可选)",
+        "lbl_banner_selection": "横幅图像",
+        "lbl_no_banner": "未选择任何横幅",
+        "btn_video": "选择背景视频 (可选)",
+        "lbl_video_selection": "视频文件",
+        "lbl_no_video": "未选择任何视频",
+        "btn_background": "选择背景图像 (可选)",
+        "lbl_background_selection": "背景图像文件",
+        "lbl_no_background": "未选择任何背景",
+        "btn_cdtitle": "选择 CdTitle 图像 (可选)",
+        "lbl_cdtitle_selection": "CdTitle 文件",
+        "lbl_no_cdtitle": "未选择任何 CdTitle",
+        "chk_rename": "重命名文件 (歌曲标题)",
+        "lbl_sec_adv": "--- 步法引擎参数 (原创性) ---",
+        "lbl_temp": "AI 温度 (混沌度):",
+        "lbl_pack_name": "打包包名称 (组):",
+        "lbl_seed": "生成种子 (留空 = 随机):",
+        "lbl_presets": "🧪 模板 (预设):",
+        "lbl_custom_preset_name": "自定义预设名称:",
+        "btn_save_preset": "💾 保存预设",
+        "btn_delete_preset": "🗑️ 删除预设",
+        "msg_preset_saved": "预设 '{}' 已成功保存。",
+        "msg_preset_deleted": "预设 '{}' 已删除。",
+        "msg_preset_empty": "预设名称不能为空。",
+        "lbl_adv_settings": "⚙️ 引擎高级设置:",
+        "btn_reset": "重置参数",
+        "label_status_reset": "状态: 参数已成功重置。",
+        "btn_generate": "处理并导出双向包！ 🚀",
+        "btn_cancel_gen": "🔴 取消生成",
+        "lbl_status_wait": "状态: 等待最少必要文件...",
+        "lbl_monitor": "🖥️ 实时密度监视器",
+        "txt_console_wait": "等待执行以计算 NPS...\n",
+        "txt_inference_wait": "正在执行混合推理 ⚡...",
+        "menu_opt_hide": "隐藏参数",
+        "menu_opt_time": "时间设置",
+        "menu_opt_bpm": "BPM 与节奏配置",
+        "menu_opt_fx": "特效、地雷与陷阱",
+        "menu_opt_filters": "频谱滤波器与难度",
+        "btn_graph": "在交互式图表中调整限制 📊",
+        "lbl_duration": "最大时长 (秒 / 0=完整):",
+        "lbl_sec_time": "--- 歌曲附加参数 ---",
+        "lbl_offset": "起始偏移:",
+        "chk_offset_auto": "自动检测偏移 (DSP 音量)",
+        "lbl_extension": "美学最终延伸 (相对):",
+        "lbl_extension_mode": "通过长按键延伸？默认地雷。",
+        "lbl_offset_auto_active": "起始偏移: [自动激活]",
+        "lbl_synchronize_values_graph": "计算并同步数值",
+        "lbl_sec_bpm": "--- BPM 参数 ---",
+        "lbl_bpm_config": "BPM 配置:",
+        "lbl_bpm_auto": "自动 (DSP 检测)",
+        "lbl_bpm_manual": "手动",
+        "chk_double_bpm": "双倍 BPM (x2)",
+        "lbl_double_bpm": "在 BPM 低于此值时应用 x2:",
+        "chk_dynamic_bpm": "应用动态 BPM (变速)",
+        "lbl_min_bpm": "最小 BPM (留空 = 自动):",
+        "lbl_max_bpm": "最大 BPM (留空 = 自动):",
+        "lbl_rms_min_bpm": "最小 BPM RMS 敏感度:",
+        "lbl_rms_max_bpm": "最大 BPM RMS 敏感度:",
+        "lbl_bpm_umbral": "应用更改的 BPM 读取阈值:",
+        "lbl_bpm_damping": "BPM 潮汐阻尼器:",
+        "lbl_bpm_damping_indicator1": "极端 (波浪流)",
+        "lbl_bpm_damping_indicator2": "缓和 (推荐)",
+        "lbl_bpm_damping_indicator3": "渐进反应式",
+        "lbl_bpm_damping_indicator4": "立即 (剧烈)",
+        "lbl_sec_speed": "--- 滚动速度参数 (Scroll Speeds) ---",
+        "chk_dynamic_speed": "自适应视觉速度 (滚动速度)",
+        "lbl_speed_loss": "因损耗延长的持续时间:",
+        "lbl_rms_min_speed": "最小滚动 RMS 敏感度:",
+        "lbl_rms_max_speed": "最大滚动 RMS 敏感度:",
+        "lbl_speed_min": "最低速度 (平静部分):",
+        "lbl_speed_max": "最高速度 (高潮部分):",
+        "lbl_speed_trans": "过渡持续时间:",
+        "lbl_speed_anti_dizzy": "防眩晕 toe 滤镜 (触发阈值):",
+        "lbl_speed_anti_dizzy_indicator1": "稳定最佳 (零眩晕)",
+        "lbl_speed_anti_dizzy_indicator2": "敏感 (有眩晕风险)",
+        "lbl_speed_anti_dizzy_indicator3": "剧烈变化 / 噱头",
+        "lbl_speed_anti_dizzy_indicator4": "超反应式 (不稳定)",
+        "lbl_sec_fx": "--- 特效与陷阱参数 ---",
+        "lbl_prob_mines": "每小节地雷概率:",
+        "lbl_max_mines": "每小节最大地雷数:",
+        "lbl_prob_fakes": "每小节伪造键 (Fakes) 概率:",
+        "lbl_max_fakes": "每小节最大伪造键数:",
+        "lbl_prob_lifts": "每小节拉起键 (Lifts) 概率:",
+        "lbl_max_lifts": "每小节最大拉起键数:",
+        "lbl_prob_potions": "每小节药水键 (Potions) 概率:",
+        "lbl_max_potions": "每小节最大药水键数:",
+        "lbl_prob_shields": "每小节护盾键 (Shields) 概率:",
+        "lbl_max_shields": "每小节最大护盾键数:",
+        "lbl_prob_rayos": "每小节雷电键 (Shock) 概率:",
+        "lbl_max_rayos": "每小节最大雷电键数:",
+        "lbl_prob_hiddens": "每小节隐藏键 (Hiddens) 概率:",
+        "lbl_max_hiddens": "每小节最大隐藏键数:",
+        "chk_fx_rms": "在高潮部分增强特效与陷阱 (RMS 分析)",
+        "lbl_rms_min_fx": "最小陷阱 RMS 敏感度:",
+        "lbl_rms_max_fx": "最大陷阱 RMS 敏感度:",
+        "lbl_umbral_silencio": "静音最低音量阈值:",
+        "chk_umbral_silencio": "激活静音功能",
+        "lbl_sec_holders": "--- 长按键参数 (Holders) ---",
+        "lbl_max_hold": "长按键最大持续时间 (行数):",
+        "lbl_sim_holds": "最大同时长按键数:",
+        "chk_postprocess": "对长按键应用节奏后处理",
+        "chk_jumps": "生成跳跃部分 (RMS 过滤器)",
+        "lbl_rms_min_jumps": "最小跳跃 RMS 敏感度:",
+        "lbl_rms_max_jumps": "最大跳跃 RMS 敏感度:",
+        "lbl_sec_diff": "--- 难度参数 ---",
+        "lbl_diff_ceiling": "打包包封顶难度: 等级",
+        "chk_recalc_diff": "动态重新计算难度 (NPS)",
+        "lbl_sec_extra_diff": "--- 附加难度参数 ---",
+        "lbl_rms_min_density": "最小 RMS 敏感度 (音符密度):",
+        "lbl_rms_max_density": "最大 RMS 敏感度 (音符密度):",
+        "lbl_compas_lines_low": "每小节行数 (低密度):",
+        "lbl_compas_lines_sug": "每小节行数 (推荐):",
+        "lbl_compas_lines_high": "每小节行数 (高精度):",
+        "lbl_compas_lines_madness": "每小节行数 (极限精度):",
+        "lbl_min_compas_notes": "每小节最小音符数:",
+        "lbl_min_compas_notes_sug": "每小节最小音符数 (建议):",
+        "lbl_max_compas_notes_low": "每小节最大音符数 (低/普通难度):",
+        "lbl_max_compas_notes_sug": "每小节最大音符数 (普通/困难难度):",
+        "lbl_max_compas_notes_high": "每小节最大音符数 (困难/专家难度):",
+        "lbl_max_compas_notes_madness": "每小节最大音符数 (专家/疯狂难度):",
+        "lbl_sec_sampling": "--- 谱面自适应削减 (采样) ---",
+        "chk_sampling": "启用多层样本生成",
+        "lbl_sampling_min": "最小初始采样:",
+        "lbl_sampling_num": "总中间样本数 (直至完成 100%):",
+        "lbl_present_status": "预设已加载",
+        "preset_0": "选择预设 (手动)",
+        "preset_1": "1. 视觉动态。",
+        "preset_2": "2. 更多跳跃",
+        "preset_3": "3. 混沌速度。",
+        "preset_4": "4. 浮动潮汐 (波浪流与平滑滚动)",
+        "preset_5": "5. 混沌噱头 (骤停与冲击陷阱)",
+        "preset_6": "6. 纯密度推理 (无修改器的频谱 low 滤镜)",
+        "preset_7": "7. 硬核风暴 (最大 Deathstream 与并存修改器)",
+        "status_processing": "状态: 正在处理矩阵与 DSP...",
+        "status_success": "成功: 文件已创建！ ✅",
+        "status_error": "关键错误 ❌",
+        "status_cancel": "状态: 流程已取消。",
+        "btn_cancel_status_processing": "正在取消流程...",
+        "lbl_cancel_status_processing": "状态: 正在停止算法...",
+        "msg_interrupted_cancel": "用户已取消生成。",
+        "msg_error_cancel": "流程已被中断",
+        "msg_error_cancel_desc": "Simfile 生成已被强制安全停止。",
+        "msg_error_dsp": "DSP 分析错误:",
+        "msg_error_inference": "推理错误",
+        "msg_error_missing": "您必须强制加载音频与 AI 检查点 (.pt)。",
+        "msg_error_title": "Simfile 标题不能为空。",
+        "msg_error_duration": "时长必须是有效数字。",
+        "msg_error_double_bpm": "x2 选项的 BPM 无效。",
+        "msg_error_bpm_range": "最小或最大 BPM 无效，不能超过 300 或低于 30",
+        "msg_success_box": "混合包创建成功。\n\n.sm 和 .ssc 文件已就绪。",
+        "lbl_warning": "⚠ 警告",
+        "vis_window_title": "非对称音频限制",
+        "vis_lbl_info": "拖动线条: 偏移 (左) 和时长 (中) 在边界处停止。延伸 (右) 可以扩展。",
+        "vis_btn_sync": "计算并同步数值",
+        "vis_axis_time": "时间 (秒)",
+        "vis_axis_amp": "振幅",
+        "vis_msg_sync_title": "同步成功",
+        "vis_msg_sync_body": "在引擎限制内调整的数值:\n• 偏移: {:.3f}s (最大限制 16s)\n• 时长: {:.3f}s\n• 延伸: {:.1f}s (最大限制 15s)",
+        "vis_msg_missing_audio": "请先在步骤 1 中选择有效的音频文件。",
+        "vis_msg_missing_title": "文件缺失",
+        "console_recalc_disabled": "重新计算已禁用。已应用 GUI 基础级别。\n",
+        "console_report_header": "📊 [{}] (图层 {}%) 全局 NPS: {:.2f}\n",
+        "console_report_meter": "🎯 动态计量缩放: 等级 {} (图层最高封顶: {})\n",
+        "console_report_offset": "⏱️ 全局偏移: {:.3f} 秒\n",
+        "console_report_bpm": "💓 全局基础 BPM: {:.3f} \n",
+        "console_report_seed": "🔑 数字指纹 (种子): {}\n",
+        "console_report_multi": "🚀 多层处理完成: 已导出 {} 个 simfile 文件。\n",
+        "console_report_standard": "🚀 标准流程完成: 已导出 2 个 simfile 文件。\n",
+        "lbl_btn_batch_generation": "批量处理文件夹 (海量)",
+        "lbl_masive_file_origin": "选择包含歌曲子文件夹的文件夹",
+        "lbl_masive_control_dup": "重复项控制",
+        "lbl_msg_masive_control_pt_1": "检测到",
+        "lbl_msg_masive_control_pt_2": "首歌曲已存在于目的地。",
+        "lbl_msg_masive_control_pt_3": "您是否要覆盖它们并重新生成其次步法？\n",
+        "lbl_msg_masive_control_pt_4": "• [是] -> 重新生成并覆盖所有内容。\n",
+        "lbl_msg_masive_control_pt_5": "• [否] -> 跳过并保留当前歌曲。\n",
+        "lbl_msg_masive_control_pt_6": "• [取消] -> 停止批量流程。",
+        "lbl_masive_cancel": "\n🔴 流程已被强制安全停止。\n",
+        "console_masive_msg_status_start": "⚡ 正在批量启动完整的 AI + DSP 引擎\n",
+        "console_masive_msg_mode": "📂 重复模式:",
+        "console_masive_msg_omite": "⏭️ 已跳过并保留:",
+        "console_masive_msg_inference": "🔮 正在推理 AI 步法:",
+        "console_masive_msg_error_directory": "❌ 错误于",
+        "console_masive_msg_warning_omite": "⚠️ 已跳过:",
+        "console_masive_msg_warning_omite_audio": "(无有效音频)",
+        "console_masive_msg_status_end": "\n🏆 流程已结束:",
+        "console_masive_msg_status_songs_num": "首歌曲已完整计算。\n",
+        "console_masive_msg_status_end_succesful": "状态: 批量处理已完成。",
+        "msg_warning_masive_process_not_ok": "目录内未找到子文件夹。",
+        "msg_warning_masive_process_ok": "海量批量处理",
+        "msg_motor_lotes": "AI 批量引擎",
+        "msg_motor_lotes_pt_1": "完美成功！\n已处理并创建",
+        "msg_motor_lotes_pt_2": "个图层包内的双向 simfile (.sm / .ssc)"
     }
+}
 
 def get_translation(key):
     """Función de traducción rápida basada en el idioma activo."""
@@ -1239,7 +1905,8 @@ def ejecutar_bucle_sincrono(config_dificultad, compases_totales, bpm, val_offset
 # CORE DE GENERACIÓN HÍBRIDA DUAL (.SM y .SSC)
 # =====================================================================
 def generar_simfiles_hibridos(audio_path, checkpoint_path, song_title, max_level_chosen, 
-                              carpeta_salida, artist_name="", banner_path="", video_path="", duracion_limite=0.0, custom_params=None, evento_cancelar=None):
+                              carpeta_salida, artist_name="", banner_path="", video_path="", background_path="", cdtitle_path="",
+                              duracion_limite=0.0, custom_params=None, evento_cancelar=None):
 
     # Recuperar y fijar la semilla de forma estricta antes de que la IA o el DSP hagan algo
     seed_actual = custom_params.get("seed_value", 42)
@@ -1362,8 +2029,12 @@ def generar_simfiles_hibridos(audio_path, checkpoint_path, song_title, max_level
             duracion = duracion + speed_offset_time
         else: #Redundante pero se entiende que sino existen scrolls se toma la duración auto
             duracion = duracion
-    
-    double_bpm_factor = 2.0 if (custom_params and custom_params.get("double_bpm") == True) else 1.0
+
+    #Aplicamos el duplicador de BPM incluyendo su respectivo limitador
+    if custom_params and custom_params.get("double_bpm") == True and bpm < custom_params.get("double_bpm_limit"):
+        double_bpm_factor = 2.0
+    else: 
+        double_bpm_factor = 1.0
 
     #Aplicamos un bpm manual si es configurado desde la interfaz
     if custom_params and custom_params.get("bpm_automatico") == False:
@@ -1414,6 +2085,8 @@ def generar_simfiles_hibridos(audio_path, checkpoint_path, song_title, max_level
     #Verificacion de seguridad para el banner y video
     nombre_banner = os.path.basename(banner_path) if banner_path else ""
     nombre_video = os.path.basename(video_path) if video_path else ""
+    nombre_background = os.path.basename(background_path) if background_path else ""
+    nombre_cdtitle = os.path.basename(cdtitle_path) if cdtitle_path else ""
 
     # Definir la jerarquía de carpetas estándar: Raíz -> Nombre del Pack -> Nombre de la Canción
     nombre_grupo = custom_params.get("pack_name", "AI_Generated_Charts")
@@ -1441,7 +2114,7 @@ def generar_simfiles_hibridos(audio_path, checkpoint_path, song_title, max_level
     if banner_path and os.path.exists(banner_path):
         if custom_params.get("renombrar_archivos", False):
             _, extension = os.path.splitext(nombre_banner)
-            new_banner_name = f"{folder_song_sanitizada}{extension}"
+            new_banner_name = f"{folder_song_sanitizada}_bn{extension}"
         else:
             new_banner_name = nombre_banner
         ruta_final_banner = os.path.join(carpeta_pack_final, new_banner_name)
@@ -1461,6 +2134,30 @@ def generar_simfiles_hibridos(audio_path, checkpoint_path, song_title, max_level
             shutil.copy(video_path, ruta_final_video)
     else:
         new_video_name = ""
+
+    if background_path and os.path.exists(background_path):
+        if custom_params.get("renombrar_archivos", False):
+            _, extension = os.path.splitext(nombre_background)
+            new_background_name = f"{folder_song_sanitizada}_bg{extension}"
+        else:
+            new_background_name = nombre_background
+        ruta_final_background = os.path.join(carpeta_pack_final, new_background_name)
+        if os.path.abspath(background_path) != os.path.abspath(ruta_final_background):
+            shutil.copy(background_path, ruta_final_background)
+    else:
+        new_background_name = ""
+
+    if cdtitle_path and os.path.exists(cdtitle_path):
+        if custom_params.get("renombrar_archivos", False):
+            _, extension = os.path.splitext(nombre_cdtitle)
+            new_cdtitle_name = f"{folder_song_sanitizada}_cdtitle{extension}"
+        else:
+            new_cdtitle_name = nombre_cdtitle
+        ruta_final_cdtitle = os.path.join(carpeta_pack_final, new_cdtitle_name)
+        if os.path.abspath(cdtitle_path) != os.path.abspath(ruta_final_cdtitle):
+            shutil.copy(cdtitle_path, ruta_final_cdtitle)
+    else:
+        new_cdtitle_name = ""
 
     bg_changes_line = f"0.000={new_video_name}=1.000=1=0=0=crossfade=," if new_video_name else ""
 
@@ -1543,7 +2240,8 @@ def generar_simfiles_hibridos(audio_path, checkpoint_path, song_title, max_level
         # --- ESCRITURA DEL ARCHIVO .SM INDIVIDUAL ---
         with open(output_sm, "w", encoding="utf-8") as f:
             f.write(f"#TITLE:{titulo_simfile};\n#SUBTITLE:{subtitulo};\n")
-            f.write(f"#ARTIST:{artist_name};\n#MUSIC:{new_audio_name};\n#BANNER:{new_banner_name};\n")
+            f.write(f"#ARTIST:{artist_name};\n#CREDIT:AI_Engine_GSH;\n")
+            f.write(f"#MUSIC:{new_audio_name};\n#BANNER:{new_banner_name};\n#BACKGROUND:{new_background_name};\n#CDTITLE:{new_cdtitle_name};\n")
             f.write(f"#VIDEO:{new_video_name};\n")
             f.write(f"#OFFSET:-{val_offset:.3f};\n") 
             f.write(f"#BPMS:{bpms_string_line};\n")
@@ -1559,7 +2257,8 @@ def generar_simfiles_hibridos(audio_path, checkpoint_path, song_title, max_level
         # --- ESCRITURA DEL ARCHIVO .SSC INDIVIDUAL ---
         with open(output_ssc, "w", encoding="utf-8") as f:
             f.write(f"#VERSION:0.83;\n#TITLE:{titulo_simfile};\n#SUBTITLE:{subtitulo};\n")
-            f.write(f"#ARTIST:{artist_name};\n#MUSIC:{new_audio_name};\n#BANNER:{new_banner_name};\n")
+            f.write(f"#ARTIST:{artist_name};\n")
+            f.write(f"#MUSIC:{new_audio_name};\n#BANNER:{new_banner_name};\n#BACKGROUND:{new_background_name};\n#CDTITLE:{new_cdtitle_name};\n")
             f.write(f"#VIDEO:{new_video_name};\n")
             f.write(f"#OFFSET:-{val_offset:.3f};\n") 
             f.write(f"#BPMS:{bpms_string_line};\n#COMBOLINK:1;\n")
@@ -1572,7 +2271,7 @@ def generar_simfiles_hibridos(audio_path, checkpoint_path, song_title, max_level
             for diff, bloque in mapa_pasos_por_dificultad.items():
                 f.write(f"//dance-single - AI_DSP_Hybrid_Engine\n#NOTEDATA:;\n#CHARTNAME:{chart_name};\n#STEPSTYPE:dance-single;\n")
                 f.write(f"#DESCRIPTION:AI_DSP_Hybrid_Engine_Size_{int(round(pct*100))};\n#DIFFICULTY:{diff};\n#METER:{config_dificultad[diff]['meter']};\n")
-                f.write(f"#RADARVALUES:0.1,0.1,0.1,0.1,0.1;\n#CREDIT:AI_Engine;\n#NOTES:\n")
+                f.write(f"#RADARVALUES:0.1,0.1,0.1,0.1,0.1;\n#CREDIT:AI_Engine_GSH;\n#NOTES:\n")
                 f.write(bloque)
                 f.write("\n")
         
@@ -1784,6 +2483,8 @@ class StepHybridUI(ctk.CTk):
         self.checkpoint_file_path = ""
         self.banner_file_path = ""
         self.video_file_path = ""
+        self.background_file_path = ""
+        self.cdtitle_file_path = ""
         self.minas_rms_activa = False
 
          # 🔥 NUEVA BANDERA DE CONTROL DE HILOS 🔥
@@ -1819,7 +2520,7 @@ class StepHybridUI(ctk.CTk):
         
         self.menu_lang = ctk.CTkOptionMenu(
             self.frame_lang,
-            values=["Español", "English"],
+            values=["Español", "English", "Japanese", "Portuguese", "Chinese (Simplified)"],
             command=self.cambiar_idioma_ui,
             fg_color="#1abc9c",
             button_color="#16a085",
@@ -1855,7 +2556,11 @@ class StepHybridUI(ctk.CTk):
         self.label_banner_path = ctk.CTkLabel(self.contenedor_vertical, text=get_translation("lbl_no_banner"), text_color="gray", wraplength=350)
         self.btn_video = ctk.CTkButton(self.contenedor_vertical, text=get_translation("btn_video"), fg_color="#8e44ad", command=self.buscar_video)
         self.label_video_path = ctk.CTkLabel(self.contenedor_vertical, text=get_translation("lbl_no_video"), text_color="gray", wraplength=350)
-
+        self.btn_background = ctk.CTkButton(self.contenedor_vertical, text=get_translation("btn_background"), fg_color="#C438BB", command=self.buscar_background)
+        self.label_background_path = ctk.CTkLabel(self.contenedor_vertical, text=get_translation("lbl_no_background"), text_color="gray", wraplength=350)
+        self.btn_cdtitle = ctk.CTkButton(self.contenedor_vertical, text=get_translation("btn_cdtitle"), fg_color="#BBC93D", command=self.buscar_cdtitle)
+        self.label_cdtitle_path = ctk.CTkLabel(self.contenedor_vertical, text=get_translation("lbl_no_cdtitle"), text_color="gray", wraplength=350)
+        
         self.checkbox_rename = ctk.CTkCheckBox(self.contenedor_vertical, text=get_translation("chk_rename")) 
 
         # Separador visual lógico
@@ -1886,7 +2591,8 @@ class StepHybridUI(ctk.CTk):
         componentes_entrada = [
             self.btn_audio, self.label_audio_path, self.btn_checkpoint, self.label_checkpoint_path,
             self.label_name, self.entry_title, self.label_artist_name, self.entry_artist_name, self.btn_banner, self.label_banner_path,
-            self.btn_video, self.label_video_path, self.checkbox_rename, 
+            self.btn_video, self.label_video_path, self.btn_background, self.label_background_path, self.btn_cdtitle, self.label_cdtitle_path,
+            self.checkbox_rename, 
             self.label_seccion_adv, self.label_temp, self.slider_temp, self.label_umbral_silencios, self.slider_umbral_silencios, self.checkbox_activar_umbral_silencios,
             self.label_pack_name, self.entry_pack_name,
             self.label_seed, self.entry_seed
@@ -2045,6 +2751,26 @@ class StepHybridUI(ctk.CTk):
         self.checkbox_bpm_doble = ctk.CTkCheckBox(self.apartado_bpm, text=get_translation("chk_double_bpm")) 
         self.checkbox_bpm_doble.deselect()
 
+        # Contenedor principal para la sección de doble bpm 
+        self.frame_double_bpm = ctk.CTkFrame(self.apartado_bpm, fg_color="transparent")
+
+        # Fila 1: BPM Doble
+        self.label_double_bpm = ctk.CTkLabel(
+            self.frame_double_bpm, 
+            text=get_translation("lbl_double_bpm"), 
+            width=160, 
+            font=ctk.CTkFont(weight="bold"),
+            anchor="w"
+        )
+        self.label_double_bpm.pack(pady=2, padx=5)
+
+        self.entry_double_bpm = ctk.CTkEntry(
+            self.frame_double_bpm, 
+            placeholder_text="Ex: 90", 
+            width=100
+        )
+        self.entry_double_bpm.pack(pady=2, padx=5)
+
         self.checkbox_bpm_dinamico = ctk.CTkCheckBox(self.apartado_bpm, text=get_translation("chk_dynamic_bpm"), command=self.gestionar_exclusividad_ritmo)
         self.checkbox_bpm_dinamico.deselect()
         
@@ -2188,7 +2914,7 @@ class StepHybridUI(ctk.CTk):
         self.slider_speed_umbral.set(0.50)
 
         widgets_bpm = [
-            self.label_seccion_adv_bpm, self.label_bpm, self.frame_controles_bpm, self.frame_bpm_botones, self.checkbox_bpm_doble, self.checkbox_bpm_dinamico, #self.frame_bpm_dinamico,
+            self.label_seccion_adv_bpm, self.label_bpm, self.frame_controles_bpm, self.frame_bpm_botones, self.checkbox_bpm_doble, self.frame_double_bpm, self.checkbox_bpm_dinamico, #self.frame_bpm_dinamico,
             self.label_seccion_adv_speed, self.checkbox_speeds_dinamico
             ]
         for w in widgets_bpm: 
@@ -2289,11 +3015,11 @@ class StepHybridUI(ctk.CTk):
         self.label_seccion_adv_holders = ctk.CTkLabel(self.apartado_filtros, text=get_translation("lbl_sec_holders"), font=ctk.CTkFont(size=13, weight="bold", slant="italic"), text_color="#FFB874")
 
         self.label_max_hold = ctk.CTkLabel(self.apartado_filtros, text=f"{get_translation("lbl_max_hold")} 8", font=ctk.CTkFont(weight="bold"))
-        self.slider_max_hold = ctk.CTkSlider(self.apartado_filtros, from_=2, to=32, number_of_steps=30, width=340, command=lambda v: self.label_max_hold.configure(text=f"{get_translation("lbl_max_hold")} {int(v)}"))
+        self.slider_max_hold = ctk.CTkSlider(self.apartado_filtros, from_=1, to=32, number_of_steps=31, width=340, command=lambda v: self.label_max_hold.configure(text=f"{get_translation("lbl_max_hold")} {int(v)}"))
         self.slider_max_hold.set(8)
         
         self.label_holds_sim = ctk.CTkLabel(self.apartado_filtros, text=f"{get_translation("lbl_sim_holds")} 2", font=ctk.CTkFont(weight="bold"))
-        self.slider_holds_sim = ctk.CTkSlider(self.apartado_filtros, from_=1, to=4, number_of_steps=3, width=340, command=lambda v: self.label_holds_sim.configure(text=f"{get_translation("lbl_sim_holds")} {int(v)}"))
+        self.slider_holds_sim = ctk.CTkSlider(self.apartado_filtros, from_=0, to=4, number_of_steps=4, width=340, command=lambda v: self.label_holds_sim.configure(text=f"{get_translation("lbl_sim_holds")} {int(v)}"))
         self.slider_holds_sim.set(2)
 
         self.checkbox_postprocesar = ctk.CTkCheckBox(self.apartado_filtros, text=get_translation("chk_postprocess"), command=self.alternar_visibilidad_postprocesamiento)
@@ -2401,7 +3127,7 @@ class StepHybridUI(ctk.CTk):
         # Selección de muestras discretas (De 2 a 10)
         self.label_muestreo_num = ctk.CTkLabel(self.frame_sub_muestreo, text=f"{get_translation("lbl_sampling_num")} 6", font=ctk.CTkFont(weight="bold"))
         self.label_muestreo_num.pack(pady=2, padx=5)
-        self.slider_muestreo_num = ctk.CTkSlider(self.frame_sub_muestreo, from_=2, to=10, number_of_steps=8, width=340, command=self.actualizar_texto_muestreo_num)
+        self.slider_muestreo_num = ctk.CTkSlider(self.frame_sub_muestreo, from_=2, to=20, number_of_steps=18, width=340, command=self.actualizar_texto_muestreo_num)
         self.slider_muestreo_num.pack(pady=2, padx=5)
         self.slider_muestreo_num.set(6)
 
@@ -2427,6 +3153,18 @@ class StepHybridUI(ctk.CTk):
         self.btn_resetear = ctk.CTkButton(self.contenedor_vertical, text=get_translation("btn_reset"), fg_color="#c0392b", hover_color="#962d22", command=self.restablecer_valores)
         self.btn_generar = ctk.CTkButton(self.contenedor_vertical, text=get_translation("btn_generate"), fg_color="#2ecc71", hover_color="#27ae60", height=45, font=ctk.CTkFont(size=14, weight="bold"), command=self.iniciar_generacion)
         
+        # Ejemplo: Reemplazar o añadir junto al botón de generar en inicializar_componentes:
+        self.btn_masivo = ctk.CTkButton(
+            self.contenedor_vertical, 
+            text=get_translation("lbl_btn_batch_generation"), 
+            fg_color="#34495e", 
+            hover_color="#2c3e50", 
+            font=ctk.CTkFont(weight="bold"),
+            command=self.iniciar_generacion_masiva
+        )
+        # Lo empaquetamos justo arriba del botón de procesar individual
+        #self.btn_masivo.pack(pady=5, fill="x", padx=20)
+
         # 🔥 NUEVO BOTÓN DE CANCELAR FORZADO 🔥
         self.btn_cancelar = ctk.CTkButton(
             self.contenedor_vertical, 
@@ -2449,7 +3187,7 @@ class StepHybridUI(ctk.CTk):
 
         # Empaquetado lineal descendente y ordenado para scroll seguro
         componentes_ui = [
-            self.btn_resetear, self.btn_generar, self.btn_cancelar, self.label_status, self.label_consola, self.txt_consola
+            self.btn_resetear, self.btn_generar, self.btn_masivo, self.btn_cancelar, self.label_status, self.label_consola, self.txt_consola
             ]
         for widget in componentes_ui:
             widget.pack(pady=5, fill="x" if "Button" in type(widget).__name__ else None, padx=20)
@@ -2473,7 +3211,17 @@ class StepHybridUI(ctk.CTk):
     def cambiar_idioma_ui(self, seleccion):
         """Alterna el idioma global y reescribe los textos activos en pantalla."""
         global IDIOMA_ACTUAL
-        IDIOMA_ACTUAL = "es" if seleccion == "Español" else "en"
+        IDIOMA_ACTUAL = "es" 
+        if seleccion == "Español":
+            IDIOMA_ACTUAL = "es"
+        elif seleccion == "English":
+            IDIOMA_ACTUAL = "en"
+        elif seleccion == "Portuguese":
+            IDIOMA_ACTUAL = "pt"
+        elif seleccion == "Japanese":
+            IDIOMA_ACTUAL = "ja"
+        else:
+            IDIOMA_ACTUAL = "zh"
         
         # 1. Ventana y Títulos principales
         self.title(get_translation("window_title"))
@@ -2491,6 +3239,10 @@ class StepHybridUI(ctk.CTk):
         if not self.banner_file_path: self.label_banner_path.configure(text=get_translation("lbl_no_banner"))
         self.btn_video.configure(text=get_translation("btn_video"))
         if not self.video_file_path: self.label_video_path.configure(text=get_translation("lbl_no_video"))
+        self.btn_background.configure(text=get_translation("btn_background"))
+        if not self.background_file_path: self.label_background_path.configure(text=get_translation("lbl_no_background"))
+        self.btn_cdtitle.configure(text=get_translation("btn_cdtitle"))
+        if not self.cdtitle_file_path: self.label_cdtitle_path.configure(text=get_translation("lbl_no_cdtitle"))
         self.checkbox_rename.configure(text=get_translation("chk_rename"))
         self.label_seccion_adv.configure(text=get_translation("lbl_sec_adv"))
         self.label_pack_name.configure(text=get_translation("lbl_pack_name"))
@@ -2504,6 +3256,7 @@ class StepHybridUI(ctk.CTk):
         self.btn_cancelar.configure(text=get_translation("btn_cancel_gen"))
         self.btn_resetear.configure(text=get_translation("btn_reset"))
         self.btn_generar.configure(text=get_translation("btn_generate"))
+        self.btn_masivo.configure(text=get_translation("lbl_btn_batch_generation"))
         self.label_consola.configure(text=get_translation("lbl_monitor"))
         # Traducir sub-panel de presets personalizados
         self.lbl_custom_preset.configure(text=get_translation("lbl_custom_preset_name"))
@@ -2520,7 +3273,10 @@ class StepHybridUI(ctk.CTk):
         
         # 5. Apartado BPM y Speeds
         self.label_seccion_adv_bpm.configure(text=get_translation("lbl_sec_bpm"))
+        self.label_bpm.configure(text=get_translation("lbl_bpm_config"))
+        self.check_auto_bpm.configure(text=get_translation("lbl_bpm_auto"))
         self.checkbox_bpm_doble.configure(text=get_translation("chk_double_bpm"))
+        self.label_double_bpm.configure(text=get_translation("lbl_double_bpm"))
         self.checkbox_bpm_dinamico.configure(text=get_translation("chk_dynamic_bpm"))
         self.label_min_bpm_dinamico.configure(text=get_translation("lbl_min_bpm"))
         self.label_max_bpm_dinamico.configure(text=get_translation("lbl_max_bpm"))
@@ -2540,19 +3296,19 @@ class StepHybridUI(ctk.CTk):
         self.label_seccion_adv_trampas.configure(text=get_translation("lbl_sec_fx"))
         self.checkbox_efectos_rms.configure(text=get_translation("chk_fx_rms"))
         self.label_prob_minas.configure(text=f"{get_translation("lbl_prob_mines")} {self.slider_prob_minas.get()}")
-        self.label_max_minas.configure(text=f"{get_translation("lbl_max_mines")} {self.slider_max_minas.get()}")
+        self.label_max_minas.configure(text=f"{get_translation("lbl_max_mines")} {self.slider_max_minas.get():.0f}")
         self.label_prob_fakes.configure(text=f"{get_translation("lbl_prob_fakes")} {self.slider_prob_fakes.get()}")
-        self.label_max_fakes.configure(text=f"{get_translation("lbl_max_fakes")} {self.slider_max_fakes.get()}")
+        self.label_max_fakes.configure(text=f"{get_translation("lbl_max_fakes")} {self.slider_max_fakes.get():.0f}")
         self.label_prob_lifts.configure(text=f"{get_translation("lbl_prob_lifts")} {self.slider_prob_lifts.get()}")
-        self.label_max_lifts.configure(text=f"{get_translation("lbl_max_lifts")} {self.slider_max_lifts.get()}")
+        self.label_max_lifts.configure(text=f"{get_translation("lbl_max_lifts")} {self.slider_max_lifts.get():.0f}")
         self.label_prob_potions.configure(text=f"{get_translation("lbl_prob_potions")} {self.slider_prob_potions.get()}")
-        self.label_max_potions.configure(text=f"{get_translation("lbl_max_potions")} {self.slider_max_potions.get()}")
+        self.label_max_potions.configure(text=f"{get_translation("lbl_max_potions")} {self.slider_max_potions.get():.0f}")
         self.label_prob_shields.configure(text=f"{get_translation("lbl_prob_shields")} {self.slider_prob_shields.get()}")
-        self.label_max_shields.configure(text=f"{get_translation("lbl_max_shields")} {self.slider_max_shields.get()}")
+        self.label_max_shields.configure(text=f"{get_translation("lbl_max_shields")} {self.slider_max_shields.get():.0f}")
         self.label_prob_rayos.configure(text=f"{get_translation("lbl_prob_rayos")} {self.slider_prob_rayos.get()}")
-        self.label_max_rayos.configure(text=f"{get_translation("lbl_max_rayos")} {self.slider_max_rayos.get()}")
+        self.label_max_rayos.configure(text=f"{get_translation("lbl_max_rayos")} {self.slider_max_rayos.get():.0f}")
         self.label_prob_hiddens.configure(text=f"{get_translation("lbl_prob_hiddens")} {self.slider_prob_hiddens.get()}")
-        self.label_max_hiddens.configure(text=f"{get_translation("lbl_max_hiddens")} {self.slider_max_hiddens.get()}")
+        self.label_max_hiddens.configure(text=f"{get_translation("lbl_max_hiddens")} {self.slider_max_hiddens.get():.0f}")
         self.label_rms_min_fx.configure(text=f"{get_translation("lbl_rms_min_fx")} {self.slider_rms_min_fx.get()}")
         self.label_rms_max_fx.configure(text=f"{get_translation("lbl_rms_max_fx")} {self.slider_rms_max_fx.get()}")
         
@@ -2566,11 +3322,11 @@ class StepHybridUI(ctk.CTk):
         self.label_seccion_muestreo_adv.configure(text=get_translation("lbl_sec_sampling"))
         self.checkbox_muestreo.configure(text=get_translation("chk_sampling"))
         self.label_muestreo_min.configure(text=f"{get_translation("lbl_sampling_min")} {self.slider_muestreo_min.get()}")
-        self.label_muestreo_num.configure(text=f"{get_translation("lbl_sampling_num")} {self.slider_muestreo_num.get()}")
-        self.label_max_hold.configure(text=f"{get_translation("lbl_max_hold")} {self.slider_max_hold.get()}")
-        self.label_holds_sim.configure(text=f"{get_translation("lbl_sim_holds")} {self.slider_holds_sim.get()}")
-        self.label_rms_min_saltos.configure(text=f"{get_translation("lbl_rms_min_jumps")} {self.slider_rms_min_saltos.get()}")
-        self.label_rms_max_saltos.configure(text=f"{get_translation("lbl_rms_max_jumps")} {self.slider_rms_max_saltos.get()}")
+        self.label_muestreo_num.configure(text=f"{get_translation("lbl_sampling_num")} {self.slider_muestreo_num.get():.0f}")
+        self.label_max_hold.configure(text=f"{get_translation("lbl_max_hold")} {self.slider_max_hold.get():.0f}")
+        self.label_holds_sim.configure(text=f"{get_translation("lbl_sim_holds")} {self.slider_holds_sim.get():.0f}")
+        self.label_rms_min_saltos.configure(text=f"{get_translation("lbl_rms_min_jumps")} {self.slider_rms_min_saltos.get():.2f}")
+        self.label_rms_max_saltos.configure(text=f"{get_translation("lbl_rms_max_jumps")} {self.slider_rms_max_saltos.get():.2f}")
         self.label_rms_min.configure(text=f"{get_translation("lbl_rms_min_density")} {self.slider_rms_min.get()}")
         self.label_rms_max.configure(text=f"{get_translation("lbl_rms_max_density")} {self.slider_rms_max.get()}")
 
@@ -3059,10 +3815,14 @@ class StepHybridUI(ctk.CTk):
         #self.checkpoint_file_path = ""
         self.banner_file_path = ""
         self.video_file_path = ""
+        self.background_file_path = ""
+        self.cdtitle_file_path = ""
         
         self.label_audio_path.configure(text=get_translation("lbl_no_audio"), text_color="gray")
         self.label_banner_path.configure(text=get_translation("btn_banner"), text_color="gray")
         self.label_video_path.configure(text=get_translation("btn_video"), text_color="gray")
+        self.label_background_path.configure(text=get_translation("btn_background"), text_color="gray")
+        self.label_cdtitle_path.configure(text=get_tranlation("btn_cdtitle"), text_color="gray")
         
         self.entry_title.delete(0, "end")
         self.entry_artist_name.delete(0, "end")
@@ -3081,6 +3841,7 @@ class StepHybridUI(ctk.CTk):
         self.btn_bpm_mas.configure(state="disabled")
 
         self.checkbox_bpm_doble.deselect() 
+        self.entry_double_bpm.delete(0, "end")
 
         self.checkbox_bpm_dinamico.deselect() 
         self.checkbox_bpm_dinamico.configure(state="normal")
@@ -3515,13 +4276,35 @@ class StepHybridUI(ctk.CTk):
         file_path = filedialog.askopenfilename(filetypes=[(get_translation("lbl_banner_selection"), "*.png *.jpg *.jpeg *.bpm *.svg *.wepg")])
         if file_path:
             self.banner_file_path = file_path
-            self.label_banner_path.configure(text=os.path.basename(file_path), text_color="#1abc9c")
+            self.label_banner_path.configure(text=os.path.basename(file_path), text_color="#16a085")
 
     def buscar_video(self):
         file_path = filedialog.askopenfilename(filetypes=[(get_translation("lbl_video_selection"), "*.mp4 *.avi *.mkv *.flv *.mpg")])
         if file_path:
             self.video_file_path = file_path
-            self.label_video_path.configure(text=os.path.basename(file_path), text_color="#1abc9c")
+            self.label_video_path.configure(text=os.path.basename(file_path), text_color="#8e44ad")
+    
+    def buscar_background(self):
+        file_path = filedialog.askopenfilename(filetypes=[(get_translation("lbl_background_selection"), "*.png *.jpg *.jpeg *.bpm *.svg *.wepg")])
+        if file_path:
+            self.background_file_path = file_path
+            self.label_background_path.configure(text=os.path.basename(file_path), text_color="#C438BB")
+    
+    def buscar_cdtitle(self):
+        file_path = filedialog.askopenfilename(filetypes=[(get_translation("lbl_cdtitle_selection"), "*.png *.jpg *.jpeg *.bpm *.svg *.wepg")])
+        if file_path:
+            self.cdtitle_file_path = file_path
+            self.label_cdtitle_path.configure(text=os.path.basename(file_path), text_color="#BBC93D")
+
+    def buscar_palabra_en_rutas(self, ruta_archivo, palabra_buscada):
+        # Preparamos la palabra buscada para hacer la comparación uniforme (minúsculas)
+        palabra_busqueda_lower = palabra_buscada.strip().lower()
+
+        # La comprobación se hace sobre la ruta completa del archivo
+        if palabra_busqueda_lower in ruta_archivo.lower():
+            return True
+        else:
+            return False
 
     def solicitar_cancelacion(self):
         """Activa la señal de cancelación y actualiza el texto de advertencia."""
@@ -3547,6 +4330,16 @@ class StepHybridUI(ctk.CTk):
                 if duracion_manual < 0: raise ValueError
             except ValueError:
                 messagebox.showerror("Error", get_translation("msg_error_duration"))
+                return
+
+        double_bpm_texto = self.entry_double_bpm.get().strip()
+        double_bpm_manual = 300.0
+        if double_bpm_texto:
+            try:
+                double_bpm_manual = float(double_bpm_texto)
+                if double_bpm_manual < 0: raise ValueError
+            except ValueError:
+                message.showerror("Error", get_translation("msg_error_double_bpm"))
                 return
         
         seed_raw = self.entry_seed.get().strip()
@@ -3579,6 +4372,7 @@ class StepHybridUI(ctk.CTk):
             "bpm_manual": float(self.slider_bpm.get()),
             "bpm_automatico": bool(self.check_auto_bpm.get()),
             "double_bpm": bool(self.checkbox_bpm_doble.get()),
+            "double_bpm_limit": double_bpm_manual,
             "aplicar_bpm_dinamico": bool(self.checkbox_bpm_dinamico.get()), 
             "min_bpm_dinamico" : min_bpm_dinamico,
             "max_bpm_dinamico" : max_bpm_dinamico,
@@ -3644,6 +4438,265 @@ class StepHybridUI(ctk.CTk):
         self.label_status.configure(text=get_translation("status_processing"), text_color="#f1c40f")
 
         threading.Thread(target=self.ejecutar_proceso, args=(titulo, duracion_manual, params_usuario)).start()
+    
+    def iniciar_generacion_masiva(self):
+        """
+        Lee una carpeta raíz seleccionada por el usuario con subcarpetas de canciones,
+        organiza su multimedia y GENERA automáticamente sus simfiles (.sm y .ssc)
+        utilizando la IA y las configuraciones actuales de la interfaz gráfica.
+        """
+        # 1. Validar que tengamos cargado obligatoriamente el checkpoint de la IA
+        if not self.checkpoint_file_path:
+            messagebox.showerror("Error", get_translation("msg_error_missing"))
+            return
+
+        # 2. Solicitar al usuario la carpeta principal que contiene las canciones
+        carpeta_raiz_origen = filedialog.askdirectory(title=get_translation("lbl_masive_file_origin")) 
+        if not carpeta_raiz_origen:
+            return
+
+        # 3. Determinar el directorio de salida del ejecutable/script
+        import sys
+        if getattr(sys, 'frozen', False):
+            carpeta_salida = os.path.dirname(sys.executable)
+        else:
+            carpeta_salida = os.path.dirname(os.path.abspath(__file__))
+
+        # 4. Capturar parámetros globales de la interfaz
+        pack_name = self.entry_pack_name.get().strip() if self.entry_pack_name.get().strip() else "AI_Generated_Charts"
+        renombrar_archivos = bool(self.checkbox_rename.get())
+        max_nivel = int(self.slider_level.get())
+        
+        # Intentar leer duración manual global (0 = Full song)
+        duracion_texto = self.entry_duracion.get().strip()
+        duracion_manual = 0.0
+        if duracion_texto:
+            try:
+                duracion_manual = float(duracion_texto)
+            except ValueError:
+                pass
+
+        double_bpm_texto = self.entry_double_bpm.get().strip()
+        double_bpm_manual = 300.0
+        if double_bpm_texto:
+            try:
+                double_bpm_manual = float(double_bpm_texto)
+            except ValueError:
+                pass
+
+        min_bpm_dinamico_text = self.entry_min_bpm_dinamico.get().strip()
+        max_bpm_dinamico_text = self.entry_max_bpm_dinamico.get().strip()
+        min_bpm_dinamico = 0
+        max_bpm_dinamico = 0
+        if min_bpm_dinamico_text and max_bpm_dinamico_text:
+            try:
+                min_bpm_dinamico = int(min_bpm_dinamico_text)
+                max_bpm_dinamico = int(max_bpm_dinamico_text)
+            except ValueError:
+                pass
+
+        # Extensiones válidas
+        EXT_AUDIO = ('.mp3', '.wav', '.ogg', '.flac', '.opus')
+        EXT_BANNER = ('.png', '.jpg', '.jpeg', '.bmp', '.svg', '.webp')
+        EXT_VIDEO = ('.mp4', '.avi', '.mkv', '.flv', '.mpg')
+        EXT_BACKGROUND = ('.png', '.jpg', '.jpeg', '.bmp', '.svg', '.webp')
+        EXT_CDTITLE = ('.png', '.jpg', '.jpeg', '.bmp', '.svg', '.webp')
+
+        # Listar carpetas internas
+        subcarpetas = [f for f in os.listdir(carpeta_raiz_origen) if os.path.isdir(os.path.join(carpeta_raiz_origen, f))]
+        if not subcarpetas:
+            messagebox.showwarning(get_translation("msg_warning_masive_process_ok"), get_translation("msg_warning_masive_process_not_ok"))
+            return
+
+        # 🔍 CONTROL PREVIO DE DUPLICADOS
+        folder_group_sanitizada = "".join([c for c in pack_name if c.isalnum() or c in [' ', '_', '-']]).strip()
+        carpeta_raiz_packs = os.path.join(carpeta_salida, "AI_Generated_Packs")
+        
+        canciones_duplicadas = []
+        for nombre_carpeta in subcarpetas:
+            folder_song_sanitizada = "".join([c for c in nombre_carpeta if c.isalnum() or c in [' ', '_', '-']]).strip()
+            carpeta_pack_final = os.path.join(carpeta_raiz_packs, folder_group_sanitizada, folder_song_sanitizada)
+            if os.path.exists(carpeta_pack_final):
+                canciones_duplicadas.append(nombre_carpeta)
+
+        modo_duplicados = "sobrescribir"
+        if canciones_duplicadas:
+            ans = messagebox.askyesnocancel(
+                "lbl_masive_control_dup", 
+                f"{get_translation("lbl_msg_masive_control_pt_1")} {len(canciones_duplicadas)} {get_translation("lbl_msg_masive_control_pt_2")}\n\n"
+                f"{get_translation("lbl_msg_masive_control_pt_3")}"
+                f"{get_translation("lbl_msg_masive_control_pt_4")}"
+                f"{get_translation("lbl_msg_masive_control_pt_5")}"
+                f"{get_translation("lbl_msg_masive_control_pt_6")}"
+            )
+            if ans is True: modo_duplicados = "sobrescribir"
+            elif ans is False: modo_duplicados = "omitir"
+            else: return
+
+        # Modificación de estados en la UI e hilos de control
+        self.cancelar_generacion.clear()
+        self.btn_generar.configure(state="disabled", text=get_translation("txt_inference_wait"))
+        self.btn_cancelar.configure(state="normal", fg_color="#c0392b")
+        self.label_status.configure(text=get_translation("status_processing"), text_color="#f1c40f")
+        
+        self.txt_consola.configure(state="normal")
+        self.txt_consola.delete("0.0", "end")
+        self.txt_consola.insert("end", f"{get_translation("console_masive_msg_status_start")}")
+        self.txt_consola.insert("end", f"{get_translation("console_masive_msg_mode")} {modo_duplicados.upper()}\n\n")
+
+        # 5. Función que correrá en un hilo secundario para no congelar CustomTkinter
+        def bucle_procesamiento_hilo():
+            conteo_exitos = 0
+            conteo_omitidos = 0
+
+            for nombre_carpeta in subcarpetas:
+                # Verificar si el usuario presionó el botón de cancelar
+                if self.cancelar_generacion.is_set():
+                    self.after(0, lambda: self.txt_consola.insert("end", get_translation("lbl_masive_cancel")))
+                    break
+
+                folder_song_sanitizada = "".join([c for c in nombre_carpeta if c.isalnum() or c in [' ', '_', '-']]).strip()
+                carpeta_pack_final = os.path.join(carpeta_raiz_packs, folder_group_sanitizada, folder_song_sanitizada)
+
+                if os.path.exists(carpeta_pack_final) and modo_duplicados == "omitir":
+                    self.after(0, lambda n=nombre_carpeta: [self.txt_consola.insert("end", f"{get_translation("console_masive_msg_omite")} '{n}'\n"), self.txt_consola.see("end")])
+                    conteo_omitidos += 1
+                    continue
+
+                ruta_subcarpeta = os.path.join(carpeta_raiz_origen, nombre_carpeta)
+                audio_encontrado = None
+                banner_encontrado = None
+                video_encontrado = None
+                background_encontrado = None
+                cdtitle_encontrado = None
+
+                for archivo in os.listdir(ruta_subcarpeta):
+                    ruta_archivo = os.path.join(ruta_subcarpeta, archivo)
+                    if os.path.isdir(ruta_archivo): continue
+                    archivo_lowercase = archivo.lower()
+
+                    if archivo_lowercase.endswith(EXT_AUDIO) and not audio_encontrado:
+                        audio_encontrado = ruta_archivo
+                    elif archivo_lowercase.endswith(EXT_BACKGROUND) and not background_encontrado and not self.buscar_palabra_en_rutas(ruta_archivo, "cdtitle"):
+                        background_encontrado = ruta_archivo
+                    elif archivo_lowercase.endswith(EXT_BANNER) and not banner_encontrado and not self.buscar_palabra_en_rutas(ruta_archivo, "cdtitle"):
+                        banner_encontrado = ruta_archivo
+                    elif archivo_lowercase.endswith(EXT_VIDEO) and not video_encontrado:
+                        video_encontrado = ruta_archivo
+
+                    if archivo_lowercase.endswith(EXT_CDTITLE) and not cdtitle_encontrado and self.buscar_palabra_en_rutas(ruta_archivo, "cdtitle"):
+                        cdtitle_encontrado = ruta_archivo 
+
+                if audio_encontrado:
+                    # Generar una semilla aleatoria única y estable para cada canción del lote
+                    seed_final = random.randint(100000, 999999)
+
+                    # Construir el diccionario de parámetros exacto para pasar al core del motor híbrido
+                    params_cancion = {
+                        "renombrar_archivos": renombrar_archivos,
+                        "bpm_manual": float(self.slider_bpm.get()),
+                        "bpm_automatico": bool(self.check_auto_bpm.get()),
+                        "double_bpm": bool(self.checkbox_bpm_doble.get()),
+                        "double_bpm_limit": double_bpm_manual,
+                        "aplicar_bpm_dinamico": bool(self.checkbox_bpm_dinamico.get()), 
+                        "min_bpm_dinamico" : min_bpm_dinamico,
+                        "max_bpm_dinamico" : max_bpm_dinamico,
+                        "bpm_dinamico_rms_min": float(self.slider_rms_min_bpm.get()),
+                        "bpm_dinamico_rms_max": float(self.slider_rms_max_bpm.get()),
+                        "umbral_disparo_custom_bpm": float(self.slider_bpm_umbral.get()),
+                        "bpm_amortiguador_custom": float(self.slider_bpm_amortiguador.get()),
+                        "aplicar_speeds_dinamicos": bool(self.checkbox_speeds_dinamico.get()),
+                        "percent_aditional_time": float(self.slider_speed_offset_time.get()),
+                        "speed_rms_min": float(self.slider_rms_min_speed.get()),
+                        "speed_rms_max": float(self.slider_rms_max_speed.get()),
+                        "speed_min_custom": float(self.slider_speed_min.get()),  
+                        "speed_max_custom": float(self.slider_speed_max.get()),  
+                        "speed_trans_custom": float(self.slider_speed_trans.get()),
+                        "speed_umbral_disparo": float(self.slider_speed_umbral.get()),
+                        "aplicar_postprocesamiento": bool(self.checkbox_postprocesar.get()),
+                        "recalcular_dificultad": bool(self.checkbox_recalcular_diff.get()),
+                        "offset_automatico": bool(self.checkbox_offset_auto.get()),
+                        "offset_manual": float(self.slider_offset.get()),
+                        "extension_final": float(self.slider_extension.get()),
+                        "extension_mode_by": bool(self.checkbox_extension_mode.get()),
+                        "temperatura": float(self.slider_temp.get()),
+                        "max_hold": int(self.slider_max_hold.get()),
+                        "holds_simultaneos": int(self.slider_holds_sim.get()),
+                        "activar_secciones_saltos": bool(self.checkbox_secciones_saltos.get()),
+                        "saltos_rms_min": float(self.slider_rms_min_saltos.get()),
+                        "saltos_rms_max": float(self.slider_rms_max_saltos.get()),
+                        "probabilidad_minas": float(self.slider_prob_minas.get()) / 100.0,
+                        "max_minas_compas": int(self.slider_max_minas.get()),
+                        "probabilidad_fakes": float(self.slider_prob_fakes.get()) / 100.0,
+                        "max_fakes_compas": int(self.slider_max_fakes.get()),
+                        "probabilidad_lifts": float(self.slider_prob_lifts.get()) / 100.0,
+                        "max_lifts_compas": int(self.slider_max_lifts.get()),
+                        "probabilidad_potions": float(self.slider_prob_potions.get()) / 100.0,
+                        "max_potions_compas": int(self.slider_max_potions.get()),
+                        "probabilidad_shields": float(self.slider_prob_shields.get()) / 100.0,
+                        "max_shields_compas": int(self.slider_max_shields.get()),
+                        "probabilidad_rayos": float(self.slider_prob_rayos.get()) / 100.0,
+                        "max_rayos_compas": int(self.slider_max_rayos.get()),
+                        "probabilidad_hiddens": float(self.slider_prob_hiddens.get()) / 100.0,
+                        "max_hiddens_compas": int(self.slider_max_hiddens.get()),
+                        "efectos_por_rms": bool(self.checkbox_efectos_rms.get()),
+                        "fx_rms_min": float(self.slider_rms_min_fx.get()),
+                        "fx_rms_max": float(self.slider_rms_max_fx.get()),
+                        "ratio_min_energia": float(self.slider_rms_min.get()),
+                        "ratio_max_energia": float(self.slider_rms_max.get()),
+                        "lineas_por_compas": int(self.lineas_por_compas),
+                        "max_notas_compas": int(self.max_notas_compas),
+                        "min_notas_compas": int(self.min_notas_compas),
+                        "pack_name": pack_name,
+                        "activar_muestreo_multicapa": bool(self.checkbox_muestreo.get()),
+                        "muestreo_pct_min": float(self.slider_muestreo_min.get()),
+                        "muestreo_num_muestras": int(self.slider_muestreo_num.get()),
+                        "umbral_silencios": float(self.slider_umbral_silencios.get()),
+                        "activar_umbral_silencios": bool(self.checkbox_activar_umbral_silencios.get()),
+                        "seed_value": seed_final
+                    }
+
+                    # Notificar en consola el arranque de inferencia
+                    self.after(0, lambda n=nombre_carpeta: [self.txt_consola.insert("end", f"{get_translation("console_masive_msg_inference")} '{n}'...\n"), self.txt_consola.see("end")])
+
+                    #Sanitizamos el nombre de la carpeta para evitar que se corrompan los archivos por nombres extraños
+                    folder_song_sanitizada = "".join([c for c in nombre_carpeta if c.isalnum() or c in [' ', '_', '-']]).strip()
+                    try:
+                        # Invocar de forma síncrona dentro del hilo la función maestra generadora de tu core
+                        generar_simfiles_hibridos(
+                            audio_path=audio_encontrado,
+                            checkpoint_path=self.checkpoint_file_path,
+                            song_title=folder_song_sanitizada,
+                            max_level_chosen=max_nivel,
+                            carpeta_salida=carpeta_salida,
+                            artist_name="",
+                            banner_path=banner_encontrado if banner_encontrado else "",
+                            video_path=video_encontrado if video_encontrado else "",
+                            background_path=background_encontrado if background_encontrado else "",
+                            cdtitle_path=cdtitle_encontrado if cdtitle_encontrado else "",
+                            duracion_limite=duracion_manual,
+                            custom_params=params_cancion,
+                            evento_cancelar=self.cancelar_generacion
+                        )
+                        conteo_exitos += 1
+                    except Exception as err:
+                        self.after(0, lambda n=nombre_carpeta, e=err: [self.txt_consola.insert("end", f"{get_translation("console_masive_msg_error_directory")} '{n}': {str(e)}"), self.txt_consola.see("end")])
+                else:
+                    self.after(0, lambda n=nombre_carpeta: [self.txt_consola.insert("end", f"{get_translation("console_masive_msg_warning_omite")} '{n}' {get_translation("console_masive_msg_warning_omite_audio")}\n"), self.txt_consola.see("end")])
+
+            # Cierre y restauración de la UI principal tras finalizar el lote
+            def finalizar_interfaz():
+                self.txt_consola.insert("end", f"{get_translation("console_masive_msg_status_end")} {conteo_exitos} {get_translation("console_masive_msg_status_songs_num")}")
+                self.txt_consola.configure(state="disabled")
+                self.btn_generar.configure(state="normal", text=get_translation("btn_generate"))
+                self.btn_cancelar.configure(state="disabled", fg_color="#7f8c8d", text=get_translation("btn_cancel_gen"))
+                self.label_status.configure(text=get_translation("console_masive_msg_status_end_succesful"), text_color="#2ecc71")
+                messagebox.showinfo(get_translation("msg_motor_lotes"), f"{get_translation("msg_motor_lotes_pt_1")} {conteo_exitos} {get_translation("msg_motor_lotes_pt_2")} '{pack_name}'.")
+
+            self.after(0, finalizar_interfaz)
+
+        # 6. Despachar el bucle masivo en un hilo de ejecución independiente
+        threading.Thread(target=bucle_procesamiento_hilo, daemon=True).start()
 
     def actualizar_consola_gui(self, texto):
         self.txt_consola.configure(state="normal")
@@ -3676,6 +4729,8 @@ class StepHybridUI(ctk.CTk):
                 artist_name=self.entry_artist_name.get().strip(),
                 banner_path=self.banner_file_path,
                 video_path=self.video_file_path,
+                background_path=self.background_file_path,
+                cdtitle_path=self.cdtitle_file_path,
                 duracion_limite=duracion_manual,
                 custom_params=params_usuario,
                 evento_cancelar=self.cancelar_generacion 
@@ -3707,9 +4762,13 @@ class StepHybridUI(ctk.CTk):
         self.audio_file_path = ""
         self.banner_file_path = ""
         self.video_file_path = ""
+        self.background_file_path = ""
+        self.cdtitle_file_path = ""
         self.label_audio_path.configure(text=get_translation("lbl_no_audio"), text_color="gray")
         self.label_banner_path.configure(text=get_translation("lbl_no_banner"), text_color="gray")
         self.label_video_path.configure(text=get_translation("lbl_no_video"), text_color="gray")
+        self.label_background_path.configure(text=get_translation("lbl_no_background"), text_color="gray")
+        self.label_cdtitle_path.configure(text=get_tranlation("lbl_no_cdtitle"), text_color="gray")
 
 if __name__ == "__main__":
     app = StepHybridUI()
