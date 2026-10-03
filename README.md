@@ -20,7 +20,7 @@ El entorno base de prueba es Python 3.12 en WINDOWS 11, pero se espera compatibi
 
 **La versión ejecutable (.exe) con un checkpoint aparte se encuentra disponible si solo desea utilizar el generador.**
 
-**Nueva versión mejorada. A partir de la versión 1.8 se agrego la función de stops y se corrigieron ciertas incongruencias con la construcción de los archivos (.sm y .scc) ahora ya no se presenta este problema. A partir de ahora, ITGmania puede crashear con canciones mayores a 2 minutos en su archivo (.scc). El archivo (.sm) sigue siendo funcional. En caso de requerir archivos para canciones más extensas usar alguna versión anterior, como la v1.7.0.1. Por su parte Outfox si puede procesar los nuevos archivos correctamente.**
+**Nueva versión mejorada. A partir de la versión 1.8 se agrego la función de stops y se corrigieron ciertas incongruencias con la construcción de los archivos (.sm y .scc) ahora ya no se presenta este problema. A partir de ahora, ITGmania puede crashear con canciones mayores a 2 minutos en su archivo (.scc). El archivo (.sm) sigue siendo funcional. En caso de requerir archivos para canciones más extensas usar alguna versión anterior, como la [![v1.7.0.1.](https://github.com/elcurisw/Generador_Simfiles_Hibrido/releases/tag/v.1.7.0.1)] Por su parte Outfox si puede procesar los nuevos archivos correctamente.**
 
 #### A. Dependencias Principales (Instalación vía pip)
 
