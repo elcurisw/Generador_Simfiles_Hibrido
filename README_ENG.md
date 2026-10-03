@@ -112,8 +112,9 @@ These controls determine the duration of the step map and exactly where the gene
 | 26 | **Maximum Duration** | Text Input | Defines the absolute maximum length for the generated step file. | Useful for trimming or limiting the overall extension of the map. |
 | 27 | **Starting Offset** | Selector/Buttons | Allows manual definition of the exact point where step generation should begin, separate from the total duration. Adjustable with incremental buttons (-0.04s and +0.04s). | Useful if the track starts quietly or without a clear beat. |
 | 28 | **Auto-Detect Offset** | Checkbox | If unchecked, you must specify an offset manually (points 15 and 16). | Recommended to disable this if you know the precise starting point of the rhythm. |
-| 29 | **Aesthetic Final Extension** | Number Control | Allows extending the audio file *without* generating additional rhythmic steps. | Ideal for creating a smooth "fade out" effect at the end of the track. |
-| 30 | **Extension by Holders? Mines by Default | Checkbox | Adds the possibility for the aesthetic extension to be used as a closure for holders. By default, it extends with mines. | Optional. Advanced. Requires the user to verify the result to coordinate that this section fits correctly at the exact moment they want it to appear. |
+| 29 | **Added Time Percentage** | Numeric Control | Sets a readjustment in map duration when applying speed modifiers (BPM, Scroll Speeds, Stops). This part is inferred using the song's BPM and AI generation. Advanced. Requires the user to verify this value so that it covers the expected duration of the song. Useful if you use Dynamic BPM and Velocity or Stops modes, as well as the sampling function. Reminder: the silence function may interfere with this addition. |
+| 30 | **Aesthetic Final Extension** | Number Control | Allows extending the audio file *without* generating additional rhythmic steps. | Ideal for creating a smooth "fade out" effect at the end of the track. |
+| 31 | **Extension by Holders? Mines by Default** | Checkbox | Adds the possibility for the aesthetic extension to be used as a closure for holders. By default, it extends with mines. | Optional. Advanced. Requires the user to verify the result to coordinate that this section fits correctly at the exact moment they want it to appear. |
 
 #### C. Master Rhythm and Speed Analysis (BPM & Flow Configuration)
 
@@ -125,25 +126,27 @@ This is the most advanced section, controlling the pulse and responsiveness of t
 
 | # | Field | Type | Description | Key Notes |
 | :---: | :---: | :---: | :---: | :---: |
-| 31 | **BPM Configuration** | Number Control | Sets the desired beats per minute (BPM). Adjustable with incremental buttons (1 BPM at a time). | Defines the basic rhythm foundation of the song. |
-| 32 | **Auto** | Checkbox | Enables automatic calculation of the BPM based on audio analysis. | Disable if you intend to apply a manual, fixed BPM. |
-| 33 | **Double BPM** | Checkbox | If the calculated or manual BPM is unsatisfactory, this option allows you to double it before step generation. | Advanced rhythmic adjustment. |
-| 34 | **Apply x2 starting at a BPM lower than** | Text Input | Used to check that the BPM is lower than this value for duplication. | Optional. By default, if you leave this field blank, it compares against a BPM of 300. Useful for batch generation mode. |
-| 35 | **Apply Dynamic BPM** | Checkbox | Enables an audio spectrum-based analysis (using RMS) to apply natural changes in BPM throughout the song. | New advanced feature. Adjusts rhythm based on energy peaks. |
-| 36 | **Minimum BPM** | Text Input | Configures the minimum allowed BPM for dynamic shifts (point 25). | Advanced, optional setting. If not configured, the software defaults to (Current BPM - 30). |
-| 37 | **Maximum BPM** | Text Input | Configures the maximum allowed BPM for dynamic shifts (point 25). | Advanced, optional setting. If not configured, the software defaults to (Current BPM + 30). |
-| 38 | **Minimum BPM RMS Sensitivity** | Number Control | Sets the minimum required audio energy (RMS) level needed for a section to be considered rhythmically notable by the AI. | Specialized for BPM adjustment; impacts quiet sections. |
-| 39 | **Maximum BPM RMS Sensitivity** | Number Control | Sets the maximum peak impact energy (RMS) that defines the strongest rhythmic peak of the song. | Specialized for BPM adjustment; impacts intense peaks. |
-| 40 | **MIN BPM per BPM Change** | Number Control | Sets a minimum change in BPM when reading the audio signal to write the change to the final file. | Advanced Use. The lower it is, the more reactive it is, but it's also more likely that your file will break the game upon loading. If this happens, delete the file and generate a new one with different settings. |
-| 41 | **BPM Tide Damping** | Number Control | Sets the approximation value when changing BPMs dynamically. | Higher values result in more abrupt and precise BPM shifts but risk causing "swerving" or audio distortion. |
-| 42 | **Adapt Visual Speed** | Checkbox | Enables an audio spectrum-based analysis (using RMS) to apply speed changes (not just tempo). | New experimental feature. Requires manual tuning for optimal results. |
-| 43 | **Extended Time Duration by Loss** | Number Control | Adjusts the map duration when applying speed/tempo changes dynamically. | Advanced: The user must verify this value to ensure the expected song length is covered. |
+| 32 | **BPM Configuration** | Number Control | Sets the desired beats per minute (BPM). Adjustable with incremental buttons (1 BPM at a time). | Defines the basic rhythm foundation of the song. |
+| 33 | **Auto** | Checkbox | Enables automatic calculation of the BPM based on audio analysis. | Disable if you intend to apply a manual, fixed BPM. |
+| 34 | **Double BPM** | Checkbox | If the calculated or manual BPM is unsatisfactory, this option allows you to double it before step generation. | Advanced rhythmic adjustment. |
+| 35 | **Apply x2 starting at a BPM lower than** | Text Input | Used to check that the BPM is lower than this value for duplication. | Optional. By default, if you leave this field blank, it compares against a BPM of 300. Useful for batch generation mode. |
+| 36 | **Apply Dynamic BPM** | Checkbox | Enables an audio spectrum-based analysis (using RMS) to apply natural changes in BPM throughout the song. | New advanced feature. Adjusts rhythm based on energy peaks. |
+| 37 | **Minimum BPM** | Text Input | Configures the minimum allowed BPM for dynamic shifts (point 25). | Advanced, optional setting. If not configured, the software defaults to (Current BPM - 30). |
+| 38 | **Maximum BPM** | Text Input | Configures the maximum allowed BPM for dynamic shifts (point 25). | Advanced, optional setting. If not configured, the software defaults to (Current BPM + 30). |
+| 39 | **Minimum BPM RMS Sensitivity** | Number Control | Sets the minimum required audio energy (RMS) level needed for a section to be considered rhythmically notable by the AI. | Specialized for BPM adjustment; impacts quiet sections. |
+| 40 | **Maximum BPM RMS Sensitivity** | Number Control | Sets the maximum peak impact energy (RMS) that defines the strongest rhythmic peak of the song. | Specialized for BPM adjustment; impacts intense peaks. |
+| 41 | **MIN BPM per BPM Change** | Numeric Control | Sets a minimum change of BPM in the reading of the audio signal to write the change to the final file. Usage for advanced users. The lower it is, the more reactive it is, but it is more likely that your file will break when loaded into the game. If this happens, delete that file (.scc) and generate a new one with different configurations. Files (.sm) should not have problems. |
+| 42 | **BPM Tide Damping** | Number Control | Sets the approximation value for BPM changes. The higher it is, the more sudden and exact the BPM change, but it can cause dizziness or distortions. This field brings BPM changes closer to the values in the Minimum and Maximum BPM fields. |
+| 43 | **Adapt Visual Speed** | Checkbox | Enables a spectrum based on RMS (reading of high and low audio peaks) to apply speed changes. New option. Experimental function. Advanced rhythm adjustment. Activating this option requires manual adjustment by the user. Does not apply to (.sm) files. |
 | 44 | **Minimum Scroll RMS Sensitivity** | Number Control | Sets the minimum required audio energy (RMS) needed for a section to be considered rhythmically notable by the AI for scrolling speed adjustments. | Specialized for controlling scroll speed in quiet sections. |
 | 45 | **Maximum Scroll RMS Sensitivity** | Number Control | Sets the maximum peak impact energy (RMS) that defines the strongest rhythmic peak of the song for scroll adjustments. | Specialized for controlling scroll speed during intense peaks. |
 | 46 | **Speed at Minimums** | Number Control | Sets the minimum velocity parameter applied during the lowest RMS audio moments. | Advanced: Affects how slow or fast the steps are in quiet parts. |
 | 47 | **Speed at Maximums** | Number Control | Sets the maximum velocity parameter applied during the highest RMS audio moments. | Advanced: Controls the speed of steps during powerful beats. |
 | 48 | **Transition Duration** | Number Control | Determines how long the tool takes to readjust speed when using "Adapt Visual Speed" (point 31). | Controls the smoothness of tempo changes; higher values = smoother, but slower change. |
-| 49 | **Anti-Dizziness Filter** | Number Control | Sets the threshold for applying a speed change. | Advanced. The higher the value, the more stable the speed change; the lower it can produce abrupt cuts and nausea. Also, like BPM, it becomes more reactive and may break the game. If this happens, delete the file and create a new one with different configurations. |
+| 49 | **Anti-Dizziness Filter** | Numeric Control | Sets the threshold for applying a speed change. Advanced. The higher the value, the more stable the speed change; the lower it is, the more abrupt cuts and dizziness can occur. Also, similar to BPM, it becomes more reactive and may break the game. If this happens, delete the file (.scc) and create a new one with different configurations. Sets the approximation value for applying Minimum Speed or Maximum Speed. |
+| 50 | **Enable Dynamic Stop Usage**| Checkbox | Enables the stop function in the step file. Does not apply to the (.sm) file. Enabling it in case of wanting to use this option; depending on the song duration, the final file may corrupt the Stepmania engine or its derivatives. If this happens, delete the file (.scc) and use other configurations. |
+| 51 | **Stop Activation Threshold** | Numeric Control | Determines the minimum reading in the audio signal to apply a stop. The lower it is, the more reactive. |
+| 52 | **Stop Duration** | Numeric Control | Determines the duration of a Stop. Recommended to use a low value. |
 
 #### D. Special Elements and Complexity (Effects, Traps, Mines)
 
@@ -154,10 +157,10 @@ These controls allow adding specific elements typical of rhythm game genres to i
 
 | # | Field | Type | Description | Key Notes |
 | :---: | :---: | :---: | :---: | :---: |
-| 50 - 63 | (Minas, Fakes, Lifts, Potions, Shields, Rays, Hiddens) | Probability / Max Num. Control | Each of these groups controls the probability and maximum number of a specific effect per measure generated. | These are extremely fine-tuning adjustments for creating targeted patterns (e.g., if you want many traps/mines). |
-| 64 | **Enhance Effects and Traps** | Checkbox | Activating this applies advanced special effects to the steps generated by the AI. | Advanced usage; mandatory for activating complex trap mechanisms. |
-| 65 | **Minimum Traps RMS Sensitivity** | Number Control | Sets the minimum required audio energy (RMS) needed for a section to be considered rhythmically notable by the AI when generating traps. | Specialized for traps in quiet sections. |
-| 66 | **Maximum Traps RMS Sensitivity** | Number Control | Sets the maximum peak impact energy (RMS) that defines the strongest rhythmic peak of the song when generating traps. | Specialized for traps during intense peaks. |
+| 53 - 66 | (Minas, Fakes, Lifts, Potions, Shields, Rays, Hiddens) | Probability / Max Num. Control | Each of these groups controls the probability and maximum number of a specific effect per measure generated. | These are extremely fine-tuning adjustments for creating targeted patterns (e.g., if you want many traps/mines). |
+| 67 | **Enhance Effects and Traps** | Checkbox | Activating this applies advanced special effects to the steps generated by the AI. | Advanced usage; mandatory for activating complex trap mechanisms. |
+| 68 | **Minimum Traps RMS Sensitivity** | Number Control | Sets the minimum required audio energy (RMS) needed for a section to be considered rhythmically notable by the AI when generating traps. | Specialized for traps in quiet sections. |
+| 69 | **Maximum Traps RMS Sensitivity** | Number Control | Sets the maximum peak impact energy (RMS) that defines the strongest rhythmic peak of the song when generating traps. | Specialized for traps during intense peaks. |
 
 #### E. Difficulty and Note Density (Spectral Filters & Complexity)
 
@@ -169,19 +172,29 @@ These controls govern the quality and severity of the generated rhythm pattern, 
 
 | # | Field | Type | Description | Key Notes |
 | :---: | :---: | :---: | :---: | :---: |
-| 67 | **Enable Multi-Layer Sample Generation** | Allows the creation of multiple files by taking a percentage of the total steps. | *fill |
-| 68 | **Minimum Initial Sampling** | The percentage of total steps from which the sampling process begins. | It is recommended to set this value between 90% and 95%, which covers the final portion of the song's duration. |
-| 69 | **Total Intermediate Samples** | Defines the number of samples to be generated, starting from the minimum percentage up to 100% of the total duration. | Set this value between 5 and 10 for greater precision. |
-| 70 | **Maximum Hold Duration** | Number Control | Defines the maximum time a sustained step (Hold) can last. | Controls the length of long-held notes. |
-| 71 | **Max Simultaneous Holds** | Number Control | Determines how many held steps can occur at the same time. | Useful for controlling complexity in specific areas (e.g., removing or adding density). |
-| 72 | **Apply Rhythmic Post-Processing to Holders** | Checkbox | Cleans and corrects the AI's base holds to the established configurations. Disabling it produces a "raw" result in the holds. | Recommended to activate for better quality. |
-| 73 | **Generate Jump Sections** | Checkbox | Enables the option of adding more dedicated jump sections into the map. | Use if you are unsatisfied with the current jump frequency. *Reminder: Lowering hold duration is recommended.* |
-| 74 | **Minimum Jumps RMS Sensitivity** | Number Control | Sets the minimum required audio energy (RMS) needed for a section to be considered rhythmically notable by the AI when generating jumps. | Specialized for jumps in quiet sections. |
-| 75 | **Maximum Jumps RMS Sensitivity** | Number Control | Sets the maximum peak impact energy (RMS) that defines the strongest rhythmic peak of the song when generating jumps. | Specialized for jumps during intense peaks. |
-| 76 | **Pack Ceiling Difficulty** | Number Control | Defines the general desired difficulty level for the entire step pack. This is used in calculating the final difficulty rating (point 64). | Sets the artistic intention for the final result. |
-| 77 | **Recalculate Difficulty Dynamically** | Checkbox/Opt. | Allows recalculating the difficulty based on user's manual choices (e.g., BPM, Scroll Min/Max settings). | If disabled, a fixed default configuration is used for difficulty calculation. |
-| 78 | **Minimum RMS Sensitivity (Note Density)** | Number Control | Sets the minimum required audio energy (RMS) needed for a section to be considered rhythmically notable by the AI when calculating note density. | Specialized for controlling notes in quiet sections. |
-| 79 | **Maximum RMS Sensitivity  (Note Density)** | Number Control | Sets the maximum peak impact energy (RMS) that defines the strongest rhythmic peak of the song when calculating note density. | Specialized for controlling notes during intense peaks. |
-| 80 | **Lines per Measure** | Buttons | Increases the number of divisions used when drawing notes in a measure. | Advanced: Impacts both complexity and the final difficulty level. |
-| 81 | **MIN Notes per Measure** | Buttons | The minimum number of notes considered based on low RMS energy levels. | Highly advanced, high impact on difficulty. Experimental feature. |
-| 82 | **MAX Notes per Measure** | Buttons | The maximum number of notes considered based on high RMS energy levels. | Highly advanced, high impact on difficulty. Experimental feature. |
+| 70 | **Enable Multi-Layer Sample Generation** | Checkbox | Allows the creation of multiple files by taking a percentage of the total steps. | Usalo para afinar el mapa si no quieres usar el editor de Stepmania o acelerar el proceso para ajustar las configuraciones que estas buscando. Útil entre más muestras uses y a un porcentaje menor de muestreo (Ej: 90%). |
+| 71 | **Minimum Initial Sampling** | Number Control | The percentage of total steps from which the sampling process begins. | It is recommended to set this value between 90% and 95%, which covers the final portion of the song's duration. |
+| 72 | **Total Intermediate Samples** | Number Control | Defines the number of samples to be generated, starting from the minimum percentage up to 100% of the total duration. | Set this value between 5 and 10 for greater precision. |
+| 73 | **Enable Multi-threaded Execution** | Checkbox | Activa la función de multi núcleo, usando todos los recursos de CPU. | Recomendado activarlo en la función de muestreo o por lotes. |
+| 74 | **Maximum Hold Duration** | Number Control | Defines the maximum time a sustained step (Hold) can last. | Controls the length of long-held notes. |
+| 75 | **Max Simultaneous Holds** | Number Control | Determines how many held steps can occur at the same time. | Useful for controlling complexity in specific areas (e.g., removing or adding density). |
+| 76 | **Apply Rhythmic Post-Processing to Holders** | Checkbox | Cleans and corrects the AI's base holds to the established configurations. Disabling it produces a "raw" result in the holds. | Recommended to activate for better quality. |
+| 77 | **Generate Jump Sections** | Checkbox | Enables the option of adding more dedicated jump sections into the map. | Use if you are unsatisfied with the current jump frequency. *Reminder: Lowering hold duration is recommended.* |
+| 78 | **Minimum Jumps RMS Sensitivity** | Number Control | Sets the minimum required audio energy (RMS) needed for a section to be considered rhythmically notable by the AI when generating jumps. | Specialized for jumps in quiet sections. |
+| 79 | **Maximum Jumps RMS Sensitivity** | Number Control | Sets the maximum peak impact energy (RMS) that defines the strongest rhythmic peak of the song when generating jumps. | Specialized for jumps during intense peaks. |
+| 80 | **Pack Ceiling Difficulty** | Number Control | Defines the general desired difficulty level for the entire step pack. This is used in calculating the final difficulty rating (point 64). | Sets the artistic intention for the final result. |
+| 81 | **Recalculate Difficulty Dynamically** | Checkbox/Opt. | Allows recalculating the difficulty based on user's manual choices (e.g., BPM, Scroll Min/Max settings). | If disabled, a fixed default configuration is used for difficulty calculation. |
+| 82 | **Minimum RMS Sensitivity (Note Density)** | Number Control | Sets the minimum required audio energy (RMS) needed for a section to be considered rhythmically notable by the AI when calculating note density. | Specialized for controlling notes in quiet sections. |
+| 83 | **Maximum RMS Sensitivity  (Note Density)** | Number Control | Sets the maximum peak impact energy (RMS) that defines the strongest rhythmic peak of the song when calculating note density. | Specialized for controlling notes during intense peaks. |
+| 84 | **Lines per Measure** | Buttons | Increases the number of divisions used when drawing notes in a measure. | Advanced: Impacts both complexity and the final difficulty level. |
+| 85 | **MIN Notes per Measure** | Buttons | The minimum number of notes considered based on low RMS energy levels. | Highly advanced, high impact on difficulty. Experimental feature. |
+| 86 | **MAX Notes per Measure** | Buttons | The maximum number of notes considered based on high RMS energy levels. | Highly advanced, high impact on difficulty. Experimental feature. |
+
+#### F. Batch Processing Section (Batch Mode Filters)
+
+| # | Field | Type | Description | Key Notes |
+| :---: | :---: | :---: | :---: | :---: |
+| 87 | **Keyword to Locate Banner** | Text | Assign a word that must be in your banner file name to identify and use it as a banner. It is recommended to configure your files with keywords for easy location. By default, if you do not put anything in this field, during batch processing, the first image found will be taken as the banner in this order of priority (Background, Banner, CdTitle). |
+| 88 | **Keyword to Locate Video** | Text | Assign a word that must be in your video file name to identify and use it as a video. It is recommended to configure your files with keywords for easy location. By default, if you do not put anything in this field, during batch processing, the first video found will be taken. |
+| 89 | **Keyword to Locate Background** | Text | Assign a word that must be in your background file name to identify and use it as a background. It is recommended to configure your files with keywords for easy location. By default, if you do not put anything in this field, during batch processing, the first image found will be taken as the background in this order of priority (Background, Banner, CdTitle). |
+| 90 | **Keyword to Locate CD Title** | Text | Assign a word that must be in your cdtitle file name to identify and use it as a cdtitle. It is recommended to configure your files with keywords for easy location. By default, if you do not put anything in this field, during batch processing, the first image found will be taken as the cdtitle in this order of priority (Background, Banner, CdTitle). |
