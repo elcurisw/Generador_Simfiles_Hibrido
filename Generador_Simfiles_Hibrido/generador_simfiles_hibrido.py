@@ -88,12 +88,19 @@ TEXTOS = {
         "menu_opt_bpm": "Configuración de BPM y Ritmo",
         "menu_opt_fx": "Efectos, Minas y Trampas",
         "menu_opt_filters": "Filtros Espectrales y Dificultad",
+        "menu_opt_batch": "Filtros de Modo por Lotes",
+        "lbl_batch_mode": "--- Parámetros Adicionales del Modo por Lotes ---",
+        "lbl_palabra_banner": "Palabra Clave Para Ubicar Banner (Modo por Lotes)",
+        "lbl_palabra_video": "Palabra Clave Para Ubicar Video (Modo por Lotes)",
+        "lbl_palabra_background": "Palabra Clave Para Ubicar Background (Modo por Lotes)",
+        "lbl_palabra_cdtitle": "Palabra Clave Para Ubicar CdTitle (Modo por Lotes)",
         "btn_graph": "Ajustar Límites en Gráfica Interactiva 📊",
         "lbl_duration": "Duración Máxima (Segundos / 0=Full):",
         "lbl_sec_time": "--- Parámetros Adicionales de la Canción ---",
         "lbl_offset": "Offset de Inicio:",
         "chk_offset_auto": "Detectar Offset Automáticamente (DSP Vol)",
-        "lbl_extension": "Extensión Final Estética (Relativa):",
+        "lbl_percent_aditional_time": "Duración de Tiempo Adicional (Más Notas):",
+        "lbl_extension": "Extensión Final (Solo Estética):",
         "lbl_extension_mode": "Extender por Holders? Minas por default.",
         "lbl_offset_auto_active": "Offset de Inicio: [Automático Activo]",
         "lbl_synchronize_values_graph": "Calcular y Sincronizar Valores",
@@ -116,7 +123,6 @@ TEXTOS = {
         "lbl_bpm_damping_indicator4": "Inmediato (Brusco)",
         "lbl_sec_speed": "--- Parámetros de Scroll Speeds ---",
         "chk_dynamic_speed": "Adaptar Velocidad Visual (Scroll Speeds)",
-        "lbl_speed_loss": "Duración de Tiempo Extendida por Pérdida:",
         "lbl_rms_min_speed": "Sensibilidad RMS Mínimo Scroll:",
         "lbl_rms_max_speed": "Sensibilidad RMS Máximo Scroll:",
         "lbl_speed_min": "Velocidad en Mínimos (Calma):",
@@ -127,6 +133,10 @@ TEXTOS = {
         "lbl_speed_anti_dizzy_indicator2": "Sensible (Riesgo de Mareo)",
         "lbl_speed_anti_dizzy_indicator3": "Cambios Bruscos / Gimmick",
         "lbl_speed_anti_dizzy_indicator4": "Hiper-Reactivo (Inestable)",
+        "lbl_sec_stops": "--- Parámetros de Stops ---",
+        "chk_dynamic_stops": "Activar el uso de Stops Dinámicos",
+        "lbl_stops_umbral": "Umbral de Activación de Stop:",
+        "lbl_stops_duration": "Duración de Stop:",
         "lbl_sec_fx": "--- Parámetros de Efectos y Trampas ---",
         "lbl_prob_mines": "Probabilidad de Minas por compás:",
         "lbl_max_mines": "Máximo Minas por Compás:",
@@ -172,6 +182,7 @@ TEXTOS = {
         "lbl_max_compas_notes_madness": "MAX notas por compas (Dificultad Experto/Locura):",
         "lbl_sec_sampling": "--- Reducción Adaptativa de Mapas (Muestreo) ---",
         "chk_sampling": "Habilitar Generación de Muestras Multi-Capa",
+        "chk_multithread": "Activar ejecución Multi-hilo (Paralelo)",
         "lbl_sampling_min": "Muestreo Inicial Mínimo:",
         "lbl_sampling_num": "Muestras Intermedias Totales (Hasta completar el 100%):",
         "lbl_present_status": "Present Cargado",
@@ -218,6 +229,8 @@ TEXTOS = {
         "console_report_seed": "🔑 HUELLA DIGITAL (SEED): {}\n",
         "console_report_multi": "🚀 Proceso Multi-Capa completado: se exportaron {} archivos simfiles.\n",
         "console_report_standard": "🚀 Proceso Estándar completado: se exportaron 2 archivos simfiles.\n",
+        "console_report_beats": "Beats Ejecutados:",
+        "console_report_bpm_promedio": "BPM Promedio:",
         "lbl_btn_batch_generation": "Procesar Carpetas en Lotes (Masivo)",
         "lbl_masive_file_origin": "Seleccionar Carpeta con Subcarpetas de Canciones",
         "lbl_masive_control_dup": "Control de Duplicados",
@@ -294,12 +307,19 @@ TEXTOS = {
         "menu_opt_bpm": "BPM & Rhythm Configuration",
         "menu_opt_fx": "Effects, Mines & Traps",
         "menu_opt_filters": "Spectral Filters & Difficulty",
+        "menu_opt_batch": "Batch Mode Filters",
+        "lbl_batch_mode": "--- Additional Batch Mode Parameters ---",
+        "lbl_palabra_banner": "Keyword to Locate Banner (Batch Mode)",
+        "lbl_palabra_video": "Keyword to Locate Video (Batch Mode)",
+        "lbl_palabra_background": "Keyword to Locate Background (Batch Mode)",
+        "lbl_palabra_cdtitle": "Keyword to Locate CD Title (Batch Mode)",
         "btn_graph": "Adjust Limits in Interactive Graph 📊",
         "lbl_duration": "Maximum Duration (Seconds / 0=Full):",
         "lbl_sec_time": "--- Additional Song Parameters ---",
         "lbl_offset": "Starting Offset:",
         "chk_offset_auto": "Auto-Detect Offset (DSP Vol)",
-        "lbl_extension": "Aesthetic Final Extension (Relative):",
+        "lbl_percent_aditional_time": "Added Time Percentage (Inference):",
+        "lbl_extension": "Final Extension (Aesthetics Only):",
         "lbl_extension_mode": "Extension by Holders? Mines by Default",
         "lbl_offset_auto_active": "Starting Offset: [Automatic Active]",
         "lbl_synchronize_values_graph": "Calculate and Synchronize Values",
@@ -322,7 +342,6 @@ TEXTOS = {
         "lbl_bpm_damping_indicator4": "Inmmediate (Hard Reaction)",
         "lbl_sec_speed": "--- Scroll Speeds Parameters ---",
         "chk_dynamic_speed": "Adapt Visual Speed (Scroll Speeds)",
-        "lbl_speed_loss": "Extended Time Duration by Loss:",
         "lbl_rms_min_speed": "Minimum Scroll RMS Sensitivity:",
         "lbl_rms_max_speed": "Maximum Scroll RMS Sensitivity:",
         "lbl_speed_min": "Speed at Minimums (Calm):",
@@ -333,6 +352,10 @@ TEXTOS = {
         "lbl_speed_anti_dizzy_indicator2": "Sensitive (Middle Dizzy)",
         "lbl_speed_anti_dizzy_indicator3": "High Sensitive / Gimmick",
         "lbl_speed_anti_dizzy_indicator4": "Hiper-React (Unstable)",
+        "lbl_sec_stops": "--- Stop Parameters ---",
+        "chk_dynamic_stops": "Enable Dynamic Stop Usage",
+        "lbl_stops_umbral": "Stop Activation Threshold:",
+        "lbl_stops_duration": "Stop Duration:",
         "lbl_sec_fx": "--- Effects & Traps Parameters ---",
         "lbl_prob_mines": "Mines Probability per measure:",
         "lbl_max_mines": "Max Mines per Measure:",
@@ -378,6 +401,7 @@ TEXTOS = {
         "lbl_max_compas_notes_madness": "MAX Notes per Measure (Level Challenge/Madness):",
         "lbl_sec_sampling": "--- Adaptive Chart Reduction (Sampling) ---",
         "chk_sampling": "Enable Multi-Layer Sample Generation",
+        "chk_multithread": "Enable Multi-threaded Execution (Parallel)",
         "lbl_sampling_min": "Minimum Initial Sampling:",
         "lbl_sampling_num": "Total Intermediate Samples (To Complete 100%):",
         "lbl_present_status": "Present Loaded",
@@ -424,6 +448,8 @@ TEXTOS = {
         "console_report_seed": "🔑 DIGITAL FINGERPRINT (SEED): {}\n",
         "console_report_multi": "🚀 Multi-Layer Process completed: {} simfiles exported.\n",
         "console_report_standard": "🚀 Standard Process completed: 2 simfiles exported.\n",
+        "console_report_beats": "Detected Beats:",
+        "console_report_bpm_promedio": "Average BPM:",
         "lbl_btn_batch_generation": "Processing Files per Batch (Massive)",
         "lbl_masive_file_origin": "Select Folder with Song Subfolders",
         "lbl_masive_control_dup": "Duplicate Control",
@@ -500,12 +526,19 @@ TEXTOS = {
         "menu_opt_bpm": "Configuração de BPM e Ritmo",
         "menu_opt_fx": "Efeitos, Minas e Armadilhas",
         "menu_opt_filters": "Filtros Espectrais e Dificuldade",
+        "menu_opt_batch": "Filtros do Modo em Lote",
+        "lbl_batch_mode": "--- Parâmetros Adicionais do Modo em Lote ---",
+        "lbl_palabra_banner": "Palavra-chave para localizar o Banner (Modo em Lote)",
+        "lbl_palabra_video": "Palavra-chave para localizar o Vídeo (Modo em Lote)",
+        "lbl_palabra_background": "Palavra-chave para localizar o Fundo/Background (Modo em Lote)",
+        "lbl_palabra_cdtitle": "Palavra-chave para localizar o Título do Álbum (Modo em Lote)",
         "btn_graph": "Ajustar Limites no Gráfico Interativo 📊",
         "lbl_duration": "Duração Máxima (Segundos / 0=Full):",
         "lbl_sec_time": "--- Parámetros Adicionais da Música ---",
         "lbl_offset": "Offset de Início:",
         "chk_offset_auto": "Detectar Offset Automaticamente (DSP Vol)",
-        "lbl_extension": "Extensão Final Estética (Relativa):",
+        "lbl_percent_aditional_time": "Duração do Tempo Estendido por Inferência:",
+        "lbl_extension": "Extensão Final (Somente Estética):",
         "lbl_extension_mode": "Estender por Holders? Minas por padrão.",
         "lbl_offset_auto_active": "Offset de Início: [Automático Ativo]",
         "lbl_synchronize_values_graph": "Calcular e Sincronizar Valores",
@@ -528,7 +561,6 @@ TEXTOS = {
         "lbl_bpm_damping_indicator4": "Imediato (Brusco)",
         "lbl_sec_speed": "--- Parâmetros de Scroll Speeds ---",
         "chk_dynamic_speed": "Adaptar Velocidade Visual (Scroll Speeds)",
-        "lbl_speed_loss": "Duração de Tempo Estendida por Perda:",
         "lbl_rms_min_speed": "Sensibilidade RMS Mínimo Scroll:",
         "lbl_rms_max_speed": "Sensibilidade RMS Máximo Scroll:",
         "lbl_speed_min": "Velocidade no Mínimo (Calma):",
@@ -539,6 +571,10 @@ TEXTOS = {
         "lbl_speed_anti_dizzy_indicator2": "Sensível (Risco de Tontura)",
         "lbl_speed_anti_dizzy_indicator3": "Mudanças Bruscas / Gimmick",
         "lbl_speed_anti_dizzy_indicator4": "Hiper-Reativo (Instável)",
+        "lbl_sec_stops": "--- Parâmetros de Stops ---",
+        "chk_dynamic_stops": "Ativar o uso de Stops Dinâmicos",
+        "lbl_stops_umbral": "Limiar de Ativação de Stop:",
+        "lbl_stops_duration": "Duração do Stop:",
         "lbl_sec_fx": "--- Parâmetros de Efeitos e Armadilhas ---",
         "lbl_prob_mines": "Probabilidade de Minas por compasso:",
         "lbl_max_mines": "Máximo de Minas por Compasso:",
@@ -584,6 +620,7 @@ TEXTOS = {
         "lbl_max_compas_notes_madness": "MÁX notas por compasso (Dificuldade Experto/Loucura):",
         "lbl_sec_sampling": "--- Redução Adaptativa de Mapas (Amostragem) ---",
         "chk_sampling": "Habilitar Geração de Amostras Multi-Camada",
+        "chk_multithread": "Habilitar Execução Multi-thread (Paralela)",
         "lbl_sampling_min": "Amostragem Inicial Mínima:",
         "lbl_sampling_num": "Amostras Intermediárias Totais (Até 100%):",
         "lbl_present_status": "Preset Carregado",
@@ -630,6 +667,8 @@ TEXTOS = {
         "console_report_seed": "🔑 PEGADA DIGITAL (SEED): {}\n",
         "console_report_multi": "🚀 Processo Multi-Camada concluído: {} arquivos simfiles exportados.\n",
         "console_report_standard": "🚀 Processo Padrão concluído: 2 arquivos simfiles exportados.\n",
+        "console_report_beats": "Batidas Executadas:",
+        "console_report_bpm_promedio": "Média de BPM:",
         "lbl_btn_batch_generation": "Processar Pastas em Lotes (Massivo)",
         "lbl_masive_file_origin": "Selecionar Pasta com Subpastas de Músicas",
         "lbl_masive_control_dup": "Controle de Duplicados",
@@ -706,12 +745,19 @@ TEXTOS = {
         "menu_opt_bpm": "BPMとリズムの設定",
         "menu_opt_fx": "エフェクト・ボム・トラップ",
         "menu_opt_filters": "スペクトルフィルタと難易度",
+        "menu_opt_batch": "バッチモードフィルター ",
+        "lbl_batch_mode": "--- バッチモードの追加パラメータ --- ",
+        "lbl_palabra_banner": "バナーを検出するためのキーワード（バッチモード）",
+        "lbl_palabra_video": "ビデオを検出するためのキーワード（バッチモード）",
+        "lbl_palabra_background": "バックグラウンドを検出するためのキーワード（バッチモード）",
+        "lbl_palabra_cdtitle": "CDタイトルを検出するためのキーワード（バッチモード）",
         "btn_graph": "インタラクティブグラフで制限を調整 📊",
         "lbl_duration": "最大再生時間 (秒 / 0=フル):",
         "lbl_sec_time": "--- 楽曲の追加パラメータ ---",
         "lbl_offset": "開始オフセット:",
         "chk_offset_auto": "オフセットを自動検出 (DSP Vol)",
-        "lbl_extension": "視覚的・美的な終了延長 (相対的):",
+        "lbl_percent_aditional_time": "推論による拡張時間の長さ：",
+        "lbl_extension": "最終的な延長（美容目的のみ）：",
         "lbl_extension_mode": "フリーズで延長？デフォルトはボム。",
         "lbl_offset_auto_active": "開始オフセット: [自動検出有効]",
         "lbl_synchronize_values_graph": "値を計算して同期",
@@ -734,7 +780,6 @@ TEXTOS = {
         "lbl_bpm_damping_indicator4": "即時 (急激な変化)",
         "lbl_sec_speed": "--- スクロールスピードパラメータ ---",
         "chk_dynamic_speed": "視覚速度を適応 (スクロールスピード変更)",
-        "lbl_speed_loss": "ロスによる延長時間:",
         "lbl_rms_min_speed": "最小スクロールのRMS感度:",
         "lbl_rms_max_speed": "最大スクロールのRMS感度:",
         "lbl_speed_min": "最低速度 (静かな部分):",
@@ -745,6 +790,10 @@ TEXTOS = {
         "lbl_speed_anti_dizzy_indicator2": "敏感 (ややめまいのリスクあり)",
         "lbl_speed_anti_dizzy_indicator3": "急激な変化 / ギミック",
         "lbl_speed_anti_dizzy_indicator4": "過敏 (不安定)",
+        "lbl_sec_stops": "--- ストップパラメータ --- (---",
+        "chk_dynamic_stops": "動的ストップの使用を有効にする",
+        "lbl_stops_umbral": "ストップの活性化閾値：",
+        "lbl_stops_duration": "ストップの持続時間：",
         "lbl_sec_fx": "--- エフェクト＆トラップパラメータ ---",
         "lbl_prob_mines": "1小節あたりのボム確率:",
         "lbl_max_mines": "1小節あたりの最大ボム数:",
@@ -790,6 +839,7 @@ TEXTOS = {
         "lbl_max_compas_notes_madness": "1小節あたりの最大ノーツ数 (鬼/悪夢):",
         "lbl_sec_sampling": "--- 譜面の適応的削減 (サンプリング) ---",
         "chk_sampling": "マルチレイヤーサンプル生成を有効化",
+        "chk_multithread": "マルチスレッド実行を有効にする（並列）",
         "lbl_sampling_min": "最小初期サンプリング数:",
         "lbl_sampling_num": "総中間サンプル数 (100%完了まで):",
         "lbl_present_status": "プリセット読み込み完了",
@@ -836,6 +886,8 @@ TEXTOS = {
         "console_report_seed": "🔑 デジタル指紋 (SEED): {}\n",
         "console_report_multi": "🚀 画像レイヤー処理完了: {} 個のsimfileがエクスポートされました。\n",
         "console_report_standard": "🚀 通常処理完了: 2 個のsimfileがエクスポートされました。\n",
+        "console_report_beats": "検出ビート数：",
+        "console_report_bpm_promedio": "平均BPM:",
         "lbl_btn_batch_generation": "フォルダを一括処理 (バッチモード)",
         "lbl_masive_file_origin": "楽曲のサブフォルダを含むフォルダを選択",
         "lbl_masive_control_dup": "重複コントロール",
@@ -912,12 +964,19 @@ TEXTOS = {
         "menu_opt_bpm": "BPM 与节奏配置",
         "menu_opt_fx": "特效、地雷与陷阱",
         "menu_opt_filters": "频谱滤波器与难度",
+        "menu_opt_batch": "批量模式过滤器",
+        "lbl_batch_mode": "--- 批量模式附加参数 ---",
+        "lbl_palabra_banner": "定位横幅关键字（批量模式）",
+        "lbl_palabra_video": "定位视频关键字（批量模式）",
+        "lbl_palabra_background": "定位背景关键字（批量模式）",
+        "lbl_palabra_cdtitle": "定位专辑名称关键字（批量模式）",
         "btn_graph": "在交互式图表中调整限制 📊",
         "lbl_duration": "最大时长 (秒 / 0=完整):",
         "lbl_sec_time": "--- 歌曲附加参数 ---",
         "lbl_offset": "起始偏移:",
         "chk_offset_auto": "自动检测偏移 (DSP 音量)",
-        "lbl_extension": "美学最终延伸 (相对):",
+        "lbl_percent_aditional_time": "推理导致的延长时长：",
+        "lbl_extension": "最终延伸（仅为美观/装饰性）：",
         "lbl_extension_mode": "通过长按键延伸？默认地雷。",
         "lbl_offset_auto_active": "起始偏移: [自动激活]",
         "lbl_synchronize_values_graph": "计算并同步数值",
@@ -940,7 +999,6 @@ TEXTOS = {
         "lbl_bpm_damping_indicator4": "立即 (剧烈)",
         "lbl_sec_speed": "--- 滚动速度参数 (Scroll Speeds) ---",
         "chk_dynamic_speed": "自适应视觉速度 (滚动速度)",
-        "lbl_speed_loss": "因损耗延长的持续时间:",
         "lbl_rms_min_speed": "最小滚动 RMS 敏感度:",
         "lbl_rms_max_speed": "最大滚动 RMS 敏感度:",
         "lbl_speed_min": "最低速度 (平静部分):",
@@ -951,6 +1009,10 @@ TEXTOS = {
         "lbl_speed_anti_dizzy_indicator2": "敏感 (有眩晕风险)",
         "lbl_speed_anti_dizzy_indicator3": "剧烈变化 / 噱头",
         "lbl_speed_anti_dizzy_indicator4": "超反应式 (不稳定)",
+        "lbl_sec_stops": "--- 停止参数 ---",
+        "chk_dynamic_stops": "启用动态停止功能：",
+        "lbl_stops_umbral": "停止激活阈值：",
+        "lbl_stops_duration": "停止持续时间：",
         "lbl_sec_fx": "--- 特效与陷阱参数 ---",
         "lbl_prob_mines": "每小节地雷概率:",
         "lbl_max_mines": "每小节最大地雷数:",
@@ -996,6 +1058,7 @@ TEXTOS = {
         "lbl_max_compas_notes_madness": "每小节最大音符数 (专家/疯狂难度):",
         "lbl_sec_sampling": "--- 谱面自适应削减 (采样) ---",
         "chk_sampling": "启用多层样本生成",
+        "chk_multithread": "启用多线程执行（并行）",
         "lbl_sampling_min": "最小初始采样:",
         "lbl_sampling_num": "总中间样本数 (直至完成 100%):",
         "lbl_present_status": "预设已加载",
@@ -1042,6 +1105,8 @@ TEXTOS = {
         "console_report_seed": "🔑 数字指纹 (种子): {}\n",
         "console_report_multi": "🚀 多层处理完成: 已导出 {} 个 simfile 文件。\n",
         "console_report_standard": "🚀 标准流程完成: 已导出 2 个 simfile 文件。\n",
+        "console_report_beats": "检测节拍数:",
+        "console_report_bpm_promedio": "平均BPM:",
         "lbl_btn_batch_generation": "批量处理文件夹 (海量)",
         "lbl_masive_file_origin": "选择包含歌曲子文件夹的文件夹",
         "lbl_masive_control_dup": "重复项控制",
@@ -1227,10 +1292,10 @@ class PostProcesadorStepMania:
     @staticmethod
     def recalcular_meter_real(secuencia_pasos, duracion_segundos, dificultad_tag, max_level_chosen, 
                               max_notas_compas=12, extension_final=0.0, custom_params=None, lineas_por_compas=12, bpm=120.0,
-                              factor_escala_muestreo=1.0):
+                              factor_escala_muestreo=1.0, beats_totales=0.0):
         """
         Calcula el METER real basado en el PICO MÁXIMO de densidad (NPS Local) mediante ventanas móviles de 8 compases.
-        CORREGIDO: Escala lineal y exponencialmente el NPS resultante basándose en la capa de muestreo extraída.
+        MODIFICADO: Incorpora beats_totales (beat_actual) para calcular el BPM real efectivo y calibrar el estrés rítmico.
         """
         duracion_efectiva = max(1.0, duracion_segundos - extension_final)
         if not secuencia_pasos or duracion_efectiva <= 0:
@@ -1246,9 +1311,15 @@ class PostProcesadorStepMania:
         nps_promedio_global = total_impactos_global / duracion_efectiva
 
         # ---------------------------------------------------------------------
-        # ESCANEO DE VENTANAS LOCALES (Picos de Densidad Rítmica)
+        # CÁLCULO DE BPM EFECTIVO Y VENTANAS RÍTMICAS BASADAS EN BEATS TOTALES
         # ---------------------------------------------------------------------
-        segundos_por_compas = (60.0 / bpm) * 4.0
+        # Si disponemos de los beats totales reales del flujo, calculamos el BPM promedio exacto de la sesión
+        if beats_totales > 0:
+            bpm_efectivo = (beats_totales / duracion_efectiva) * 60.0
+        else:
+            bpm_efectivo = bpm
+
+        segundos_por_compas = (60.0 / max(10.0, bpm_efectivo)) * 4.0
         lineas_por_bloque = lineas_por_compas * 8
         segundos_por_bloque = segundos_por_compas * 8
         
@@ -1288,11 +1359,8 @@ class PostProcesadorStepMania:
         # Ponderación base de NPS
         nps_ponderado = (nps_maximo_local * 0.70) + (nps_promedio_global * 0.30)
         
-        # --- CONTROL ADAPTATIVO DEL PRECIO DE DIFICULTAD (MUESTREO) ---
-        # Multiplicamos el NPS por el factor de muestreo. Al usar la potencia (1.2)
-        # los mapas muy recortados bajan más agresivamente su nivel (Garantiza escalabilidad jugable)
+        # Control adaptativo del precio de dificultad (Muestreo)
         nps_ponderado = nps_ponderado * (factor_escala_muestreo ** 1.2)
-
         nps_ajustado_base = nps_ponderado * factor_estres_dinamico
 
         PROMEDIO_BASE = 12.0
@@ -1324,15 +1392,17 @@ class PostProcesadorStepMania:
         bloques_barra = "█" * min(30, meter_real)
         espacios_barra = "░" * max(0, (30 - meter_real))
 
-        # 🟢 Reporte rítmico traducido mediante el diccionario global utilizando los formatos parametrizados
+        # Reporte rítmico traducido mediante el diccionario global
         linea_1 = get_translation("console_report_header").format(dificultad_tag.upper(), int(factor_escala_muestreo*100), nps_promedio_global*factor_escala_muestreo)
         linea_2 = get_translation("console_report_meter").format(meter_real, techo_chal)
+        
+        # Información extra opcional para depuración visual en consola acerca de los Beats e impactos procesados
+        linea_stats = f" ├─ {get_translation("console_report_beats")} {beats_totales:.2f} | {get_translation("console_report_bpm_promedio")} {bpm_efectivo:.1f}\n"
         linea_3 = f"└─ [{bloques_barra}{espacios_barra}]\n{'-'*45}\n"
         
-        reporte = linea_1 + linea_2 + linea_3
+        reporte = linea_1 + linea_2 + linea_stats + linea_3
 
         return meter_real, reporte
-
 
 # =====================================================================
 # MOTOR DSP ESPECTRAL (OPTIMIZADO CON RMS ASIMÉTRICOS)
@@ -1430,7 +1500,8 @@ def procesar_ritmo_dinamico(segundo_actual, beat_actual, paso_idx, lineas_objeti
 
     # --- CONSTANTE DE SEGURIDAD ---
     # Definimos un límite inferior para cualquier BPM devuelto (Ej: 20 BPM)
-    MIN_BPM = max(5, np.abs(config_bpm["bajo"]) * 0.5) # Aseguramos que sea positivo y razonable
+    MIN_BPM = max(5, np.abs(config_bpm["bajo"]) * 0.95) # Aseguramos que sea positivo y razonable
+    MAX_BPM = min(300, np.abs(config_bpm["alto"]) * 1.05) #Aseguramos que sea positivo y razonable
 
     if len(rms_bpm) == 0 or paso_idx % max(1, lineas_objetivo // 4) != 0:
         # Si no hay datos de entrada o es un paso que no debe calcularse, retornamos el último valor.
@@ -1470,8 +1541,13 @@ def procesar_ritmo_dinamico(segundo_actual, beat_actual, paso_idx, lineas_objeti
     # Aplicar la restricción de seguridad: el BPM calculado debe ser al menos MIN_BPM
     if bpm_calc < MIN_BPM:
         bpm_calc = MIN_BPM
+    # Aplicar la restricción de seguridad: el BPM calculado debe ser a lo más MAX_BPM
+    elif bpm_calc > MAX_BPM:
+        bpm_calc = MAX_BPM
+    
+    bpm_calc = int(bpm_calc)
 
-    # Filtro de histéresis: Solo registramos el cambio en el Simfile si la marea se desplazó más de 1.5 BPM
+    # Filtro de histéresis: Solo registramos el cambio en el Simfile si la marea se desplazó más de umbral_disparo BPM
     if abs(bpm_calc - ultimo_bpm) > umbral_disparo:
         return round(bpm_calc, 3), f"{beat_actual:.3f}={bpm_calc:.3f}"
         
@@ -1526,6 +1602,45 @@ def procesar_scroll_dinamico(segundo_actual, beat_actual, paso_idx, lineas_objet
         
     return ultima_vel, None
 
+def procesar_stops_dinamicos(segundo_actual, beat_actual, paso_idx, total_pasos_dificultad, 
+                             lineas_objetivo, rms_stop, rms_medio_stop, hop_stop, config_stop):
+    """
+    Fase 0C: Modifica el flujo visual deteniendo el scroll de flechas temporalmente (#STOPS).
+    [OPTIMIZADO]: Implementa un sistema estricto de cooldown basado en su propia duración 
+    para mitigar la concurrencia y saturación de congelamientos visuales en ráfagas.
+    """
+    if len(rms_stop) == 0 or paso_idx % max(1, lineas_objetivo // 4) != 0:
+        return None, 0.0, False
+
+    # --- CONTROL DE CONCURRENCIA Y COOLDOWN EFECTIVO ---
+    ultimo_stop_expira = config_stop.get("ultimo_stop_expira", 0.0)
+    if segundo_actual < ultimo_stop_expira:
+        # Si aún estamos dentro del periodo del Stop activo (Cooldown), 
+        # evitamos procesar o inyectar nuevos comandos y salimos en caliente.
+        return None, 0.0, True  
+
+    f_idx = min(int((segundo_actual * 22050) / hop_stop), len(rms_stop) - 1)
+    
+    f_inicio = max(0, f_idx - 2)
+    f_fin = min(len(rms_stop), f_idx + 3)
+    rms_suavizado = np.mean(rms_stop[f_inicio:f_fin])
+    
+    ratio = rms_suavizado / rms_medio_stop if rms_medio_stop > 0 else 1.0
+    
+    umbral_disparo = config_stop.get("umbral_disparo_stop", 1.80) 
+    duracion_stop_segundos = config_stop.get("duracion_stop_base", 0.25) 
+
+    # --- DISPARO CONDICIONAL LIBRE DE CONGESTIÓN ---
+    if ratio > umbral_disparo:
+        comando_sm_ssc = f"{beat_actual:.3f}={duracion_stop_segundos:.3f}"
+        
+        # Seteamos la expiración bloqueante: tiempo actual + la propia duración del stop
+        config_stop["ultimo_stop_expira"] = segundo_actual + duracion_stop_segundos
+        
+        return comando_sm_ssc, duracion_stop_segundos, True
+        
+    return None, 0.0, False
+
 def inyectar_saltos_espectrales_paso(paso_elegido, ratio_energia, bpm, lineas_por_compas, dificultad_tag, custom_params):
     """
     Fase 2 (Optimizada): Convierte notas simples ('1') en saltos dobles ante transitorios rápidos.
@@ -1560,7 +1675,7 @@ def inyectar_saltos_espectrales_paso(paso_elegido, ratio_energia, bpm, lineas_po
 
     return paso_elegido, 0
 
-def inyectar_trampas_sincronas(paso_elegido, ratio_energia, cfg, custom_params, conteo_compas_fx):
+def inyectar_trampas_sincronas(paso_elegido, ratio_energia, cfg, custom_params, conteo_compas_fx, sm_version=False):
     """
     Fase 3 (RECALIBRADA): Reemplaza notas físicas de forma aleatoria por Minas o FX avanzados.
     Utiliza un diccionario de control de presupuesto por compás para evitar la saturación visual.
@@ -1586,7 +1701,13 @@ def inyectar_trampas_sincronas(paso_elegido, ratio_energia, cfg, custom_params, 
     random.shuffle(tipos_modificadores)
 
     for n_type in tipos_modificadores:
+
         char = n_type["char"]
+
+        # Si es versión SM nativa, omitimos cualquier FX que no sea una Mina (M)
+        if sm_version and char != "M":
+            continue
+
         max_permitido = cfg.get(n_type["key"], 0)
         
         # Si el límite configurado es 0 o ya alcanzamos el presupuesto máximo en este compás, saltar
@@ -1622,21 +1743,22 @@ def ejecutar_bucle_sincrono(config_dificultad, compases_totales, bpm, val_offset
                             dinamico_activo, speeds_activo, custom_params, aplicar_post, max_level_chosen,
                             rms_bpm, rms_medio_bpm, hop_bpm, rms_speed, rms_medio_speed, hop_speed,
                             rms_saltos, rms_medio_saltos, hop_saltos, lista_rms, rms_medio, lista_centroide,
-                            centroide_medio, mel_db, modelo, dispositivo, tokenizer, PostProcesadorStepMania, percent_aditional_time=0.0,
-                            evento_cancelar=None):
+                            centroide_medio, mel_db, modelo, dispositivo, tokenizer, PostProcesadorStepMania,
+                            evento_cancelar=None, sm_version=False, percent_aditional_time=0.0):
     """
     Bucle principal reestructurado para la generación híbrida de flechas en tiempo real.
-    Unifica la inferencia de la IA con el análisis DSP paso a paso para garantizar sincronía.
+    CORREGIDO: Sincronización Chart-Specific (Comandos independientes por dificultad dentro de NOTEDATA)
+    para evitar que los niveles bajos se corten o desincronicen.
     """
     
-    # Inicialización de buffers de control rítmico globales
-    lista_cambios_bpm = [f"0.000={bpm:.3f}"]
-    lista_cambios_speeds = []
+    # Estructura maestra para almacenar la sincronización individual de cada dificultad
+    sincronizacion_por_dificultad = {}
     mapa_pasos_por_dificultad = {}
     log_metricas_diff = ""
 
-    # Diccionarios de empaquetado para configuraciones rítmicas (Evitan re-calcular en el ciclo)
+    # Diccionario base de BPM (Solo lectura)
     dicc_config_bpm = {}
+
     if dinamico_activo:
         min_bpm_dinamico = custom_params.get("min_bpm_dinamico", 0)
         max_bpm_dinamico = custom_params.get("max_bpm_dinamico", 0)
@@ -1659,11 +1781,12 @@ def ejecutar_bucle_sincrono(config_dificultad, compases_totales, bpm, val_offset
             "umbral_disparo_custom_bpm" : custom_params.get("umbral_disparo_custom_bpm", 4.0)
         }
 
+    # Diccionario base de Scroll Speed (Solo lectura)
     dicc_config_speed = {}
-    if speeds_activo:
+    # Ahora excluimos esta función de la version sm
+    if speeds_activo and not sm_version:
         VELOCIDAD_MINIMA = custom_params.get("speed_min_custom", 0.70)
         VELOCIDAD_MAXIMA = custom_params.get("speed_max_custom", 1.40)
-        duracion_transicion = custom_params.get("speed_trans_custom", 2.0)
         r_min_speed = custom_params.get("speed_rms_min", 0.5)
         r_max_speed = custom_params.get("speed_rms_max", 1.5)
         r_diff_speed = (r_max_speed - r_min_speed) if (r_max_speed - r_min_speed) != 0 else 1.0
@@ -1674,99 +1797,151 @@ def ejecutar_bucle_sincrono(config_dificultad, compases_totales, bpm, val_offset
             "speed_trans_custom": custom_params.get("speed_trans_custom", 0.05) ,
             "umbral_disparo_custom": custom_params.get("speed_umbral_disparo", 0.50)
         }
-    # Bucle por cada dificultad configurada
+
     for diff, cfg in config_dificultad.items():
+        local_cambios_bpm = [f"0.000={bpm:.3f}"]
+        local_cambios_speeds = []
+        local_cambios_stops = []
+        
+        dicc_config_stop = {
+            "ultimo_stop_expira": 0.0,
+            "umbral_disparo_stop": custom_params.get("stop_umbral_disparo", 1.80),
+            "duracion_stop_base": custom_params.get("stop_duracion_base", 0.25)
+        }
+
         pasos_finales_ia = []
         lineas_objetivo = cfg["lineas_por_compas"]
+        porcentaje_tamano_capa = custom_params.get("porcentaje_tamano", 1.0)
 
-        porcentaje = custom_params.get("porcentaje_tamano", 1.0)
-
-        total_pasos_dificultad = int((compases_totales * lineas_objetivo) * porcentaje)
-
-        '''
-        Sección adicional para controlar los pasos de inferencia artificial, es decir fuera del límite de lo que 
-        dura la canción original, debido a la pérdida por los aceleradores de BPM y Scroll Speed Dinámicos
-
-        Del total se agregó un porcentaje si se configuró la opción en la sección de Scroll Speeds, además se 
-        ve influidó por el tamaño de la muestra si también se usa este modificador.
-
-        Estos pasos adicionales, no deben ser tratados por los silencios ya que se omiten por defecto al no ser 
-        interprétados usando música, siempre son silencios, sino inferidos fuera de ella.
-        '''
-        total_pasos_adicionales = int(total_pasos_dificultad * percent_aditional_time * porcentaje)
+        total_pasos_base = int((compases_totales * lineas_objetivo) * porcentaje_tamano_capa)
+        total_pasos_dinamicos = total_pasos_base
+        total_pasos_adicionales = int(total_pasos_dinamicos * percent_aditional_time)
 
         segundo_actual = val_offset 
         beat_actual = 0.0
         ultimo_bpm_aplicado = bpm
         ultima_velocidad_aplicada = -1.0
-
         cooldown_saltos = 0 
-
-        # Diccionario de control para el presupuesto de trampas de este compás
         conteo_compas_fx = {"M": 0, "F": 0, "L": 0, "P": 0, "D": 0, "S": 0, "H": 0}
 
-        for paso_idx in range(total_pasos_dificultad):
-
+        # --- NUEVAS VARIABLES DE CONTROL DE TIEMPO ABSOLUTO ---
+        tiempo_ultimo_cambio_bpm = val_offset
+        beat_ultimo_cambio_bpm = 0.0
+        
+        paso_idx = 0
+        while paso_idx < total_pasos_dinamicos:
             if evento_cancelar and evento_cancelar.is_set():
                 raise InterruptedError(get_translation("msg_interrupted_cancel"))
 
             beats_por_paso = 4.0 / lineas_objetivo
             
-            # --- REINICIO AUTOMÁTICO DE PRESUPUESTO POR COMPÁS ---
             if paso_idx % lineas_objetivo == 0:
                 conteo_compas_fx = {"M": 0, "F": 0, "L": 0, "P": 0, "D": 0, "S": 0, "H": 0}
 
             # -----------------------------------------------------------------
-            # FASE 0: VALIDACIÓN DE TEMPO Y VELOCIDADES (CHECKBOXES DE RITMO)
+            # FASE 0: EVALUACIÓN Y CONTROL DE STOPS
             # -----------------------------------------------------------------
-            if dinamico_activo:
-                #from dsp_synchronous_engine import procesar_ritmo_dinamico
+            stops_activo = custom_params.get("aplicar_stops_dinamicos", True)
+            stop_omitir_fases = False
+            cambio_stop_str = None
+            duracion_stop_retardo = 0.0
+
+            if stops_activo and not sm_version:
+                cambio_stop_str, duracion_stop_retardo, stop_omitir_fases = procesar_stops_dinamicos(
+                    segundo_actual, beat_actual, paso_idx, total_pasos_dinamicos,
+                    lineas_objetivo, rms_speed, rms_medio_speed, hop_speed, dicc_config_stop
+                )
+                if cambio_stop_str:
+                    local_cambios_stops.append(cambio_stop_str)
+                    
+                    # El retraso del stop se añade al acumulador global y al marcador de origen
+                    segundo_actual += duracion_stop_retardo
+                    tiempo_ultimo_cambio_bpm += duracion_stop_retardo
+                    
+                    segundos_por_un_paso_base = (60.0 / ultimo_bpm_aplicado) * beats_por_paso
+                    if segundos_por_un_paso_base > 0:
+                        pasos_descontados = int(round(duracion_stop_retardo / segundos_por_un_paso_base))
+                        total_pasos_dinamicos = max(paso_idx + 1, total_pasos_dinamicos - pasos_descontados)
+                        total_pasos_adicionales = int(total_pasos_dinamicos * percent_aditional_time)
+
+            # -----------------------------------------------------------------
+            # FASE 0.1: VALIDACIÓN DE TEMPO (INTERPOLACIÓN ABSOLUTA DE TIME)
+            # -----------------------------------------------------------------
+            if dinamico_activo and not stop_omitir_fases:
+                bpm_anterior = ultimo_bpm_aplicado
                 ultimo_bpm_aplicado, cambio_bpm_str = procesar_ritmo_dinamico(
                     segundo_actual, beat_actual, paso_idx, lineas_objetivo, 
                     rms_bpm, rms_medio_bpm, hop_bpm, ultimo_bpm_aplicado, dicc_config_bpm
                 )
                 if cambio_bpm_str:
-                    lista_cambios_bpm.append(cambio_bpm_str)
+                    local_cambios_bpm.append(cambio_bpm_str)
+                    # Cortamos la línea temporal e integramos el tiempo transcurrido con el BPM viejo
+                    beats_recorridos_en_tramo = beat_actual - beat_ultimo_cambio_bpm
+                    tiempo_ultimo_cambio_bpm += (beats_recorridos_en_tramo * 60.0) / bpm_anterior
+                    beat_ultimo_cambio_bpm = beat_actual
 
-            if speeds_activo:
-                #from dsp_synchronous_engine import procesar_scroll_dinamico
+            # --- FÓRMULA DE INTERPOLACIÓN ABSOLUTA MATEMÁTICA ---
+            # En lugar de sumar flotantes pequeños de forma iterativa, calculamos el segundo exacto
+            # midiendo la distancia en Beats desde el último cambio de tempo registrado.
+            if stop_omitir_fases:
+                beats_por_paso = 0.0
+            else:
+                beats_desde_cambio = (beat_actual + beats_por_paso) - beat_ultimo_cambio_bpm
+                segundo_actual = tiempo_ultimo_cambio_bpm + (beats_desde_cambio * 60.0) / ultimo_bpm_aplicado
+
+            # -----------------------------------------------------------------
+            # EVALUACIÓN DE SCROLL SPEED
+            # -----------------------------------------------------------------
+            if speeds_activo and not stop_omitir_fases and not sm_version:
+                velocidad_anterior = ultima_velocidad_aplicada if ultima_velocidad_aplicada > 0 else 1.0
+                
                 ultima_velocidad_aplicada, cambio_speed_str = procesar_scroll_dinamico(
                     segundo_actual, beat_actual, paso_idx, lineas_objetivo, 
                     rms_speed, rms_medio_speed, hop_speed, ultima_velocidad_aplicada, dicc_config_speed
                 )
                 if cambio_speed_str:
-                    lista_cambios_speeds.append(cambio_speed_str)
+                    local_cambios_speeds.append(cambio_speed_str)
+                    
+                    diferencial_velocidad = ultima_velocidad_aplicada - velocidad_anterior
+                    if diferencial_velocidad > 0.15:
+                        segundos_por_un_paso_base = (60.0 / ultimo_bpm_aplicado) * (4.0 / lineas_objetivo)
+                        if segundos_por_un_paso_base > 0:
+                            factor_sensibilidad = custom_params.get("speed_umbral_disparo", 0.50)
+                            tiempo_perdido_estimado = 0.05 * (1.0 / max(0.1, factor_sensibilidad)) * diferencial_velocidad
+                            pasos_adicionales_en_caliente = int(round(tiempo_perdido_estimado / segundos_por_un_paso_base))
+                            
+                            if (total_pasos_dinamicos + pasos_adicionales_en_caliente) < (total_pasos_base * 1.05):
+                                total_pasos_dinamicos += pasos_adicionales_en_caliente
+                                total_pasos_adicionales = int(total_pasos_dinamicos * percent_aditional_time)
 
-            segundos_por_paso = (60.0 / ultimo_bpm_aplicado) * beats_por_paso
-
+            #segundos_por_paso = (60.0 / ultimo_bpm_aplicado) * beats_por_paso
+            
+            if stop_omitir_fases:
+                segundos_por_paso = 0.0
+                beats_por_paso = 0.0
+            else:
+                segundos_por_paso = (60.0 / ultimo_bpm_aplicado) * beats_por_paso
+            
             # -----------------------------------------------------------------
-            # 🔥 FASE 0.5 Y 1 UNIFICADAS: FILTRO DE SILENCIO E INFERENCIA IA 🔥
+            # FASE 0.5 Y 1: FILTRO DE SILENCIO E INFERENCIA IA
             # -----------------------------------------------------------------
             frame_idx = min(int((segundo_actual / duracion) * total_frames), total_frames - 1)
             f_rms_eval = max(0, min(frame_idx, len(lista_rms) - 1))
-            
-            # Calculamos la energía relativa en este instante exacto de la canción
             ratio_energia_actual = lista_rms[f_rms_eval] / rms_medio if len(lista_rms) > 0 else 1.0
             
-            # Umbral de silencio configurado desde la interfaz gráfica
             UMBRAL_SILENCIO = custom_params.get("umbral_silencios", 0.05)
             activate_umbral_silencio = custom_params.get("activar_umbral_silencios", False)
             saltos_activos = custom_params.get("activar_secciones_saltos", False)
             
-            if activate_umbral_silencio == True and ratio_energia_actual < UMBRAL_SILENCIO and paso_idx < abs(total_pasos_dificultad - total_pasos_adicionales):
-                # [CORRECCIÓN CRÍTICA]: Si el volumen está por debajo del umbral, forzamos silencio absoluto
-                # Además no debe pertencer al rango de inferencia artificial
+            # Verificamos que la función de silencio solo afecte a la cantidad de pasos de audio real y no al porcentaje de inferencia adicional, además adaptamos el sistema a la mecánica dinámica
+            if activate_umbral_silencio == True and ratio_energia_actual < UMBRAL_SILENCIO and paso_idx < abs(total_pasos_dinamicos - total_pasos_adicionales):
                 paso_elegido = "0000"
-                cooldown_saltos = 0  # Reseteamos cooldown en zonas muertas
+                cooldown_saltos = 0  
             elif saltos_activos and cooldown_saltos > 0:
-                # Respetamos el enfriamiento por ráfaga de saltos
                 paso_elegido = "0000"
                 cooldown_saltos -= 1
             else:
-                # Si desactivan el checkbox, purgamos cualquier cooldown colgado
                 cooldown_saltos = 0 
-                
-                # Control de densidad nativo de la IA para notas consecutivas
                 if paso_idx > 0 and pasos_finales_ia and pasos_finales_ia[-1] != "0000":
                     limite_densidad = {"Easy": 0.40, "Medium": 0.30, "Hard": 0.15, "Challenge": 0.05}
                     if random.random() < limite_densidad[diff]:
@@ -1802,45 +1977,40 @@ def ejecutar_bucle_sincrono(config_dificultad, compases_totales, bpm, val_offset
                     paso_elegido = "".join(tokenizer.decode_id(prediccion))
 
             # -----------------------------------------------------------------
-            # FASE 2 & 3: COMPLEMENTOS DSP SÍNCRONOS (CHECKBOXES DE EFECTOS)
+            # FASE 2 & 3: COMPLEMENTOS DSP SÍNCRONOS
             # -----------------------------------------------------------------
             f_idx_saltos = max(0, min(int((segundo_actual * 22050) / hop_saltos), len(rms_saltos) - 1))
             ratio_energia_paso = rms_saltos[f_idx_saltos] / rms_medio_saltos if rms_medio_saltos > 0 else 1.0
 
-            if saltos_activos:
-                #from dsp_synchronous_engine import inyectar_saltos_sincronos
-                # Ejecución de la nueva función reconstructiva de saltos
+            if saltos_activos and not stop_omitir_fases:
                 paso_elegido, pasos_limpieza = inyectar_saltos_espectrales_paso(
                     paso_elegido=paso_elegido, 
                     ratio_energia=ratio_energia_paso, 
                     bpm=ultimo_bpm_aplicado, 
                     lineas_por_compas=lineas_objetivo, 
-                    dificultad_tag=diff, # <--- Enviamos la dificultad actual ("Hard", "Challenge", etc.)
+                    dificultad_tag=diff, 
                     custom_params=custom_params
                 )
-                
-                # Si se generó un salto exitoso, cargamos el cooldown para las iteraciones siguientes
                 if pasos_limpieza > 0:
                     cooldown_saltos = pasos_limpieza
 
-            if custom_params.get("efectos_por_rms", False):
-                #from dsp_synchronous_engine import inyectar_trampas_sincronas
-                if custom_params.get("efectos_por_rms", False):
-                    paso_elegido = inyectar_trampas_sincronas(
-                        paso_elegido=paso_elegido, 
-                        ratio_energia=ratio_energia_paso, 
-                        cfg=cfg, 
-                        custom_params=custom_params,
-                        conteo_compas_fx=conteo_compas_fx 
-                    )
+            if custom_params.get("efectos_por_rms", False) and not stop_omitir_fases:
+                paso_elegido = inyectar_trampas_sincronas(
+                    paso_elegido=paso_elegido, 
+                    ratio_energia=ratio_energia_paso, 
+                    cfg=cfg, 
+                    custom_params=custom_params,
+                    conteo_compas_fx=conteo_compas_fx,
+                    sm_version=sm_version 
+                )
 
-            # Acumulación en el buffer temporal y avance de relojes síncronos
             pasos_finales_ia.append(paso_elegido)
-            segundo_actual += segundos_por_paso
+            #segundo_actual += segundos_por_paso
             beat_actual += beats_por_paso
-
+            paso_idx += 1
+        print(f"diff {diff} total {total_pasos_dinamicos} adicionales {total_pasos_adicionales} paso {paso_idx} segundo {segundo_actual} beat {beat_actual}")
         # -----------------------------------------------------------------
-        # FASE 4: EXTENSIÓN ESTÉTICA Y CORRECCIÓN ANATÓMICA
+        # FASE 4: EXTENSIÓN ESTÉTICA Y FORMATEO
         # -----------------------------------------------------------------
         if aplicar_post:
             pasos_finales_ia = PostProcesadorStepMania.corregir_sintaxis_holds(
@@ -1856,49 +2026,55 @@ def ejecutar_bucle_sincrono(config_dificultad, compases_totales, bpm, val_offset
             extension_mode_by = custom_params.get("extension_mode_by", False) if custom_params else False
             for l_idx in range(compases_extras * lineas_objetivo):
                 if extension_mode_by == True:
-                    if l_idx == 0:
-                        pasos_finales_ia.append("2002")
-                    elif l_idx == (compases_extras * lineas_objetivo) - 1:
-                        pasos_finales_ia.append("3003")
-                    else:
-                        pasos_finales_ia.append("0000")
+                    if l_idx == 0: pasos_finales_ia.append("2002")
+                    elif l_idx == (compases_extras * lineas_objetivo) - 1: pasos_finales_ia.append("3003")
+                    else: pasos_finales_ia.append("0000")
                 else:
-                    if l_idx == (compases_extras * lineas_objetivo) - 1:
-                        pasos_finales_ia.append("M00M")
-                    else:
-                        pasos_finales_ia.append("0000")
+                    if l_idx == (compases_extras * lineas_objetivo) - 1: pasos_finales_ia.append("M00M")
+                    else: pasos_finales_ia.append("0000")
 
-        # Formateo de los bloques de medidas rítmicas del Simfile
         bloque_pasos_texto = ""
         compas_print = []
+        total_pasos_generados = len(pasos_finales_ia)
+
         for idx, paso in enumerate(pasos_finales_ia):
             compas_print.append(paso)
-            if len(compas_print) == lineas_objetivo or idx == len(pasos_finales_ia) - 1:
+            if len(compas_print) == lineas_objetivo or idx == total_pasos_generados - 1:
                 bloque_pasos_texto += "\n".join(compas_print)
-                bloque_pasos_texto += "\n;\n" if idx == len(pasos_finales_ia) - 1 else "\n,\n"
+                bloque_pasos_texto += "\n;\n" if idx == total_pasos_generados - 1 else "\n,\n"
                 compas_print = []
 
         mapa_pasos_por_dificultad[diff] = bloque_pasos_texto
 
-        # Recálculo dinámico del METER real adaptado al tamaño de la muestra
+        # 🚀 GUARDAMOS LA SINCRONIZACIÓN CORRESPONDIENTE A ESTA DIFICULTAD ESPECÍFICA
+        sincronizacion_por_dificultad[diff] = {
+        "bpms": ",\n".join(dict.fromkeys(local_cambios_bpm)),
+        "speeds": ",\n".join(dict.fromkeys(local_cambios_speeds)) if local_cambios_speeds else "",
+        "stops": ",\n".join(dict.fromkeys(local_cambios_stops)) if local_cambios_stops else ""
+        }
+
         if custom_params.get("recalcular_dificultad", False):
-            # Extraemos el porcentaje actual para castigar el NPS proporcionalmente
-            pct_actual = custom_params.get("porcentaje_tamano", 1.0)
-            
             meter_real, texto_reporte = PostProcesadorStepMania.recalcular_meter_real(
-                secuencia_pasos=pasos_finales_ia, duracion_segundos=duracion, dificultad_tag=diff,
-                max_level_chosen=max_level_chosen, max_notas_compas=cfg.get("max_notas_compas", 12),
-                extension_final=extension_final, custom_params=custom_params, lineas_por_compas=lineas_objetivo, bpm=bpm,
-                factor_escala_muestreo=pct_actual 
+            secuencia_pasos=pasos_finales_ia, duracion_segundos=duracion, dificultad_tag=diff,
+            max_level_chosen=max_level_chosen, max_notas_compas=cfg.get("max_notas_compas", 12),
+            extension_final=extension_final, custom_params=custom_params, lineas_por_compas=lineas_objetivo, bpm=bpm,
+            factor_escala_muestreo=porcentaje_tamano_capa, beats_totales=beat_actual  
             )
-            config_dificultad[diff]["meter"] = meter_real
-            log_metricas_diff += texto_reporte
 
-    # Purgar duplicados de las cadenas de sincronización globales
-    bpms_string_line = ",\n".join(dict.fromkeys(lista_cambios_bpm))
-    speeds_string_line = ",\n".join(dict.fromkeys(lista_cambios_speeds)) if lista_cambios_speeds else ""
+        config_dificultad[diff]["meter"] = meter_real
+        log_metricas_diff += texto_reporte
 
-    return mapa_pasos_por_dificultad, bpms_string_line, speeds_string_line, log_metricas_diff
+    # 📁 RETORNO DE ESTRUCTURAS COMPLETA AL CORE
+    # Para mantener compatibilidad con el resto del script externo (Líneas 706-724), pasamos
+    # la sincronización de 'Challenge' como fallback de cabecera, pero adjuntamos el diccionario completo.
+    diff_fallback = "Challenge" if "Challenge" in sincronizacion_por_dificultad else list(sincronizacion_por_dificultad.keys())[-1]
+    
+    bpms_global = sincronizacion_por_dificultad[diff_fallback]["bpms"]
+    speeds_global = sincronizacion_por_dificultad[diff_fallback]["speeds"]
+    stops_global = sincronizacion_por_dificultad[diff_fallback]["stops"]
+    
+    # Inyectamos el diccionario de sincronización detallado dentro del reporte para que el escritor de archivos (.SM/.SSC) lo use
+    return mapa_pasos_por_dificultad, bpms_global, speeds_global, stops_global, (log_metricas_diff, sincronizacion_por_dificultad)
 
 
 # =====================================================================
@@ -2012,23 +2188,23 @@ def generar_simfiles_hibridos(audio_path, checkpoint_path, song_title, max_level
     rms_medio = rms_medio_saltos  # Su respectiva media global
 
     speeds_activo = custom_params.get("aplicar_speeds_dinamicos", False) if custom_params else False
-    # Verificamos si existe una ampliación en la duración por aplicar scroll speeds
-    percent_speed_offset_time = custom_params["percent_aditional_time"] if custom_params and speeds_activo else 0
+    
+    # Verificamos si existe una ampliación en la duración por porcentaje
+    percent_aditional_time = custom_params["percent_aditional_time"] * 0.01 if custom_params else 0.0
     
     # Si utilizamos la duración dada por el usuario > 0
     if duracion_limite > 0.0:
-        #Verificamos si se están utilizando scrolls speeds
-        if speeds_activo:
-            speed_offset_time = 0.1 * percent_speed_offset_time * duracion_limite
-            duracion = duracion_limite + speed_offset_time
-        else:
-            duracion = duracion_limite
+        aditional_time = percent_aditional_time * duracion_limite
+        duracion = duracion_limite + aditional_time
     else: # En caso contrario aumentamos la duración del audio más el aumento por pérdida
-        if speeds_activo:
-            speed_offset_time = 0.1 * percent_speed_offset_time * duracion
-            duracion = duracion + speed_offset_time
-        else: #Redundante pero se entiende que sino existen scrolls se toma la duración auto
-            duracion = duracion
+        aditional_time = percent_aditional_time * duracion
+        duracion = duracion + aditional_time
+
+    '''
+    # Si utilizamos la duración dada por el usuario > 0 se respeta, de lo contrario se usa la del audio real
+    if duracion_limite > 0.0:
+        duracion = duracion_limite
+    '''
 
     #Aplicamos el duplicador de BPM incluyendo su respectivo limitador
     if custom_params and custom_params.get("double_bpm") == True and bpm < custom_params.get("double_bpm_limit"):
@@ -2072,8 +2248,10 @@ def generar_simfiles_hibridos(audio_path, checkpoint_path, song_title, max_level
     # Validar booleano de posprocesamiento enviado por la interfaz
     aplicar_post = custom_params.get("aplicar_postprocesamiento", True) if custom_params else True
 
-        # --- LÓGICA DE COEXISTENCIA PARA BPMS Y SPEEDS DINÁMICOS ---
+        # --- LÓGICA DE COEXISTENCIA PARA BPMS Y STOPS DINÁMICOS ---
     dinamico_activo = custom_params.get("aplicar_bpm_dinamico", False) if custom_params else False
+
+    stops_activo = custom_params.get("aplicar_stops_dinamicos", False) if custom_params else False
 
     post = PostProcesadorStepMania()
 
@@ -2190,39 +2368,59 @@ def generar_simfiles_hibridos(audio_path, checkpoint_path, song_title, max_level
     elif custom_params["max_notas_compas"] > 32:
         subtitulo_dev = "💀​ HARDCORE DIFFICULT, MAXIMUM DENSITY"
 
-    # ---------------------------------------------------------------------
-    # SISTEMA DE MUESTREO MULTI-ARCHIVO ADAPTATIVO CON LINSPACE
-    # ---------------------------------------------------------------------
+    # =====================================================================
+    # 📁 SISTEMA DE MUESTREO MULTI-ARCHIVO ADAPTATIVO MULTIHILO (OPTIMIZADO)
+    # =====================================================================
     activar_muestreo = custom_params.get("activar_muestreo_multicapa", False)
     
     if activar_muestreo:
         porcentaje_min = custom_params.get("muestreo_pct_min", 0.95)
         num_muestras = custom_params.get("muestreo_num_muestras", 7)
-        # Genera puntos de muestreo distribuidos de manera equidistante hasta el 1.00 (100%)
         porcentajes_muestreo = np.linspace(porcentaje_min, 1.00, num=num_muestras).tolist()
     else:
-        # Caída por defecto si el checkbox está desactivado: solo genera el archivo estándar al 100%
         porcentajes_muestreo = [1.00]
 
     log_metricas_acumulado = ""
-    
-    for idx_m, pct in enumerate(porcentajes_muestreo):
-        # 🔥 NUEVA COMPROBACIÓN ANTES DE CADA CAPA 🔥
+
+    # Función interna que ejecutará cada hilo de forma aislada
+    def procesar_capa_muestreo(pct):
+        # 1. COMPROBACIÓN DE CANCELACIÓN
         if evento_cancelar and evento_cancelar.is_set():
-            raise InterruptedError(get_translation("msg_interrupted_cancel"))
+            return None
 
-        custom_params["porcentaje_tamano"] = pct
-        # Generar las matrices de pasos reducidas/completas de forma síncrona
-        mapa_pasos_por_dificultad, bpms_string_line, speeds_string_line, log_metricas_diff = ejecutar_bucle_sincrono(config_dificultad=config_dificultad, compases_totales=compases_totales,
-            bpm=bpm, val_offset=val_offset, duracion=duracion, total_frames=total_frames, dinamico_activo=dinamico_activo, speeds_activo=speeds_activo, custom_params=custom_params,
-            aplicar_post=aplicar_post, max_level_chosen=max_level_chosen, rms_bpm=rms_bpm, rms_medio_bpm=rms_medio_bpm, hop_bpm=hop_bpm, rms_speed=rms_speed, rms_medio_speed=rms_medio_speed,
-            hop_speed=hop_speed, rms_saltos=rms_saltos, rms_medio_saltos=rms_medio_saltos, hop_saltos=hop_saltos, lista_rms=lista_rms, rms_medio=rms_medio, lista_centroide=lista_centroide,
-            centroide_medio=centroide_medio, mel_db=mel_db, modelo=modelo, dispositivo=dispositivo, tokenizer=tokenizer, PostProcesadorStepMania=post, percent_aditional_time=percent_speed_offset_time)
+        # 2. CLONACIÓN PROFUNDA DE PARÁMETROS PARA EVITAR RICE CONDITIONS
+        import copy
+        params_locales = copy.deepcopy(custom_params)
+        params_locales["porcentaje_tamano"] = pct
 
-    # =====================================================================
-    # 📁 PLANTILLA DE EMPAQUETADO AUTOMÁTICO PARA STEPMANIA / OUTFOX
-    # =====================================================================
-        # --- ASIGNACIÓN DE SUFIJOS DE SALIDA SEGÚN CONFIGURACIÓN ---
+        # 3. EJECUCIÓN SÍNCRONA DE MATRICES (VERSIÓN SSC)
+        mapa_pasos_scc, _, _, _, datos_scc = ejecutar_bucle_sincrono(
+            config_dificultad=copy.deepcopy(config_dificultad), compases_totales=compases_totales,
+            bpm=bpm, val_offset=val_offset, duracion=duracion, total_frames=total_frames, 
+            dinamico_activo=dinamico_activo, speeds_activo=speeds_activo, custom_params=params_locales,
+            aplicar_post=aplicar_post, max_level_chosen=max_level_chosen, rms_bpm=rms_bpm, rms_medio_bpm=rms_medio_bpm, 
+            hop_bpm=hop_bpm, rms_speed=rms_speed, rms_medio_speed=rms_medio_speed, hop_speed=hop_speed, 
+            rms_saltos=rms_saltos, rms_medio_saltos=rms_medio_saltos, hop_saltos=hop_saltos, lista_rms=lista_rms, 
+            rms_medio=rms_medio, lista_centroide=lista_centroide, centroide_medio=centroide_medio, mel_db=mel_db, 
+            modelo=modelo, dispositivo=dispositivo, tokenizer=tokenizer, PostProcesadorStepMania=post, 
+            sm_version=False, percent_aditional_time=percent_aditional_time
+        )
+        log_diff_scc, sincro_diff_scc = datos_scc
+
+        # 4. EJECUCIÓN SÍNCRONA DE MATRICES (VERSIÓN SM)
+        mapa_pasos_sm, bpms_sm, _, _, datos_sm = ejecutar_bucle_sincrono(
+            config_dificultad=copy.deepcopy(config_dificultad), compases_totales=compases_totales,
+            bpm=bpm, val_offset=val_offset, duracion=duracion, total_frames=total_frames, 
+            dinamico_activo=dinamico_activo, speeds_activo=speeds_activo, custom_params=params_locales,
+            aplicar_post=aplicar_post, max_level_chosen=max_level_chosen, rms_bpm=rms_bpm, rms_medio_bpm=rms_medio_bpm, 
+            hop_bpm=hop_bpm, rms_speed=rms_speed, rms_medio_speed=rms_medio_speed, hop_speed=hop_speed, 
+            rms_saltos=rms_saltos, rms_medio_saltos=rms_medio_saltos, hop_saltos=hop_saltos, lista_rms=lista_rms, 
+            rms_medio=rms_medio, lista_centroide=lista_centroide, centroide_medio=centroide_medio, mel_db=mel_db, 
+            modelo=modelo, dispositivo=dispositivo, tokenizer=tokenizer, PostProcesadorStepMania=post, 
+            sm_version=True, percent_aditional_time=percent_aditional_time
+        )
+
+        # 5. ASIGNACIÓN DE NOMBRES Y SUFIJOS ESPECÍFICOS DE LA CAPA
         if activar_muestreo:
             sufijo_tamano = f"size_{int(round(pct*100))}"
             titulo_simfile = f"{song_title} ({int(round(pct*100))}% Size)"
@@ -2237,48 +2435,70 @@ def generar_simfiles_hibridos(audio_path, checkpoint_path, song_title, max_level
         output_sm = os.path.join(carpeta_pack_final, f"{name_output}.sm")
         output_ssc = os.path.join(carpeta_pack_final, f"{name_output}.ssc")
 
-        # --- ESCRITURA DEL ARCHIVO .SM INDIVIDUAL ---
+        # 6. ESCRITURA EN DISCO DEL ARCHIVO .SM
         with open(output_sm, "w", encoding="utf-8") as f:
             f.write(f"#TITLE:{titulo_simfile};\n#SUBTITLE:{subtitulo};\n")
             f.write(f"#ARTIST:{artist_name};\n#CREDIT:AI_Engine_GSH;\n")
             f.write(f"#MUSIC:{new_audio_name};\n#BANNER:{new_banner_name};\n#BACKGROUND:{new_background_name};\n#CDTITLE:{new_cdtitle_name};\n")
             f.write(f"#VIDEO:{new_video_name};\n")
             f.write(f"#OFFSET:-{val_offset:.3f};\n") 
-            f.write(f"#BPMS:{bpms_string_line};\n")
+            f.write(f"#BPMS:{bpms_sm};\n")
             f.write(f"#BGCHANGES:{bg_changes_line};\n\n")
             
-            for diff, bloque in mapa_pasos_por_dificultad.items():
+            for diff in mapa_pasos_sm.keys():
                 f.write(f"#NOTES:\n dance-single:\n AI_DSP_Hybrid_Engine:\n {diff}:\n {config_dificultad[diff]['meter']}:\n 0.1,0.1,0.1,0.1,0.1:\n")
-                f.write(bloque)
+                f.write(mapa_pasos_sm[diff])
                 f.write("\n")
 
-        chart_name = "DEATHSTREAM" if custom_params.get("max_notas_compas", 0) > 20 else "AI_Engine"
-
-        # --- ESCRITURA DEL ARCHIVO .SSC INDIVIDUAL ---
+        # 7. ESCRITURA EN DISCO DEL ARCHIVO .SSC
+        chart_name = "DEATHSTREAM" if params_locales.get("max_notas_compas", 0) > 20 else "AI_Engine"
         with open(output_ssc, "w", encoding="utf-8") as f:
             f.write(f"#VERSION:0.83;\n#TITLE:{titulo_simfile};\n#SUBTITLE:{subtitulo};\n")
             f.write(f"#ARTIST:{artist_name};\n")
             f.write(f"#MUSIC:{new_audio_name};\n#BANNER:{new_banner_name};\n#BACKGROUND:{new_background_name};\n#CDTITLE:{new_cdtitle_name};\n")
             f.write(f"#VIDEO:{new_video_name};\n")
             f.write(f"#OFFSET:-{val_offset:.3f};\n") 
-            f.write(f"#BPMS:{bpms_string_line};\n#COMBOLINK:1;\n")
-
-            if speeds_activo and speeds_string_line:
-                f.write(f"#SPEEDS:{speeds_string_line};\n")
-
             f.write(f"#BGCHANGES:{bg_changes_line};\n\n")
             
-            for diff, bloque in mapa_pasos_por_dificultad.items():
+            for diff in mapa_pasos_scc.keys():
                 f.write(f"//dance-single - AI_DSP_Hybrid_Engine\n#NOTEDATA:;\n#CHARTNAME:{chart_name};\n#STEPSTYPE:dance-single;\n")
                 f.write(f"#DESCRIPTION:AI_DSP_Hybrid_Engine_Size_{int(round(pct*100))};\n#DIFFICULTY:{diff};\n#METER:{config_dificultad[diff]['meter']};\n")
+                
+                sincro_local = sincro_diff_scc[diff]
+                f.write(f"#BPMS:{sincro_local['bpms']};\n")
+                if sincro_local['stops']: f.write(f"#STOPS:{sincro_local['stops']};\n")
+                if sincro_local['speeds']: f.write(f"#SPEEDS:{sincro_local['speeds']};\n")
+                
                 f.write(f"#RADARVALUES:0.1,0.1,0.1,0.1,0.1;\n#CREDIT:AI_Engine_GSH;\n#NOTES:\n")
-                f.write(bloque)
+                f.write(mapa_pasos_scc[diff])
                 f.write("\n")
-        
+
+        # 8. RETORNAR EL LOG GENERADO POR ESTA CAPA
         if activar_muestreo:
-            log_metricas_acumulado += f"📌 [VERSIÓN {int(round(pct*100))}%] Pasos procesados con éxito.\n"
+            return f"📌 [VERSIÓN {int(round(pct*100))}%] Pasos procesados con éxito en paralelo.\n"
         else:
-            log_metricas_acumulado += log_metricas_diff
+            return log_diff_scc
+
+    # --- DESPACHADOR DEL POOL DE HILOS ADAPTATIVO (MODIFICADO) ---
+    usar_multihilo = custom_params.get("usar_multihilo", True) if custom_params else True
+
+    if usar_multihilo:
+        # Modo histórico: Ejecución agresiva en paralelo usando múltiples núcleos de CPU
+        from concurrent.futures import ThreadPoolExecutor
+        with ThreadPoolExecutor(max_workers=len(porcentajes_muestreo)) as executor:
+            resultados_logs = executor.map(procesar_capa_muestreo, porcentajes_muestreo)
+        
+        # Recopilar los logs devueltos por cada hilo
+        for res_log in resultados_logs:
+            if res_log:
+                log_metricas_acumulado += res_log
+    else:
+        # Modo Seguro / Monohilo: Procesa capa por capa de forma puramente secuencial
+        # Ideal para computadoras de gama baja, evita congelar el sistema operativo.
+        for pct in porcentajes_muestreo:
+            res_log = procesar_capa_muestreo(pct)
+            if res_log:
+                log_metricas_acumulado += res_log
 
     # 🟢 Estructura de logs finales de consola completamente internacionalizados
     log_metricas_acumulado += get_translation("console_report_offset").format(val_offset)
@@ -2608,7 +2828,8 @@ class StepHybridUI(ctk.CTk):
 
         self.menu_presets = ctk.CTkOptionMenu(
             self.contenedor_vertical,
-            values=[get_translation("preset_0"), get_translation("preset_1"), get_translation("preset_2"), get_translation("preset_3"), get_translation("preset_4"), get_translation("preset_5"), get_translation("preset_6"), get_translation("preset_7")],
+            values=[get_translation("preset_0"), get_translation("preset_1"), get_translation("preset_2"), get_translation("preset_3"),
+             get_translation("preset_4"), get_translation("preset_5"), get_translation("preset_6"), get_translation("preset_7")],
             command=self.aplicar_preset_config,
             fg_color="#d35400",
             button_color="#e67e22"
@@ -2646,7 +2867,8 @@ class StepHybridUI(ctk.CTk):
         
         self.menu_apartados = ctk.CTkOptionMenu(
             self.contenedor_vertical, 
-            values=[get_translation("menu_opt_hide"), get_translation("menu_opt_time"), get_translation("menu_opt_bpm"), get_translation("menu_opt_fx"), get_translation("menu_opt_filters")],
+            values=[get_translation("menu_opt_hide"), get_translation("menu_opt_time"), get_translation("menu_opt_bpm"), get_translation("menu_opt_fx"),
+             get_translation("menu_opt_filters"), get_translation("menu_opt_batch")],
             command=self.conmutar_apartados_ui,
             fg_color="#2980b9",
             button_color="#3498db"
@@ -2660,6 +2882,7 @@ class StepHybridUI(ctk.CTk):
         self.apartado_efectos = ctk.CTkFrame(self.contenedor_vertical, fg_color="transparent")
         self.apartado_filtros = ctk.CTkFrame(self.contenedor_vertical, fg_color="transparent")
         self.apartado_tiempo = ctk.CTkFrame(self.contenedor_vertical, fg_color="transparent")
+        self.apartado_modo_batch = ctk.CTkFrame(self.contenedor_vertical, fg_color="transparent")
 
         # --- APARTADO: TIEMPO ---
         self.btn_visualizar_grafico = ctk.CTkButton(self.apartado_tiempo, text=get_translation("btn_graph"), fg_color="#8e44ad", hover_color="#9b59b6", font=ctk.CTkFont(weight="bold"), command=self.abrir_visualizador_audio)
@@ -2686,6 +2909,13 @@ class StepHybridUI(ctk.CTk):
         )
         self.checkbox_offset_auto.select()
 
+        self.label_percent_aditional_time = ctk.CTkLabel(self.apartado_tiempo, text=f"{get_translation("lbl_percent_aditional_time")} 0.0%", font=ctk.CTkFont(weight="bold"))
+        #self.label_percent_aditional_time.pack(pady=2, padx=5)
+        self.slider_percent_aditional_time = ctk.CTkSlider(self.apartado_tiempo, from_=0.0, to=15.0, number_of_steps=60, width=340, 
+            command=lambda v: self.label_percent_aditional_time.configure(text=f"{get_translation("lbl_percent_aditional_time")} {v:.2f}%" if v > 0 else f"{get_translation("lbl_percent_aditional_time")} 0.0%"))
+        #self.slider_percent_aditional_time.pack(pady=2, padx=5)
+        self.slider_percent_aditional_time.set(0.0)
+
         # === Extensión final de la canción ===
         self.label_extension = ctk.CTkLabel(self.apartado_tiempo, text=f"{get_translation("lbl_extension")} 0.0 s", font=ctk.CTkFont(weight="bold"))
         self.slider_extension = ctk.CTkSlider(self.apartado_tiempo, from_=0.0, to=30.0, number_of_steps=300, width=340, command=self.actualizar_texto_extension)
@@ -2700,6 +2930,7 @@ class StepHybridUI(ctk.CTk):
         widgets_tiempo = [
             self.btn_visualizar_grafico, self.label_duracion, self.entry_duracion,
             self.label_seccion_adv_tiempo, self.label_offset, self.slider_offset, self.frame_offset_botones, self.checkbox_offset_auto,
+            self.label_percent_aditional_time, self.slider_percent_aditional_time,
             self.label_extension, self.slider_extension, self.checkbox_extension_mode
             ]
         for w in widgets_tiempo: 
@@ -2863,11 +3094,6 @@ class StepHybridUI(ctk.CTk):
         
         # CONTENEDOR DE SCROLL SPEED
         self.frame_scroll_speed_dinamico = ctk.CTkFrame(self.apartado_bpm, fg_color="transparent")
-        self.label_speed_offset_time = ctk.CTkLabel(self.frame_scroll_speed_dinamico, text=f"{get_translation("lbl_speed_loss")} 0.15%", font=ctk.CTkFont(weight="bold"))
-        self.label_speed_offset_time.pack(pady=2, padx=5)
-        self.slider_speed_offset_time = ctk.CTkSlider(self.frame_scroll_speed_dinamico, from_=0.0, to=5.0, number_of_steps=500, width=340, command=lambda v: self.label_speed_offset_time.configure(text=f"{get_translation("lbl_speed_loss")} {v:.2f}%" if v > 0 else f"{get_translation("lbl_speed_loss")} 0%"))
-        self.slider_speed_offset_time.pack(pady=2, padx=5)
-        self.slider_speed_offset_time.set(0.15)
 
         self.label_rms_min_speed = ctk.CTkLabel(self.frame_scroll_speed_dinamico, text=f"{get_translation("lbl_rms_min_speed")} 0.50", font=ctk.CTkFont(weight="bold"))
         self.label_rms_min_speed.pack(pady=2, padx=5)
@@ -2913,9 +3139,36 @@ class StepHybridUI(ctk.CTk):
         self.slider_speed_umbral.pack(pady=2, padx=5)
         self.slider_speed_umbral.set(0.50)
 
+
+        # CONTENEDOR STOPS DINAMICO
+        self.label_seccion_adv_stops = ctk.CTkLabel(self.apartado_bpm, text=get_translation("lbl_sec_stops"), font=ctk.CTkFont(size=13, weight="bold", slant="italic"), text_color="#E6CDCF")
+        
+        self.checkbox_stops_dinamico = ctk.CTkCheckBox(self.apartado_bpm, text=get_translation("chk_dynamic_stops"), command=self.gestionar_exclusivad_stops)
+        self.checkbox_stops_dinamico.deselect()
+
+        self.frame_stops_dinamico = ctk.CTkFrame(self.apartado_bpm, fg_color="transparent")
+
+        self.label_stops_umbral = ctk.CTkLabel(self.frame_stops_dinamico, text=f"{get_translation("lbl_stops_umbral")} 1.5", font=ctk.CTkFont(weight="bold"))
+        self.label_stops_umbral.pack(pady=2, padx=5)
+        self.slider_stops_umbral = ctk.CTkSlider(
+            self.frame_stops_dinamico, from_=0.05, to=3.00, number_of_steps=59, width=340, 
+            command=lambda v: self.label_stops_umbral.configure(text=f"{get_translation("lbl_stops_umbral")} {float(v):.2f}")
+        )
+        self.slider_stops_umbral.pack(pady=2, padx=5)
+        self.slider_stops_umbral.set(1.5)
+
+        self.label_stops_duracion = ctk.CTkLabel(self.frame_stops_dinamico, text=f"{get_translation("lbl_stops_duration")} 0.25s", font=ctk.CTkFont(weight="bold"))
+        self.label_stops_duracion.pack(pady=2, padx=5)
+        self.slider_stops_duracion = ctk.CTkSlider(
+            self.frame_stops_dinamico, from_=0.25, to=2.00, number_of_steps=7, width=340, 
+            command=lambda v: self.label_stops_duracion.configure(text=f"{get_translation("lbl_stops_duration")} {float(v):.2f}s")
+        )
+        self.slider_stops_duracion.pack(pady=2, padx=5)
+        self.slider_stops_duracion.set(0.25)        
+
         widgets_bpm = [
             self.label_seccion_adv_bpm, self.label_bpm, self.frame_controles_bpm, self.frame_bpm_botones, self.checkbox_bpm_doble, self.frame_double_bpm, self.checkbox_bpm_dinamico, #self.frame_bpm_dinamico,
-            self.label_seccion_adv_speed, self.checkbox_speeds_dinamico
+            self.label_seccion_adv_speed, self.checkbox_speeds_dinamico, self.label_seccion_adv_stops, self.checkbox_stops_dinamico
             ]
         for w in widgets_bpm: 
             w.pack(pady=4, padx=20)
@@ -3114,6 +3367,15 @@ class StepHybridUI(ctk.CTk):
         self.checkbox_muestreo.pack(pady=4, padx=20)
         self.checkbox_muestreo.deselect()
 
+        # Checkbox para activar/desactivar MULTIHILO en el muestreo
+        self.checkbox_multihilo_activo = ctk.CTkCheckBox(
+            self.apartado_filtros,
+            text=get_translation("chk_multithread"),
+            text_color="#00FFCC"
+        )
+        self.checkbox_multihilo_activo.select() # Activado por defecto para mantener rendimiento histórico
+        self.checkbox_multihilo_activo.pack(pady=4, padx=20)
+
         # Contenedor dinámico secundario de Sliders
         self.frame_sub_muestreo = ctk.CTkFrame(self.apartado_filtros, fg_color="transparent")
         
@@ -3144,6 +3406,26 @@ class StepHybridUI(ctk.CTk):
             self.label_max_notas_compas_texto, self.frame_max_notas_botones
             ]
         for w in widgets_filtros: 
+            w.pack(pady=4, padx=20)
+
+        # --- APARTADO: MODO POR LOTES ---
+
+        self.label_seccion_adv_modo_batch = ctk.CTkLabel(self.apartado_modo_batch, text=get_translation("lbl_batch_mode"), font=ctk.CTkFont(size=13, weight="bold", slant="italic"), text_color="#A368FF")
+        self.label_palabra_banner = ctk.CTkLabel(self.apartado_modo_batch, text=get_translation("lbl_palabra_banner"), font=ctk.CTkFont(weight="bold"))
+        self.entry_palabra_banner = ctk.CTkEntry(self.apartado_modo_batch, placeholder_text="Ex: banner", width=340)
+        self.label_palabra_video = ctk.CTkLabel(self.apartado_modo_batch, text=get_translation("lbl_palabra_video"), font=ctk.CTkFont(weight="bold"))
+        self.entry_palabra_video = ctk.CTkEntry(self.apartado_modo_batch, placeholder_text="Ex: video", width=340)
+        self.label_palabra_background = ctk.CTkLabel(self.apartado_modo_batch, text=get_translation("lbl_palabra_background"), font=ctk.CTkFont(weight="bold"))
+        self.entry_palabra_background = ctk.CTkEntry(self.apartado_modo_batch, placeholder_text="Ex: background", width=340)
+        self.label_palabra_cdtitle = ctk.CTkLabel(self.apartado_modo_batch, text=get_translation("lbl_palabra_cdtitle"), font=ctk.CTkFont(weight="bold"))
+        self.entry_palabra_cdtitle = ctk.CTkEntry(self.apartado_modo_batch, placeholder_text="Ex: cdtitle", width=340)
+
+        widgets_modo_batch = [
+            self.label_seccion_adv_modo_batch, self.label_palabra_banner, self.entry_palabra_banner,
+            self.label_palabra_video, self.entry_palabra_video, self.label_palabra_background, self.entry_palabra_background,
+            self.label_palabra_cdtitle, self.entry_palabra_cdtitle
+            ]
+        for w in widgets_modo_batch: 
             w.pack(pady=4, padx=20)
 
         #=====================================================================
@@ -3199,6 +3481,7 @@ class StepHybridUI(ctk.CTk):
         self.apartado_bpm.pack_forget()
         self.apartado_efectos.pack_forget()
         self.apartado_filtros.pack_forget()
+        self.apartado_modo_batch.pack_forget()
         if seleccion == get_translation("menu_opt_time"):
             self.apartado_tiempo.pack(fill="x", expand=True, before=self.btn_resetear)
         elif seleccion == get_translation("menu_opt_bpm"):
@@ -3207,6 +3490,8 @@ class StepHybridUI(ctk.CTk):
             self.apartado_efectos.pack(fill="x", expand=True, before=self.btn_resetear)
         elif seleccion == get_translation("menu_opt_filters"):
             self.apartado_filtros.pack(fill="x", expand=True, before=self.btn_resetear)
+        elif seleccion == get_translation("menu_opt_batch"):
+            self.apartado_modo_batch.pack(fill="x", expand=True, before=self.btn_resetear)
 
     def cambiar_idioma_ui(self, seleccion):
         """Alterna el idioma global y reescribe los textos activos en pantalla."""
@@ -3250,9 +3535,11 @@ class StepHybridUI(ctk.CTk):
         
         # 3. Menús y Botones de acción inferior
         self.label_presets.configure(text=get_translation("lbl_presets"))
-        self.menu_presets.configure(values=[get_translation("preset_0"), get_translation("preset_1"), get_translation("preset_2"), get_translation("preset_3"), get_translation("preset_4"), get_translation("preset_5"), get_translation("preset_6"), get_translation("preset_7")])
+        self.menu_presets.configure(values=[get_translation("preset_0"), get_translation("preset_1"), get_translation("preset_2"), get_translation("preset_3"),
+         get_translation("preset_4"), get_translation("preset_5"), get_translation("preset_6"), get_translation("preset_7")])
         self.label_menu_apartados.configure(text=get_translation("lbl_adv_settings"))
-        self.menu_apartados.configure(values=[get_translation("menu_opt_hide"), get_translation("menu_opt_time"), get_translation("menu_opt_bpm"), get_translation("menu_opt_fx"), get_translation("menu_opt_filters")])
+        self.menu_apartados.configure(values=[get_translation("menu_opt_hide"), get_translation("menu_opt_time"), get_translation("menu_opt_bpm"),
+         get_translation("menu_opt_fx"), get_translation("menu_opt_filters"), get_translation("menu_opt_batch")])
         self.btn_cancelar.configure(text=get_translation("btn_cancel_gen"))
         self.btn_resetear.configure(text=get_translation("btn_reset"))
         self.btn_generar.configure(text=get_translation("btn_generate"))
@@ -3270,6 +3557,7 @@ class StepHybridUI(ctk.CTk):
         self.label_seccion_adv_tiempo.configure(text=get_translation("lbl_sec_time"))
         self.checkbox_offset_auto.configure(text=get_translation("chk_offset_auto"))
         self.checkbox_extension_mode.configure(text=get_translation("lbl_extension_mode"))
+        self.label_percent_aditional_time.configure(text=f"{get_translation("lbl_percent_aditional_time")} {self.slider_percent_aditional_time.get():.2f}%")
         
         # 5. Apartado BPM y Speeds
         self.label_seccion_adv_bpm.configure(text=get_translation("lbl_sec_bpm"))
@@ -3285,12 +3573,15 @@ class StepHybridUI(ctk.CTk):
         self.checkbox_speeds_dinamico.configure(text=get_translation("chk_dynamic_speed"))
         self.label_rms_min_bpm.configure(text=f"{get_translation("lbl_rms_min_bpm")} {self.slider_rms_min_bpm.get()}")
         self.label_rms_max_bpm.configure(text=f"{get_translation("lbl_rms_max_bpm")} {self.slider_rms_max_bpm.get()}")
-        self.label_speed_offset_time.configure(text=f"{get_translation("lbl_speed_loss")} {self.slider_speed_offset_time.get():.2f}")
         self.label_rms_min_speed.configure(text=f"{get_translation("lbl_rms_min_speed")} {self.slider_rms_min_speed.get()}")
         self.label_rms_max_speed.configure(text=f"{get_translation("lbl_rms_max_speed")} {self.slider_rms_max_speed.get()}")
         self.label_speed_min.configure(text=f"{get_translation("lbl_speed_min")} {self.slider_speed_min.get()}x")
         self.label_speed_max.configure(text=f"{get_translation("lbl_speed_max")} {self.slider_speed_max.get()}x")
         self.label_speed_trans.configure(text=f"{get_translation("lbl_speed_trans")} {self.slider_speed_trans.get()}")
+        self.label_seccion_adv_stops.configure(text=get_translation("lbl_sec_stops"))
+        self.checkbox_stops_dinamico.configure(text=get_translation("chk_dynamic_stops"))
+        self.label_stops_umbral.configure(text=f"{get_translation("lbl_stops_umbral")} {self.slider_stops_umbral.get():.2f}") 
+        self.label_stops_duracion.configure(text=f"{get_translation("lbl_stops_duration")} {self.slider_stops_duracion.get():.2f}s") 
 
         # 6. Apartado Trampas y FX
         self.label_seccion_adv_trampas.configure(text=get_translation("lbl_sec_fx"))
@@ -3321,7 +3612,7 @@ class StepHybridUI(ctk.CTk):
         self.label_seccion_adv_compas.configure(text=get_translation("lbl_sec_extra_diff"))
         self.label_seccion_muestreo_adv.configure(text=get_translation("lbl_sec_sampling"))
         self.checkbox_muestreo.configure(text=get_translation("chk_sampling"))
-        self.label_muestreo_min.configure(text=f"{get_translation("lbl_sampling_min")} {self.slider_muestreo_min.get()}")
+        self.checkbox_multihilo_activo.configure(text=get_translation("chk_multithread"))
         self.label_muestreo_num.configure(text=f"{get_translation("lbl_sampling_num")} {self.slider_muestreo_num.get():.0f}")
         self.label_max_hold.configure(text=f"{get_translation("lbl_max_hold")} {self.slider_max_hold.get():.0f}")
         self.label_holds_sim.configure(text=f"{get_translation("lbl_sim_holds")} {self.slider_holds_sim.get():.0f}")
@@ -3330,6 +3621,13 @@ class StepHybridUI(ctk.CTk):
         self.label_rms_min.configure(text=f"{get_translation("lbl_rms_min_density")} {self.slider_rms_min.get()}")
         self.label_rms_max.configure(text=f"{get_translation("lbl_rms_max_density")} {self.slider_rms_max.get()}")
 
+        # 8. Apartado Modo por Lotes
+        self.label_seccion_adv_modo_batch.configure(text=get_translation("lbl_batch_mode"))
+        self.label_palabra_banner.configure(text=get_translation("lbl_palabra_banner"))
+        self.label_palabra_video.configure(text=get_translation("lbl_palabra_video"))
+        self.label_palabra_background.configure(text=get_translation("lbl_palabra_background"))
+        self.label_palabra_cdtitle.configure(text=get_translation("lbl_palabra_cdtitle"))
+
         # Refrescar los textos calculados por sliders activos
         self.actualizar_texto_offset(self.slider_offset.get())
         self.actualizar_texto_extension(self.slider_extension.get())
@@ -3337,6 +3635,7 @@ class StepHybridUI(ctk.CTk):
         self.actualizar_texto_umbral_speed(self.slider_speed_umbral.get())
         self.actualizar_valores_interfaz()
         self.actualizar_valores_compas()
+        self.actualizar_texto_muestreo_min(self.slider_muestreo_min.get())
         
         # Cambiar placeholders de entradas de texto de forma segura
         self.label_temp.configure(text=f"{get_translation("lbl_temp")} {self.slider_temp.get():.2f}")
@@ -3359,14 +3658,21 @@ class StepHybridUI(ctk.CTk):
             data = presets_usuario[seleccion]
             
             # Asignación segura de valores guardados a los controles del GUI
+            if data.get("renombrar", False): self.checkbox_rename.select()
+            else: self.checkbox_rename.deselect()
+            
             self.slider_temp.set(data.get("temperatura", 1.3))
             self.label_temp.configure(text=f"{get_translation("lbl_temp")} {self.slider_temp.get()}")
             self.slider_umbral_silencios.set(data.get("umbral_silencios", 0.0))
-            self.label_umbral_silencios.configure(text=f"{get_translation("lbl_umbral_silencio")} {self.slider_umbral_silencios.get()}")
+            self.label_umbral_silencios.configure(text=f"{get_translation("lbl_umbral_silencio")} {self.slider_umbral_silencios.get():.2f}")
             
             if data.get("activar_umbral_silencios", False): self.checkbox_activar_umbral_silencios.select()
             else: self.checkbox_activar_umbral_silencios.deselect()
             
+            #Asignando valores de tiempo
+            self.slider_percent_aditional_time.set(data.get("percent_aditional_time", 0.0))
+            self.label_percent_aditional_time.configure(text=f"{get_translation("lbl_percent_aditional_time")} {self.slider_percent_aditional_time.get():.2f}%")
+
             #Aplicando presents de BPM
             if data.get("bpm_automatico", False): 
                 self.check_auto_bpm.select()
@@ -3376,6 +3682,9 @@ class StepHybridUI(ctk.CTk):
 
             if data.get("double_bpm", False): self.checkbox_bpm_doble.select()
             else: self.checkbox_bpm_doble.deselect()
+
+            self.entry_double_bpm.delete(0, "end")
+            self.entry_double_bpm.insert(0, data.get("double_bpm_limit", 0))
             
             if data.get("aplicar_bpm_dinamico", False): self.checkbox_bpm_dinamico.select()
             else: self.checkbox_bpm_dinamico.deselect()
@@ -3393,8 +3702,6 @@ class StepHybridUI(ctk.CTk):
             if data.get("aplicar_speeds_dinamicos", False): self.checkbox_speeds_dinamico.select()
             else: self.checkbox_speeds_dinamico.deselect()
             
-            self.slider_speed_offset_time.set(data.get("percent_aditional_time", 0.15))
-            self.label_speed_offset_time.configure(text=f"{get_translation("lbl_speed_loss")} {self.slider_speed_offset_time.get():.2f}%")
             self.slider_rms_min_speed.set(data.get("speed_rms_min", 0.5))
             self.label_rms_min_speed.configure(text=f"{get_translation("lbl_rms_min_speed")} {self.slider_rms_min_speed.get():.2f}")
             self.slider_rms_max_speed.set(data.get("speed_rms_max", 1.5))
@@ -3407,7 +3714,16 @@ class StepHybridUI(ctk.CTk):
             self.label_speed_trans.configure(text=f"{get_translation("lbl_speed_trans")} {self.slider_speed_trans.get()} Beats")
             self.slider_speed_umbral.set(data.get("speed_umbral_disparo", 0.50))
             self.label_speed_umbral.configure(text=f"{get_translation("lbl_speed_anti_dizzy")} {self.slider_speed_umbral.get():.2f}")
-            
+
+            #Aplicando presents de stops
+            if data.get("aplicar_stops_dinamicos", False): self.checkbox_stops_dinamico.select()
+            else: self.checkbox_stops_dinamico.deselect()
+        
+            self.slider_stops_umbral.set(data.get("stops_umbral_disparo", 1.50))
+            self.label_stops_duracion.configure(text=f"{get_translation("lbl_stops_umbral")} {self.slider_stops_umbral.get():.2f}") 
+            self.slider_stops_duracion.set(data.get("stops_duracion", 0.25))
+            self.label_stops_duracion.configure(text=f"{get_translation("lbl_stops_duration")} {self.slider_stops_duracion.get():.2f}s") 
+                
             #Aplicando presents de trampas
             self.slider_prob_minas.set(data.get("probabilidad_minas", 35.0))
             self.label_prob_minas.configure(text=f"{get_translation("lbl_prob_mines")} {self.slider_prob_minas.get()}%")
@@ -3478,10 +3794,13 @@ class StepHybridUI(ctk.CTk):
             if data.get("activar_muestreo_multicapa", False): self.checkbox_muestreo.select()
             else: self.checkbox_muestreo.deselect()
 
+            if data.get("usar_multihilo", True): self.checkbox_multihilo_activo.select()
+            else: self.checkbox_multihilo_activo.deselect()
+
             self.slider_muestreo_min.set(data.get("muestreo_pct_min", 0.95))
-            self.label_muestreo_min.configure(text=f"{get_translation("lbl_sampling_min")} {self.slider_muestreo_min.get()}%")
+            self.actualizar_texto_muestreo_min(self.slider_muestreo_min.get())
             self.slider_muestreo_num.set(data.get("muestreo_num_muestras", 6))
-            self.label_muestreo_num.configure(text=f"{get_translation("lbl_sampling_num")} {self.slider_muestreo_num.get()}")
+            self.label_muestreo_num.configure(text=f"{get_translation("lbl_sampling_num")} {self.slider_muestreo_num.get():.0f}")
 
             # Refrescar interfaz de texto
             self.actualizar_texto_amortiguador_bpm(self.slider_bpm_amortiguador.get())
@@ -3712,13 +4031,25 @@ class StepHybridUI(ctk.CTk):
             messagebox.showerror("Error", get_translation("msg_preset_empty"))
             return
 
+        double_bpm_texto = self.entry_double_bpm.get().strip()
+        double_bpm_manual = 0
+        if double_bpm_texto:
+            try:
+                double_bpm_manual = float(double_bpm_texto)
+                if double_bpm_manual < 0: raise ValueError
+            except ValueError:
+                message.showerror("Error", get_translation("msg_error_double_bpm"))
+                return
+
         # Diccionario con el estado exacto aplicando round() según la precisión requerida
         config_actual = {
+            "renombrar": self.checkbox_rename.get(),
             "temperatura": round(self.slider_temp.get(), 2),
             "umbral_silencios": round(self.slider_umbral_silencios.get(), 2),
             "activar_umbral_silencios": self.checkbox_activar_umbral_silencios.get(),
             "bpm_automatico": self.check_auto_bpm.get(),
             "double_bpm": self.checkbox_bpm_doble.get(),
+            "double_bpm_limit": round(double_bpm_manual, 2),
             "aplicar_bpm_dinamico": self.checkbox_bpm_dinamico.get(),
             
             # Ajustes RMS de BPM (Redondeados a 2 decimales)
@@ -3728,7 +4059,7 @@ class StepHybridUI(ctk.CTk):
             "bpm_amortiguador_custom": round(self.slider_bpm_amortiguador.get(), 2),
             
             "aplicar_speeds_dinamicos": self.checkbox_speeds_dinamico.get(),
-            "percent_aditional_time": round(self.slider_speed_offset_time.get(), 2),
+            "percent_aditional_time": round(self.slider_percent_aditional_time.get(), 2),
             
             # Ajustes RMS de Scroll Speeds (Redondeados a 2 decimales)
             "speed_rms_min": round(self.slider_rms_min_speed.get(), 2),
@@ -3737,6 +4068,11 @@ class StepHybridUI(ctk.CTk):
             "speed_max_custom": round(self.slider_speed_max.get(), 2),
             "speed_trans_custom": round(self.slider_speed_trans.get(), 1),
             "speed_umbral_disparo": round(self.slider_speed_umbral.get(), 2),
+
+            #Ajustes de Stops
+            "aplicar_stops_dinamicos": self.checkbox_stops_dinamico.get(),
+            "stops_umbral_disparo": round(self.slider_stops_umbral.get(), 2),
+            "stops_duracion": round(self.slider_stops_duracion.get(), 2),
             
             # Modificadores de notas
             "probabilidad_minas": round(self.slider_prob_minas.get(), 1),
@@ -3771,6 +4107,7 @@ class StepHybridUI(ctk.CTk):
 
             # Variables de muestreo
             "activar_muestreo_multicapa": self.checkbox_muestreo.get(),
+            "usar_multihilo": self.checkbox_multihilo_activo.get(),
             "muestreo_pct_min": round(self.slider_muestreo_min.get(), 2),
             "muestreo_num_muestras": int(self.slider_muestreo_num.get()),
 
@@ -3822,7 +4159,7 @@ class StepHybridUI(ctk.CTk):
         self.label_banner_path.configure(text=get_translation("btn_banner"), text_color="gray")
         self.label_video_path.configure(text=get_translation("btn_video"), text_color="gray")
         self.label_background_path.configure(text=get_translation("btn_background"), text_color="gray")
-        self.label_cdtitle_path.configure(text=get_tranlation("btn_cdtitle"), text_color="gray")
+        self.label_cdtitle_path.configure(text=get_translation("btn_cdtitle"), text_color="gray")
         
         self.entry_title.delete(0, "end")
         self.entry_artist_name.delete(0, "end")
@@ -3830,6 +4167,7 @@ class StepHybridUI(ctk.CTk):
         self.entry_seed.delete(0, "end")
 
         # Resetear Sincronización Básica
+        self.checkbox_multihilo_activo.select()
         self.checkbox_rename.deselect()
 
         # Reset de ui de BPM
@@ -3863,9 +4201,6 @@ class StepHybridUI(ctk.CTk):
         self.checkbox_speeds_dinamico.deselect()
         self.checkbox_speeds_dinamico.configure(state="normal")
 
-        self.label_speed_offset_time.configure(text=f"{get_translation("lbl_speed_loss")} 0.15%")
-        self.slider_speed_offset_time.set(0.15)
-
         self.label_rms_min_speed.configure(text=f"{get_translation("lbl_rms_min_speed")} 0.50")
         self.slider_rms_min_speed.set(0.50)
         self.label_rms_max_speed.configure(text=f"{get_translation("lbl_rms_max_speed")} 1.50")
@@ -3885,9 +4220,19 @@ class StepHybridUI(ctk.CTk):
         self.slider_speed_umbral.set(0.50)
         self.label_speed_umbral.configure(text=f"{get_translation("lbl_speed_anti_dizzy")} 0.50")
 
+        # Reset de ui stops
+        self.checkbox_stops_dinamico.deselect()
+        self.checkbox_stops_dinamico.configure(state="normal")
+        self.slider_stops_umbral.set(1.5)
+        self.label_stops_duracion.configure(text=f"{get_translation("lbl_stops_umbral")} {self.slider_stops_umbral.get():.2f}") 
+        self.slider_stops_duracion.set(0.25)
+        self.label_stops_duracion.configure(text=f"{get_translation("lbl_stops_duration")} {self.slider_stops_duracion.get():.2f}s") 
+
+        # Reset de holds
         self.checkbox_postprocesar.select()
         self.checkbox_recalcular_diff.select() # Reset a activado
         
+        # Reset time params
         self.slider_offset.set(0.000)
         self.label_offset.configure(text=f"{get_translation("lbl_offset")} 0.000 s")
 
@@ -3897,6 +4242,9 @@ class StepHybridUI(ctk.CTk):
         self.slider_extension.set(0.000)
         self.label_extension.configure(text=f"{get_translation("lbl_extension")} 0.0 s")
         self.checkbox_extension_mode.deselect()
+
+        self.slider_percent_aditional_time.set(0.0)
+        self.label_percent_aditional_time.configure(text=f"{get_translation("lbl_percent_aditional_time")} 0.0%")
         
         # Resetear Parámetros Avanzados
         self.slider_temp.set(1.3)
@@ -3997,6 +4345,12 @@ class StepHybridUI(ctk.CTk):
 
         self.checkbox_activar_umbral_silencios.deselect()
 
+        #Reseteo Modo Batch
+        self.entry_palabra_banner.delete(0, "end") 
+        self.entry_palabra_video.delete(0, "end")
+        self.entry_palabra_background.delete(0, "end")
+        self.entry_palabra_cdtitle.delete(0, "end")
+
         self.label_status.configure(text=get_translation("label_status_reset"), text_color="gray")
 
     def actualizar_texto_bpm(self, valor):
@@ -4077,6 +4431,12 @@ class StepHybridUI(ctk.CTk):
         else:
             tipo = get_translation("lbl_speed_anti_dizzy_indicator4")
         self.label_speed_umbral.configure(text=f"{get_translation("lbl_speed_anti_dizzy")} {valor:.2f} ({tipo})")
+
+    def gestionar_exclusivad_stops(self):
+        if self.checkbox_stops_dinamico.get():
+            self.frame_stops_dinamico.pack(pady=5, fill="x", padx=20, after=self.checkbox_stops_dinamico)
+        else:
+            self.frame_stops_dinamico.forget()
 
     def gestionar_exclusividad_saltos(self):
         if self.checkbox_secciones_saltos.get():
@@ -4369,6 +4729,7 @@ class StepHybridUI(ctk.CTk):
 
         params_usuario = {
             "renombrar_archivos": bool(self.checkbox_rename.get()),
+            "percent_aditional_time": float(self.slider_percent_aditional_time.get()),
             "bpm_manual": float(self.slider_bpm.get()),
             "bpm_automatico": bool(self.check_auto_bpm.get()),
             "double_bpm": bool(self.checkbox_bpm_doble.get()),
@@ -4381,13 +4742,15 @@ class StepHybridUI(ctk.CTk):
             "umbral_disparo_custom_bpm": float(self.slider_bpm_umbral.get()),
             "bpm_amortiguador_custom": float(self.slider_bpm_amortiguador.get()), # Marea BPM
             "aplicar_speeds_dinamicos": bool(self.checkbox_speeds_dinamico.get()),
-            "percent_aditional_time": float(self.slider_speed_offset_time.get()),
             "speed_rms_min": float(self.slider_rms_min_speed.get()),
             "speed_rms_max": float(self.slider_rms_max_speed.get()),
             "speed_min_custom": float(self.slider_speed_min.get()),  
             "speed_max_custom": float(self.slider_speed_max.get()),  
             "speed_trans_custom": float(self.slider_speed_trans.get()), # Marea Scroll
             "speed_umbral_disparo": float(self.slider_speed_umbral.get()),
+            "aplicar_stops_dinamicos": bool(self.checkbox_stops_dinamico.get()),
+            "stop_umbral_disparo": float(self.slider_stops_umbral.get()),
+            "stop_duracion_base": float(self.slider_stops_duracion.get()),
             "aplicar_postprocesamiento": bool(self.checkbox_postprocesar.get()),
             "recalcular_dificultad": bool(self.checkbox_recalcular_diff.get()),
             "offset_automatico": bool(self.checkbox_offset_auto.get()),
@@ -4424,6 +4787,7 @@ class StepHybridUI(ctk.CTk):
             "min_notas_compas": int(self.min_notas_compas),
             "pack_name": self.entry_pack_name.get().strip() if self.entry_pack_name.get().strip() else "AI_Generated_Charts",
             "activar_muestreo_multicapa": bool(self.checkbox_muestreo.get()),
+            "usar_multihilo": bool(self.checkbox_multihilo_activo.get()),
             "muestreo_pct_min": float(self.slider_muestreo_min.get()),
             "muestreo_num_muestras": int(self.slider_muestreo_num.get()),
             "umbral_silencios": float(self.slider_umbral_silencios.get()),
@@ -4494,6 +4858,16 @@ class StepHybridUI(ctk.CTk):
                 max_bpm_dinamico = int(max_bpm_dinamico_text)
             except ValueError:
                 pass
+
+
+        palabra_banner = self.entry_palabra_banner.get().strip() 
+        if not palabra_banner: palabra_banner = ""
+        palabra_video = self.entry_palabra_video.get().strip()
+        if not palabra_video: palabra_video = ""
+        palabra_background = self.entry_palabra_background.get().strip()
+        if not palabra_background: palabra_background = ""
+        palabra_cdtitle = self.entry_palabra_cdtitle.get().strip()
+        if not palabra_cdtitle: palabra_cdtitle = ""
 
         # Extensiones válidas
         EXT_AUDIO = ('.mp3', '.wav', '.ogg', '.flac', '.opus')
@@ -4577,14 +4951,13 @@ class StepHybridUI(ctk.CTk):
 
                     if archivo_lowercase.endswith(EXT_AUDIO) and not audio_encontrado:
                         audio_encontrado = ruta_archivo
-                    elif archivo_lowercase.endswith(EXT_BACKGROUND) and not background_encontrado and not self.buscar_palabra_en_rutas(ruta_archivo, "cdtitle"):
+                    elif archivo_lowercase.endswith(EXT_BACKGROUND) and not background_encontrado and self.buscar_palabra_en_rutas(ruta_archivo, palabra_background):
                         background_encontrado = ruta_archivo
-                    elif archivo_lowercase.endswith(EXT_BANNER) and not banner_encontrado and not self.buscar_palabra_en_rutas(ruta_archivo, "cdtitle"):
+                    elif archivo_lowercase.endswith(EXT_BANNER) and not banner_encontrado and self.buscar_palabra_en_rutas(ruta_archivo, palabra_banner):
                         banner_encontrado = ruta_archivo
-                    elif archivo_lowercase.endswith(EXT_VIDEO) and not video_encontrado:
+                    elif archivo_lowercase.endswith(EXT_VIDEO) and not video_encontrado and self.buscar_palabra_en_rutas(ruta_archivo, palabra_video):
                         video_encontrado = ruta_archivo
-
-                    if archivo_lowercase.endswith(EXT_CDTITLE) and not cdtitle_encontrado and self.buscar_palabra_en_rutas(ruta_archivo, "cdtitle"):
+                    elif archivo_lowercase.endswith(EXT_CDTITLE) and not cdtitle_encontrado and self.buscar_palabra_en_rutas(ruta_archivo, palabra_cdtitle):
                         cdtitle_encontrado = ruta_archivo 
 
                 if audio_encontrado:
@@ -4594,6 +4967,7 @@ class StepHybridUI(ctk.CTk):
                     # Construir el diccionario de parámetros exacto para pasar al core del motor híbrido
                     params_cancion = {
                         "renombrar_archivos": renombrar_archivos,
+                        "percent_aditional_time": float(self.slider_percent_aditional_time.get()),
                         "bpm_manual": float(self.slider_bpm.get()),
                         "bpm_automatico": bool(self.check_auto_bpm.get()),
                         "double_bpm": bool(self.checkbox_bpm_doble.get()),
@@ -4606,13 +4980,15 @@ class StepHybridUI(ctk.CTk):
                         "umbral_disparo_custom_bpm": float(self.slider_bpm_umbral.get()),
                         "bpm_amortiguador_custom": float(self.slider_bpm_amortiguador.get()),
                         "aplicar_speeds_dinamicos": bool(self.checkbox_speeds_dinamico.get()),
-                        "percent_aditional_time": float(self.slider_speed_offset_time.get()),
                         "speed_rms_min": float(self.slider_rms_min_speed.get()),
                         "speed_rms_max": float(self.slider_rms_max_speed.get()),
                         "speed_min_custom": float(self.slider_speed_min.get()),  
                         "speed_max_custom": float(self.slider_speed_max.get()),  
                         "speed_trans_custom": float(self.slider_speed_trans.get()),
                         "speed_umbral_disparo": float(self.slider_speed_umbral.get()),
+                        "aplicar_stops_dinamicos": bool(self.checkbox_stops_dinamico.get()),
+                        "stop_umbral_disparo": float(self.slider_stops_umbral.get()),
+                        "stop_duracion_base": float(self.slider_stops_duracion.get()),
                         "aplicar_postprocesamiento": bool(self.checkbox_postprocesar.get()),
                         "recalcular_dificultad": bool(self.checkbox_recalcular_diff.get()),
                         "offset_automatico": bool(self.checkbox_offset_auto.get()),
@@ -4649,6 +5025,7 @@ class StepHybridUI(ctk.CTk):
                         "min_notas_compas": int(self.min_notas_compas),
                         "pack_name": pack_name,
                         "activar_muestreo_multicapa": bool(self.checkbox_muestreo.get()),
+                        "usar_multihilo": bool(self.checkbox_multihilo_activo.get()),
                         "muestreo_pct_min": float(self.slider_muestreo_min.get()),
                         "muestreo_num_muestras": int(self.slider_muestreo_num.get()),
                         "umbral_silencios": float(self.slider_umbral_silencios.get()),
