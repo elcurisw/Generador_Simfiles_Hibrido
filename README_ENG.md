@@ -66,7 +66,7 @@ Once checkpoints are generated, you can run the main generator. By default, it w
 py -3.12 generador_simfiles_hibrido.py
 ```
 
-## ⚙️ II. Interface and Configuration Parameters (The 45 Controls)
+## ⚙️ II. Interface and Configuration Parameters (The Controls)
 
 The interface has been logically divided into sections—from primary inputs down to highly detailed adjustments for rhythm and AI performance.
 
