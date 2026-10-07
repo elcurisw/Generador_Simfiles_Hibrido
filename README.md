@@ -23,6 +23,8 @@ El entorno base de prueba es Python 3.12 en WINDOWS 11, pero se espera compatibi
 **Nueva versión mejorada. A partir de la versión 1.8 se agrego la función de stops y se corrigieron ciertas incongruencias con la construcción de los archivos (.sm y .scc) ahora ya no se presenta este problema. 
 Sin embargo, ITGmania puede crashear con canciones mayores a 2 minutos en su archivo (.scc). El archivo (.sm) sigue siendo funcional. En caso de requerir archivos para canciones más extensas usar alguna versión anterior, como la [![v1.7.0.1.](https://github.com/elcurisw/Generador_Simfiles_Hibrido/releases/tag/v.1.7.0.1)] Por su parte Outfox si puede procesar los nuevos archivos correctamente.**
 
+**RECOMENDADO utilizar un editor para dar los retoques finales como [![Arrow Vortex](https://arrowvortex.ddrnl.com/)]**
+
 #### A. Dependencias Principales (Instalación vía pip)
 
 Instalar dependencias esenciales
@@ -151,9 +153,9 @@ Controla el pulso y la velocidad de respuesta del generador basándose en el son
 | 47 | **Velocidad en Máximos** | Control Numérico | Establece el parámetro de velocidad máxima que se aplica en el punto más alto de RMS | Avanzado. Impacto en velocidad. |
 | 48 | **Duración transición** | Control Numérico |	Determina cuánto tiempo tardará la herramienta en reajustar la velocidad cuando se usa "Adaptar Velocidad Visual" (punto 43). | Controla la suavidad del cambio de ritmo. |
 | 49 | **Filtro Anti-Mareo** | Control Numérico | Estable el umbral para que se aplique un cambio de velocidad. | Avanzado. Entre más alto el valor más estable el cambio de velocidad, entre más bajo puede producir cortes bruscos y mareo, además al igual que el BPM se vuelve más reactivo y puede romper el juego, en caso de que ocurra borrar el archivo (.scc) y crear uno nuevo con otras configuraciones. Establece el valor de aproximación para aplicar la Velocidad Mínima o Velocidad Máxima. |
-| 50 | **Activar el Uso de Stops Dinámicos**| Checkbox | Habilita la función de stops en el archivo de pasos. No aplica en el archivo (.sm). | Habilitarlo en caso de desear usar esta opción, dependiendo de la duración de la canción el archivo final puede corromper el motor de stepmania o sus derivados, en caso de que ocurra borrar el archivo (.scc) y usar otras configuraciones. |
-| 51 | **Umbral de Activación de Stops** | Control Numérico | Determina la lectura mínima en la señal de audio para aplicar un stop. | Entre más bajo más reactivo. |
-| 52 | **Duración de Stops** | Control Numérico | Determina la duración de un Stop. | Recomendado utilizar un valor bajo. |
+| 50 | **Parámetros de Congelamiento Visual**| Menú desplegable | Habilita la función de stops y/o delays en el archivo de pasos. No aplica en el archivo (.sm). | Habilitarlo en caso de desear usar esta opción, dependiendo de la duración de la canción el archivo final puede corromper el motor de stepmania o sus derivados, en caso de que ocurra borrar el archivo (.scc) y usar otras configuraciones. |
+| 51 | **Umbral de Activación de Stop/Delay** | Control Numérico | Determina la lectura mínima en la señal de audio para aplicar un stop y/o delay. | Entre más bajo más reactivo. |
+| 52 | **Duración de Stop/Delay** | Control Numérico | Determina la duración de un Stop y/o delay. | Recomendado utilizar un valor bajo. |
 
 ### D. Elementos Especiales y Complejidad (Efectos, Minas y Trampas)
 
@@ -205,3 +207,15 @@ Controla la calidad y severidad del patrón rítmico generado. Se centra en las 
 | 88 | **Palabra Clave Para Ubicar Video** | Texto | Asigna una palabra, que debe posser tu archivo de video en su nombre para identificarlo y usarla como video. | Recomendado configurar tus archivos con palabras clave para ubicarlos con facilidad. Por defecto sino colocas nada en este campo, durante el procesamiento por lotes se tomara como video el primer video encontrado. |
 | 89 | **Palabra Clave Para Ubicar Background** | Texto | Asigna una palabra, que debe posser tu archivo de background en su nombre para identificarlo y usarla como background. | Recomendado configurar tus archivos con palabras clave para ubicarlos con facilidad. Por defecto sino colocas nada en este campo, durante el procesamiento por lotes se tomara como background la primera imagen encontrada en este orden de prioridad (Background, Banner, CdTitle). |
 | 90 | **Palabra Clave Para Ubicar CdTitle** | Texto | Asigna una palabra, que debe posser tu archivo de cdtitle en su nombre para identificarlo y usarla como cdtitle. | Recomendado configurar tus archivos con palabras clave para ubicarlos con facilidad. Por defecto sino colocas nada en este campo, durante el procesamiento por lotes se tomara como cdtitle la primera imagen encontrada en este orden de prioridad (Background, Banner, CdTitle). |
+
+### G. Sección de edición de etiquetas (Editor de Etiquetas SM/SSC)
+
+Pequeño apartado para editar datos en los archivos sm/ssc, su uso es limitado.
+
+| 91 | **Selección del Modo de Edición** | Menú desplegable | Configura el tipo de edición por archivo individual o por lotes (modificando los metadatos de todos los archivos almacenados en una carpeta) | Útil para modificar o agregar una etiqueta a los archivos (sm/ssc). |
+| 92 | **Seleccionar Archivo** | Botón | Selecciona el archivo o carpeta con los archivos (sm/ssc) | Obligatorio para usar esta función. |
+| 93 | **Etiqueta a Modificar o Añadir** | Menú desplegable | Selecciona la etiqueta de archivo que quieras editar o agregar. | Obligatorio seleccionar alguna para esta modalidad. |
+| 94 | **Nuevo Valor** | Texto | Asigna una palabra o ruta que quieras agregar o modificar por sobre algún valor previo. | Obligatorio escribir algún valor al editar etiquetas. |
+| 95 | **Proteger etiquetas con datos si el campo está vacío** | Checkbox | Previene que por error modifiques una etiqueta con algún valor que este previamente en el archivo o con un texto en blanco. | Deshabilita si quieres editar el valor de una etiqueta en particular. |
+| 96 | **Aplicar Cambios en Etiquetas** | Botón de Ejecución | Inicializa el proceso de edición. | En caso de que falle revisar la configuración o los permisos que pueden estar restringidos por el sistema operativo o el antivirus. |
+| 97 | **Abrir Carpeta de Editados** | Botón | Abre una ventana en donde se almacenan los nuevos archivos editados. | Usalo para ubicar el resultado final. |
