@@ -144,9 +144,9 @@ This is the most advanced section, controlling the pulse and responsiveness of t
 | 47 | **Speed at Maximums** | Number Control | Sets the maximum velocity parameter applied during the highest RMS audio moments. | Advanced: Controls the speed of steps during powerful beats. |
 | 48 | **Transition Duration** | Number Control | Determines how long the tool takes to readjust speed when using "Adapt Visual Speed" (point 31). | Controls the smoothness of tempo changes; higher values = smoother, but slower change. |
 | 49 | **Anti-Dizziness Filter** | Numeric Control | Sets the threshold for applying a speed change. Advanced. The higher the value, the more stable the speed change; the lower it is, the more abrupt cuts and dizziness can occur. Also, similar to BPM, it becomes more reactive and may break the game. If this happens, delete the file (.scc) and create a new one with different configurations. Sets the approximation value for applying Minimum Speed or Maximum Speed. |
-| 50 | **Enable Dynamic Stop Usage**| Checkbox | Enables the stop function in the step file. Does not apply to the (.sm) file. Enabling it in case of wanting to use this option; depending on the song duration, the final file may corrupt the Stepmania engine or its derivatives. If this happens, delete the file (.scc) and use other configurations. |
-| 51 | **Stop Activation Threshold** | Numeric Control | Determines the minimum reading in the audio signal to apply a stop. The lower it is, the more reactive. |
-| 52 | **Stop Duration** | Numeric Control | Determines the duration of a Stop. Recommended to use a low value. |
+| 50 | **Visual Freeze Parameters**| Checkbox | Enables the stop and/or delay function in the steps file. | Does not apply to the (.sm) file. |
+| 51 | **Stop/Delay Activation Threshold** | Numeric Control | Determines the minimum reading in the audio signal to apply a stop and/or delay. | |
+| 52 | **Stop/Delay Duration** | Numeric Control | Determines the duration of a stop and/or delay. | |
 
 #### D. Special Elements and Complexity (Effects, Traps, Mines)
 
@@ -198,3 +198,17 @@ These controls govern the quality and severity of the generated rhythm pattern, 
 | 88 | **Keyword to Locate Video** | Text | Assign a word that must be in your video file name to identify and use it as a video. It is recommended to configure your files with keywords for easy location. By default, if you do not put anything in this field, during batch processing, the first video found will be taken. |
 | 89 | **Keyword to Locate Background** | Text | Assign a word that must be in your background file name to identify and use it as a background. It is recommended to configure your files with keywords for easy location. By default, if you do not put anything in this field, during batch processing, the first image found will be taken as the background in this order of priority (Background, Banner, CdTitle). |
 | 90 | **Keyword to Locate CD Title** | Text | Assign a word that must be in your cdtitle file name to identify and use it as a cdtitle. It is recommended to configure your files with keywords for easy location. By default, if you do not put anything in this field, during batch processing, the first image found will be taken as the cdtitle in this order of priority (Background, Banner, CdTitle). |
+
+#### G. Metadata Editing (Tag Editor)
+
+Small section for editing data in sm/ssc files; its use is limited.
+
+| # | Field | Type | Description | Key Notes |
+| :---: | :---: | :---: | :---: | :---: |
+| 91 | **Select Edit Mode** | Configures the type of editing by individual file or by batches... | |
+| 92 | **Select File/Folder** | Select File to edit. | Mandatory to use this function. |
+| 93 | **Tag to modify or add** | Select Tag to edit. | Mandatory to select one for this method/mode. |
+| 94 | **New value** | Assigns a word or path you want to add or modify over a previous value. | |
+| 95 | **Protect tags with data if the field is empty** | Protect labels with data if the field is empty or fill in the file (sm/ssc). | |
+| 96 | **Apply Tag Changes** | Apply Changes to Labels. | Initiates the editing process. |
+| 97 | **Open Edited Folder** | Open Edited Folder | |
