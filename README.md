@@ -73,7 +73,7 @@ Una vez generados los checkpoints, puedes correr el generador principal. Por def
 py -3.12 generador_simfiles_hibrido.py
 ```
 
-## ⚙️ II. Interfaz y Parámetros de Configuración (Los 45 Controles)
+## ⚙️ II. Interfaz y Parámetros de Configuración (Los Controles)
 
 La interfaz está dividida lógicamente para facilitar la generación, desde las entradas principales hasta los ajustes más detallados de ritmo y IA.
 
