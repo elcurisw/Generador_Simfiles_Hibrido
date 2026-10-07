@@ -18,7 +18,7 @@ Este programa está diseñado para generar archivos de pasos (*.sm y *.ssc) din�
 Se recomienda utilizar un entorno virtual (venv) para aislar las dependencias del proyecto, ya sea para probar el código o entrenar modelos.
 El entorno base de prueba es Python 3.12 en WINDOWS 11, pero se espera compatibilidad con otras versiones de Python o Windows. 
 
-**[![La versión ejecutable (.exe)](https://github.com/elcurisw/Generador_Simfiles_Hibrido/releases/tag/v1.8)] con un checkpoint aparte se encuentra disponible si solo desea utilizar el generador.**
+**[![La versión ejecutable (.exe)](https://github.com/elcurisw/Generador_Simfiles_Hibrido/releases/tag/v1.8.1)] con un checkpoint aparte se encuentra disponible si solo desea utilizar el generador.**
 
 **Nueva versión mejorada. A partir de la versión 1.8 se agrego la función de stops y se corrigieron ciertas incongruencias con la construcción de los archivos (.sm y .scc) ahora ya no se presenta este problema. 
 Sin embargo, ITGmania puede crashear con canciones mayores a 2 minutos en su archivo (.scc). El archivo (.sm) sigue siendo funcional. En caso de requerir archivos para canciones más extensas usar alguna versión anterior, como la [![v1.7.0.1.](https://github.com/elcurisw/Generador_Simfiles_Hibrido/releases/tag/v.1.7.0.1)] Por su parte Outfox si puede procesar los nuevos archivos correctamente.**
