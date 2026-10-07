@@ -212,6 +212,8 @@ Controla la calidad y severidad del patrón rítmico generado. Se centra en las 
 
 Pequeño apartado para editar datos en los archivos sm/ssc, su uso es limitado.
 
+| # | Field | Type | Description | Key Notes |
+| :---: | :---: | :---: | :---: | :---: |
 | 91 | **Selección del Modo de Edición** | Menú desplegable | Configura el tipo de edición por archivo individual o por lotes (modificando los metadatos de todos los archivos almacenados en una carpeta) | Útil para modificar o agregar una etiqueta a los archivos (sm/ssc). |
 | 92 | **Seleccionar Archivo** | Botón | Selecciona el archivo o carpeta con los archivos (sm/ssc) | Obligatorio para usar esta función. |
 | 93 | **Etiqueta a Modificar o Añadir** | Menú desplegable | Selecciona la etiqueta de archivo que quieras editar o agregar. | Obligatorio seleccionar alguna para esta modalidad. |
