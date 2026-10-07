@@ -1,6 +1,7 @@
 import torch  # <-- DEBE SER LA LÍNEA 1
 import torch.nn as nn
 import os
+import re # --- IMPORTACIONES PARA EDICION DE .sm y .scc FILES
 import json
 import random
 import librosa
@@ -89,6 +90,22 @@ TEXTOS = {
         "menu_opt_fx": "Efectos, Minas y Trampas",
         "menu_opt_filters": "Filtros Espectrales y Dificultad",
         "menu_opt_batch": "Filtros de Modo por Lotes",
+        "menu_opt_tag_editor": "Editor de Etiquetas (SM/SSC)",
+        "lbl_tag_editor_title": "--- Modificador de Etiquetas de Simfiles ---",
+        "lbl_mode_selection": "Seleccione el Modo de Edición:",
+        "opt_mode_single": "Archivo Individual",
+        "opt_mode_batch": "Por Lote (Carpeta Completa)",
+        "btn_select_sm_file": "Seleccionar Archivo (.sm / .ssc)",
+        "btn_select_sm_folder": "Seleccionar Carpeta de Simfiles",
+        "lbl_tag_to_edit": "Etiqueta a modificar o añadir:",
+        "lbl_new_tag_value": "Nuevo valor (Ej: imagen.png o ruta/video.mp4):",
+        "btn_apply_tags": "Aplicar Cambios en Etiquetas 🛠️",
+        "msg_tags_success": "¡Modificación completada con éxito!",
+        "msg_tags_error_empty": "El valor de la etiqueta o la ruta no pueden estar vacíos.",
+        "msg_tags_no_files": "No se encontraron archivos .sm o .ssc en la ubicación especificada.",
+        "chk_overwrite_protection": "Proteger etiquetas con datos si el campo está vacío",
+        "msg_tags_skipped": "¡Modificación completada!\nArchivos alterados: {}\nArchivos protegidos (omitidos): {}",
+        "btn_edited_files": "Abrir Carpeta de Editados 📂",
         "lbl_batch_mode": "--- Parámetros Adicionales del Modo por Lotes ---",
         "lbl_palabra_banner": "Palabra Clave Para Ubicar Banner (Modo por Lotes)",
         "lbl_palabra_video": "Palabra Clave Para Ubicar Video (Modo por Lotes)",
@@ -133,10 +150,15 @@ TEXTOS = {
         "lbl_speed_anti_dizzy_indicator2": "Sensible (Riesgo de Mareo)",
         "lbl_speed_anti_dizzy_indicator3": "Cambios Bruscos / Gimmick",
         "lbl_speed_anti_dizzy_indicator4": "Hiper-Reactivo (Inestable)",
-        "lbl_sec_stops": "--- Parámetros de Stops ---",
+        "lbl_sec_stops": "--- Parámetros de Congelamiento Visual ---",
+        "lbl_stops_mode": "Modo de Congelamiento Visual:",
+        "opt_stop_disabled": "Desactivado",
+        "opt_stop_only": "Solo Stops",
+        "opt_delay_only": "Solo Delays",
+        "opt_stop_combined": "Combinado (Alternado Espectral)",
         "chk_dynamic_stops": "Activar el uso de Stops Dinámicos",
-        "lbl_stops_umbral": "Umbral de Activación de Stop:",
-        "lbl_stops_duration": "Duración de Stop:",
+        "lbl_stops_umbral": "Umbral de Activación de Stop/Delay:",
+        "lbl_stops_duration": "Duración de Stop/Delay:",
         "lbl_sec_fx": "--- Parámetros de Efectos y Trampas ---",
         "lbl_prob_mines": "Probabilidad de Minas por compás:",
         "lbl_max_mines": "Máximo Minas por Compás:",
@@ -308,6 +330,22 @@ TEXTOS = {
         "menu_opt_fx": "Effects, Mines & Traps",
         "menu_opt_filters": "Spectral Filters & Difficulty",
         "menu_opt_batch": "Batch Mode Filters",
+        "menu_opt_tag_editor": "Tag Editor (SM/SSC)",
+        "lbl_tag_editor_title": "--- Simfile Tag Modifier ---",
+        "lbl_mode_selection": "Select Edit Mode:",
+        "opt_mode_single": "Individual File",
+        "opt_mode_batch": "Batch Mode (Full Folder)",
+        "btn_select_sm_file": "Select File (.sm / .ssc)",
+        "btn_select_sm_folder": "Select Simfile Folder",
+        "lbl_tag_to_edit": "Tag to modify or add:",
+        "lbl_new_tag_value": "New value (e.g., image.png or path/video.mp4):",
+        "btn_apply_tags": "Apply Tag Changes 🛠️",
+        "msg_tags_success": "Modification completed successfully!",
+        "msg_tags_error_empty": "The tag value or the path cannot be empty.",
+        "msg_tags_no_files": "No .sm or .ssc files were found in the specified location.",
+        "chk_overwrite_protection": "Protect tags with data if the field is empty",
+        "msg_tags_skipped": "Modification complete!\nAltered files: {}\nProtected files (skipped): {}",
+        "btn_edited_files": "Open Edited Folder 📂",
         "lbl_batch_mode": "--- Additional Batch Mode Parameters ---",
         "lbl_palabra_banner": "Keyword to Locate Banner (Batch Mode)",
         "lbl_palabra_video": "Keyword to Locate Video (Batch Mode)",
@@ -352,10 +390,15 @@ TEXTOS = {
         "lbl_speed_anti_dizzy_indicator2": "Sensitive (Middle Dizzy)",
         "lbl_speed_anti_dizzy_indicator3": "High Sensitive / Gimmick",
         "lbl_speed_anti_dizzy_indicator4": "Hiper-React (Unstable)",
-        "lbl_sec_stops": "--- Stop Parameters ---",
+        "lbl_sec_stops": "--- Visual Freeze Parameters ---",
+        "lbl_stops_mode": "Visual Freeze Mode:",
+        "opt_stop_disabled": "Disabled",
+        "opt_stop_only": "Stops Only",
+        "opt_delay_only": "Delays Only",
+        "opt_stop_combined": "Combined (Spectral Alternated)",
         "chk_dynamic_stops": "Enable Dynamic Stop Usage",
-        "lbl_stops_umbral": "Stop Activation Threshold:",
-        "lbl_stops_duration": "Stop Duration:",
+        "lbl_stops_umbral": "Stop/Delay Activation Threshold:",
+        "lbl_stops_duration": "Stop/Delay Duration:",
         "lbl_sec_fx": "--- Effects & Traps Parameters ---",
         "lbl_prob_mines": "Mines Probability per measure:",
         "lbl_max_mines": "Max Mines per Measure:",
@@ -527,6 +570,22 @@ TEXTOS = {
         "menu_opt_fx": "Efeitos, Minas e Armadilhas",
         "menu_opt_filters": "Filtros Espectrais e Dificuldade",
         "menu_opt_batch": "Filtros do Modo em Lote",
+        "menu_opt_tag_editor": "Editor de Etiquetas (SM/SSC)",
+        "lbl_tag_editor_title": "--- Modificador de Etiquetas de Simfiles ---",
+        "lbl_mode_selection": "Selecione o Modo de Edição:",
+        "opt_mode_single": "Arquivo Individual",
+        "opt_mode_batch": "Por Lote (Pasta Completa)",
+        "btn_select_sm_file": "Selecionar Arquivo (.sm / .ssc)",
+        "btn_select_sm_folder": "Selecionar Pasta de Simfiles",
+        "lbl_tag_to_edit": "Etiqueta a modificar ou adicionar:",
+        "lbl_new_tag_value": "Novo valor (Ex: imagem.png ou rota/video.mp4):",
+        "btn_apply_tags": "Aplicar Alterações nas Etiquetas 🛠️",
+        "msg_tags_success": "Modificação concluída com sucesso!",
+        "msg_tags_error_empty": "O valor da etiqueta ou o caminho não podem estar vazios.",
+        "msg_tags_no_files": "Nenhum arquivo .sm ou .ssc foi encontrado no local especificado.",
+        "chk_overwrite_protection": "Proteger etiquetas com dados se o campo estiver vazio",
+        "msg_tags_skipped": "Modificação concluída!\nArquivos alterados: {}\nArquivos protegidos (omitidos): {}",
+        "btn_edited_files": "Abrir Pasta de Editados 📂",
         "lbl_batch_mode": "--- Parâmetros Adicionais do Modo em Lote ---",
         "lbl_palabra_banner": "Palavra-chave para localizar o Banner (Modo em Lote)",
         "lbl_palabra_video": "Palavra-chave para localizar o Vídeo (Modo em Lote)",
@@ -571,10 +630,15 @@ TEXTOS = {
         "lbl_speed_anti_dizzy_indicator2": "Sensível (Risco de Tontura)",
         "lbl_speed_anti_dizzy_indicator3": "Mudanças Bruscas / Gimmick",
         "lbl_speed_anti_dizzy_indicator4": "Hiper-Reativo (Instável)",
-        "lbl_sec_stops": "--- Parâmetros de Stops ---",
-        "chk_dynamic_stops": "Ativar o uso de Stops Dinâmicos",
-        "lbl_stops_umbral": "Limiar de Ativação de Stop:",
-        "lbl_stops_duration": "Duração do Stop:",
+        "lbl_sec_stops": "--- Parâmetros de Congelamento Visual ---",
+        "lbl_stops_mode": "Modo de Congelamento Visual:",
+        "opt_stop_disabled": "Desativado",
+        "opt_stop_only": "Apenas Stops",
+        "opt_delay_only": "Apenas Delays",
+        "opt_stop_combined": "Combinado (Alternado Espectral)",
+        "chk_dynamic_stops": "Ativar o uso de Congelamento Dinâmico",
+        "lbl_stops_umbral": "Limiar de Ativação de Stop/Delay:",
+        "lbl_stops_duration": "Duração do Stop/Delay:",
         "lbl_sec_fx": "--- Parâmetros de Efeitos e Armadilhas ---",
         "lbl_prob_mines": "Probabilidade de Minas por compasso:",
         "lbl_max_mines": "Máximo de Minas por Compasso:",
@@ -746,6 +810,22 @@ TEXTOS = {
         "menu_opt_fx": "エフェクト・ボム・トラップ",
         "menu_opt_filters": "スペクトルフィルタと難易度",
         "menu_opt_batch": "バッチモードフィルター ",
+        "menu_opt_tag_editor": "タグエディタ (SM/SSC)",
+        "lbl_tag_editor_title": "--- Simfile タグ修正機能 ---",
+        "lbl_mode_selection": "編集モードを選択してください：",
+        "opt_mode_single": "個別ファイル",
+        "opt_mode_batch": "一括処理（フォルダ全体）",
+        "btn_select_sm_file": "ファイルを選択 (.sm / .ssc)",
+        "btn_select_sm_folder": "Simfileフォルダを選択",
+        "lbl_tag_to_edit": "変更または追加するタグ：",
+        "lbl_new_tag_value": "新しい値 (例: image.png または path/video.mp4):",
+        "btn_apply_tags": "タグの変更を適用 🛠️",
+        "msg_tags_success": "修正が正常に完了しました！",
+        "msg_tags_error_empty": "タグの値またはパスを空欄にすることはできません。",
+        "msg_tags_no_files": "指定された場所に .sm または .ssc ファイルが見つかりませんでした。",
+        "chk_overwrite_protection": "入力欄が空の場合、データのあるタグを保護する",
+        "msg_tags_skipped": "修正が完了しました！\n変更されたファイル: {}\n保護されたファイル (スキップ): {}",
+        "btn_edited_files": "編集済みフォルダを開く 📂",
         "lbl_batch_mode": "--- バッチモードの追加パラメータ --- ",
         "lbl_palabra_banner": "バナーを検出するためのキーワード（バッチモード）",
         "lbl_palabra_video": "ビデオを検出するためのキーワード（バッチモード）",
@@ -790,10 +870,15 @@ TEXTOS = {
         "lbl_speed_anti_dizzy_indicator2": "敏感 (ややめまいのリスクあり)",
         "lbl_speed_anti_dizzy_indicator3": "急激な変化 / ギミック",
         "lbl_speed_anti_dizzy_indicator4": "過敏 (不安定)",
-        "lbl_sec_stops": "--- ストップパラメータ --- (---",
-        "chk_dynamic_stops": "動的ストップの使用を有効にする",
-        "lbl_stops_umbral": "ストップの活性化閾値：",
-        "lbl_stops_duration": "ストップの持続時間：",
+        "lbl_sec_stops": "--- 画面フリーズパラメータ ---",
+        "lbl_stops_mode": "画面フリーズモード:",
+        "opt_stop_disabled": "無効",
+        "opt_stop_only": "Stopのみ",
+        "opt_delay_only": "Delayのみ",
+        "opt_stop_combined": "複合 (スペクトル交互適用)",
+        "chk_dynamic_stops": "動的フリーズ機能の使用を有効化",
+        "lbl_stops_umbral": "Stop/Delayの発動閾値:",
+        "lbl_stops_duration": "Stop/Delayの持続時間:",
         "lbl_sec_fx": "--- エフェクト＆トラップパラメータ ---",
         "lbl_prob_mines": "1小節あたりのボム確率:",
         "lbl_max_mines": "1小節あたりの最大ボム数:",
@@ -965,6 +1050,22 @@ TEXTOS = {
         "menu_opt_fx": "特效、地雷与陷阱",
         "menu_opt_filters": "频谱滤波器与难度",
         "menu_opt_batch": "批量模式过滤器",
+        "menu_opt_tag_editor": "标签编辑器 (SM/SSC)",
+        "lbl_tag_editor_title": "--- Simfile 标签修改器 ---",
+        "lbl_mode_selection": "选择编辑模式：",
+        "opt_mode_single": "单个文件",
+        "opt_mode_batch": "批量模式（整个文件夹）",
+        "btn_select_sm_file": "选择文件 (.sm / .ssc)",
+        "btn_select_sm_folder": "选择 Simfile 文件夹",
+        "lbl_tag_to_edit": "要修改或添加的标签：",
+        "lbl_new_tag_value": "新数值 (例如: image.png 或 path/video.mp4):",
+        "btn_apply_tags": "应用标签更改 🛠️",
+        "msg_tags_success": "修改成功完成！",
+        "msg_tags_error_empty": "标签数值 or 路径不能为空。",
+        "msg_tags_no_files": "在指定位置未找到 .sm 或 .ssc 文件。",
+        "chk_overwrite_protection": "如果输入栏为空，则保护已有数据的标签",
+        "msg_tags_skipped": "修改完成！\n已修改文件: {}\n已保护文件 (跳过): {}",
+        "btn_edited_files": "打开已编辑文件夹 📂",
         "lbl_batch_mode": "--- 批量模式附加参数 ---",
         "lbl_palabra_banner": "定位横幅关键字（批量模式）",
         "lbl_palabra_video": "定位视频关键字（批量模式）",
@@ -1009,10 +1110,15 @@ TEXTOS = {
         "lbl_speed_anti_dizzy_indicator2": "敏感 (有眩晕风险)",
         "lbl_speed_anti_dizzy_indicator3": "剧烈变化 / 噱头",
         "lbl_speed_anti_dizzy_indicator4": "超反应式 (不稳定)",
-        "lbl_sec_stops": "--- 停止参数 ---",
-        "chk_dynamic_stops": "启用动态停止功能：",
-        "lbl_stops_umbral": "停止激活阈值：",
-        "lbl_stops_duration": "停止持续时间：",
+        "lbl_sec_stops": "--- 视觉冻结参数 ---",
+        "lbl_stops_mode": "视觉冻结模式:",
+        "opt_stop_disabled": "已禁用",
+        "opt_stop_only": "仅限 Stops",
+        "opt_delay_only": "仅限 Delays",
+        "opt_stop_combined": "混合模式 (频谱交替)",
+        "chk_dynamic_stops": "启用动态冻结功能",
+        "lbl_stops_umbral": "Stop/Delay 激活阈值:",
+        "lbl_stops_duration": "Stop/Delay 持续时间:",
         "lbl_sec_fx": "--- 特效与陷阱参数 ---",
         "lbl_prob_mines": "每小节地雷概率:",
         "lbl_max_mines": "每小节最大地雷数:",
@@ -1491,6 +1597,129 @@ def detectar_primer_drop_rms(rms, sr, hop_length=512, umbral_porcentaje=0.05):
 
     return 0.000
 
+def modificar_o_agregar_etiqueta(ruta_archivo, archivo_name, extension, etiqueta, nuevo_valor, proteger_activos):
+    """
+    Modifica una etiqueta y reestructura la cabecera en el orden estricto solicitado:
+    TITLE -> SUBTITLE -> ARTIST -> MUSIC -> BANNER -> BACKGROUND -> CDTITLE -> VIDEO
+    Guarda el resultado en una subcarpeta dedicada dentro de la zona de ejecución del programa.
+    """
+    import sys
+    # 1. Determinar de forma dinámica el directorio exacto de la zona del programa
+    if getattr(sys, 'frozen', False):
+        carpeta_programa = os.path.dirname(sys.executable)
+    else:
+        carpeta_programa = os.path.dirname(os.path.abspath(__file__))
+    
+    # 2. Crear la nueva carpeta de salida en la zona del programa con permisos garantizados
+    carpeta_salida_edicion = os.path.join(carpeta_programa, "Simfiles_Editados")
+    os.makedirs(carpeta_salida_edicion, exist_ok=True)
+
+    # 3. Construir la ruta final del nuevo archivo editado
+    nombre_archivo_puro = os.path.basename(ruta_archivo)
+    ruta_destino_final = os.path.join(carpeta_salida_edicion, nombre_archivo_puro)
+    
+    try:
+        etiqueta_upper = etiqueta.strip().upper().replace("#", "").replace(":", "")
+        
+        # Leer el archivo original (Acceso de solo lectura)
+        with open(ruta_archivo, "r", encoding="utf-8", errors="ignore") as f:
+            contenido = f.read()
+
+        # Diccionario para almacenar temporalmente los valores extraídos de la cabecera original
+        cabecera_ordenada = {
+            "VERSION": "0.83" if ruta_archivo.lower().endswith('.ssc') else None,
+            "TITLE": "",
+            "SUBTITLE": "",
+            "ARTIST": "",
+            "MUSIC": "",
+            "BANNER": "",
+            "BACKGROUND": "",
+            "CDTITLE": "",
+            "VIDEO": ""
+        }
+
+        # Extraer los datos existentes y limpiar los comandos viejos del bloque de contenido inicial
+        contenido_restante = contenido
+        for key in cabecera_ordenada.keys():
+            patron_busqueda = rf"#{key}:([^;]*);"
+            busqueda = re.search(patron_busqueda, contenido, re.IGNORECASE)
+            if busqueda:
+                cabecera_ordenada[key] = busqueda.group(1).strip()
+                # Removemos la etiqueta vieja de su antigua posición desordenada
+                contenido_restante = re.sub(patron_busqueda, "", contenido_restante, flags=re.IGNORECASE)
+
+        # Aplicar el cambio solicitado por la GUI
+        if etiqueta_upper in cabecera_ordenada:
+            # Control de protección condicional: si tiene datos y la interfaz viene vacía, se omite
+            if proteger_activos and not nuevo_valor and cabecera_ordenada[etiqueta_upper]:
+                return "omitido"
+            cabecera_ordenada[etiqueta_upper] = nuevo_valor
+        else:
+            # Si el usuario modificó una etiqueta fuera del bloque estricto (ej: CREDIT, OFFSET)
+            patron_generico = rf"#{etiqueta_upper}:([^;]*);"
+            busqueda_gen = re.search(patron_generico, contenido, re.IGNORECASE)
+            if busqueda_gen:
+                if proteger_activos and not nuevo_valor and busqueda_gen.group(1).strip():
+                    return "omitido"
+                contenido_restante = re.sub(patron_generico, f"#{etiqueta_upper}:{nuevo_valor};", contenido_restante, flags=re.IGNORECASE)
+            else:
+                contenido_restante = f"#{etiqueta_upper}:{nuevo_valor};\n" + contenido_restante
+
+        # Limpiar saltos de línea sobrantes al inicio provocados por las remociones
+        contenido_restante = contenido_restante.lstrip()
+
+        # 4. Construir la nueva cabecera con el orden jerárquico perfecto
+        bloque_cabecera_nuevo = ""
+        
+        # Añadir versión arriba del todo si es un archivo .ssc
+        if ruta_archivo.lower().endswith('.ssc') and cabecera_ordenada["VERSION"]:
+            bloque_cabecera_nuevo += f"#VERSION:{cabecera_ordenada['VERSION']};\n"
+
+        # Inyectar el orden secuencial estricto solicitado
+        orden_estricto_solicitado = ["TITLE", "SUBTITLE", "ARTIST", "MUSIC", "BANNER", "BACKGROUND", "CDTITLE", "VIDEO"]
+        for t_key in orden_estricto_solicitado:
+            val_tag = cabecera_ordenada[t_key]
+            bloque_cabecera_nuevo += f"#{t_key}:{val_tag};\n"
+
+        # Ensamblar cabecera limpia reordenada con los gráficos o charts inferiores intactos
+        contenido_final_reestructurado = bloque_cabecera_nuevo + contenido_restante
+
+        # Escribir el nuevo archivo directamente en la zona segura de la aplicación
+        with open(ruta_destino_final, "w", encoding="utf-8", errors="ignore") as f_dest:
+            f_dest.write(contenido_final_reestructurado)
+            
+        return "modificado"  
+        
+    except Exception as e:
+        print(f"Error procesando archivo {ruta_archivo}: {e}")
+        return "error"
+
+def procesar_etiquetas_lote_o_individual(ruta, modo, etiqueta, nuevo_valor, proteger_activos):
+    """Administra la iteración y realiza el conteo tanto de éxitos como de archivos protegidos."""
+    modificados = 0
+    omitidos = 0
+    
+    modo_limpio = modo.strip().lower()
+
+    if "individual" in modo_limpio or "single" in modo_limpio:
+        if os.path.isfile(ruta) and ruta.lower().endswith(('.sm', '.ssc')):
+            archivo_name, extension = os.path.splitext(ruta)
+            res = modificar_o_agregar_etiqueta(ruta, archivo_name, extension, etiqueta, nuevo_valor, proteger_activos)
+            if res == "modificado": modificados += 1
+            elif res == "omitido": omitidos += 1
+    else:
+        if os.path.exists(ruta):
+            for raiz, _, archivos in os.walk(ruta):
+                for archivo in archivos:
+                    if archivo.lower().endswith(('.sm', '.ssc')):
+                        ruta_completa = os.path.join(raiz, archivo)
+                        archivo_name, extension = os.path.splitext(archivo)
+                        res = modificar_o_agregar_etiqueta(ruta_completa, archivo_name, extension, etiqueta, nuevo_valor, proteger_activos)
+                        if res == "modificado": modificados += 1
+                        elif res == "omitido": omitidos += 1
+                            
+    return modificados, omitidos
+
 def procesar_ritmo_dinamico(segundo_actual, beat_actual, paso_idx, lineas_objetivo, rms_bpm, rms_medio_bpm, hop_bpm, ultimo_bpm, config_bpm):
     """
     Fase 0A: Evalúa la tendencia macro del RMS y altera el tempo de forma progresiva (Efecto Marea).
@@ -1603,43 +1832,59 @@ def procesar_scroll_dinamico(segundo_actual, beat_actual, paso_idx, lineas_objet
     return ultima_vel, None
 
 def procesar_stops_dinamicos(segundo_actual, beat_actual, paso_idx, total_pasos_dificultad, 
-                             lineas_objetivo, rms_stop, rms_medio_stop, hop_stop, config_stop):
+                             lineas_objetivo, rms_stop, rms_medio_stop, hop_stop, config_stop, seed_actual=42):
     """
-    Fase 0C: Modifica el flujo visual deteniendo el scroll de flechas temporalmente (#STOPS).
-    [OPTIMIZADO]: Implementa un sistema estricto de cooldown basado en su propia duración 
-    para mitigar la concurrencia y saturación de congelamientos visuales en ráfagas.
+    Fase 0C: Modifica el flujo visual deteniendo el scroll de flechas temporalmente (#STOPS / #DELAYS).
+    [RECALIBRADO]: Realiza un sorteo reproducible basado en la semilla para la modalidad combinada.
+    Cualquiera de las dos opciones bloquea la ejecución de la otra compartiendo el Cooldown.
     """
-    if len(rms_stop) == 0 or paso_idx % max(1, lineas_objetivo // 4) != 0:
-        return None, 0.0, False
+    modo = config_stop.get("modo_congelamiento", "Desactivado")
+    if modo == "Desactivado" or len(rms_stop) == 0 or paso_idx % max(1, lineas_objetivo // 4) != 0:
+        return None, 0.0, False, "stop"
 
-    # --- CONTROL DE CONCURRENCIA Y COOLDOWN EFECTIVO ---
+    # Control de Cooldown unificado: Bloquea stops y delays por igual si uno está activo
     ultimo_stop_expira = config_stop.get("ultimo_stop_expira", 0.0)
     if segundo_actual < ultimo_stop_expira:
-        # Si aún estamos dentro del periodo del Stop activo (Cooldown), 
-        # evitamos procesar o inyectar nuevos comandos y salimos en caliente.
-        return None, 0.0, True  
+        return None, 0.0, True, "stop"  # Sale de inmediato reteniendo el flujo
 
     f_idx = min(int((segundo_actual * 22050) / hop_stop), len(rms_stop) - 1)
-    
     f_inicio = max(0, f_idx - 2)
     f_fin = min(len(rms_stop), f_idx + 3)
     rms_suavizado = np.mean(rms_stop[f_inicio:f_fin])
     
     ratio = rms_suavizado / rms_medio_stop if rms_medio_stop > 0 else 1.0
-    
     umbral_disparo = config_stop.get("umbral_disparo_stop", 1.80) 
-    duracion_stop_segundos = config_stop.get("duracion_stop_base", 0.25) 
 
-    # --- DISPARO CONDICIONAL LIBRE DE CONGESTIÓN ---
     if ratio > umbral_disparo:
-        comando_sm_ssc = f"{beat_actual:.3f}={duracion_stop_segundos:.3f}"
+        tipo_actual = "stop"
+        duracion_efectiva = config_stop.get("duracion_stop_base", 0.25)
+
+        if modo == "Solo Delays" or modo == "Solo Delays" or modo == get_translation("opt_delay_only"):
+            tipo_actual = "delay"
+            duracion_efectiva = config_stop.get("duracion_delay_base", 0.25)
+            
+        elif modo == "Combinado (Alternado Espectral)" or modo == get_translation("opt_stop_combined"):
+            # --- SORTEO DETERMINISTA POR SEMILLA ---
+            # Creamos un estado local sumando la semilla y el paso actual para que varíe a lo largo de la canción
+            generador_local = random.Random(seed_actual + paso_idx)
+            
+            # Sorteo 50/50: Si da menor a 0.5 aplica Stop, de lo contrario aplica Delay
+            if generador_local.random() < 0.5:
+                tipo_actual = "stop"
+                duracion_efectiva = config_stop.get("duracion_stop_base", 0.25)
+            else:
+                tipo_actual = "delay"
+                duracion_efectiva = config_stop.get("duracion_delay_base", 0.25)
+
+        comando_sm_ssc = f"{beat_actual:.3f}={duracion_efectiva:.3f}"
         
-        # Seteamos la expiración bloqueante: tiempo actual + la propia duración del stop
-        config_stop["ultimo_stop_expira"] = segundo_actual + duracion_stop_segundos
+        # Seteamos la expiración unificada sobre la línea temporal absoluta de la canción
+        config_stop["ultimo_stop_expira"] = segundo_actual + duracion_efectiva
         
-        return comando_sm_ssc, duracion_stop_segundos, True
+        return comando_sm_ssc, duracion_efectiva, True, tipo_actual
         
-    return None, 0.0, False
+    return None, 0.0, False, "stop"
+
 
 def inyectar_saltos_espectrales_paso(paso_elegido, ratio_energia, bpm, lineas_por_compas, dificultad_tag, custom_params):
     """
@@ -1744,7 +1989,7 @@ def ejecutar_bucle_sincrono(config_dificultad, compases_totales, bpm, val_offset
                             rms_bpm, rms_medio_bpm, hop_bpm, rms_speed, rms_medio_speed, hop_speed,
                             rms_saltos, rms_medio_saltos, hop_saltos, lista_rms, rms_medio, lista_centroide,
                             centroide_medio, mel_db, modelo, dispositivo, tokenizer, PostProcesadorStepMania,
-                            evento_cancelar=None, sm_version=False, percent_aditional_time=0.0):
+                            evento_cancelar=None, sm_version=False, percent_aditional_time=0.0, seed_actual=42):
     """
     Bucle principal reestructurado para la generación híbrida de flechas en tiempo real.
     CORREGIDO: Sincronización Chart-Specific (Comandos independientes por dificultad dentro de NOTEDATA)
@@ -1802,11 +2047,14 @@ def ejecutar_bucle_sincrono(config_dificultad, compases_totales, bpm, val_offset
         local_cambios_bpm = [f"0.000={bpm:.3f}"]
         local_cambios_speeds = []
         local_cambios_stops = []
+        local_cambios_delays = [] 
         
         dicc_config_stop = {
             "ultimo_stop_expira": 0.0,
+            "modo_congelamiento": custom_params.get("modo_congelamiento", "Desactivado"),
             "umbral_disparo_stop": custom_params.get("stop_umbral_disparo", 1.80),
-            "duracion_stop_base": custom_params.get("stop_duracion_base", 0.25)
+            "duracion_stop_base": custom_params.get("stop_duracion_base", 0.25),
+            "duracion_delay_base": custom_params.get("stop_duracion_base", 0.25)
         }
 
         pasos_finales_ia = []
@@ -1846,15 +2094,20 @@ def ejecutar_bucle_sincrono(config_dificultad, compases_totales, bpm, val_offset
             cambio_stop_str = None
             duracion_stop_retardo = 0.0
 
-            if stops_activo and not sm_version:
-                cambio_stop_str, duracion_stop_retardo, stop_omitir_fases = procesar_stops_dinamicos(
+            # --- DENTRO DE ejecutar_bucle_sincrono (Fase 0 de Congelamientos) ---
+            if dicc_config_stop["modo_congelamiento"] != "Desactivado" and not sm_version:
+                # Pasamos la semilla "seed_actual" que ya recibe la función bucle
+                cambio_stop_str, duracion_stop_retardo, stop_omitir_fases, tipo_comando = procesar_stops_dinamicos(
                     segundo_actual, beat_actual, paso_idx, total_pasos_dinamicos,
-                    lineas_objetivo, rms_speed, rms_medio_speed, hop_speed, dicc_config_stop
+                    lineas_objetivo, rms_speed, rms_medio_speed, hop_speed, dicc_config_stop,
+                    seed_actual=seed_actual 
                 )
                 if cambio_stop_str:
-                    local_cambios_stops.append(cambio_stop_str)
+                    if tipo_comando == "stop":
+                        local_cambios_stops.append(cambio_stop_str)
+                    else:
+                        local_cambios_delays.append(cambio_stop_str)
                     
-                    # El retraso del stop se añade al acumulador global y al marcador de origen
                     segundo_actual += duracion_stop_retardo
                     tiempo_ultimo_cambio_bpm += duracion_stop_retardo
                     
@@ -1863,6 +2116,7 @@ def ejecutar_bucle_sincrono(config_dificultad, compases_totales, bpm, val_offset
                         pasos_descontados = int(round(duracion_stop_retardo / segundos_por_un_paso_base))
                         total_pasos_dinamicos = max(paso_idx + 1, total_pasos_dinamicos - pasos_descontados)
                         total_pasos_adicionales = int(total_pasos_dinamicos * percent_aditional_time)
+
 
             # -----------------------------------------------------------------
             # FASE 0.1: VALIDACIÓN DE TEMPO (INTERPOLACIÓN ABSOLUTA DE TIME)
@@ -2050,7 +2304,8 @@ def ejecutar_bucle_sincrono(config_dificultad, compases_totales, bpm, val_offset
         sincronizacion_por_dificultad[diff] = {
         "bpms": ",\n".join(dict.fromkeys(local_cambios_bpm)),
         "speeds": ",\n".join(dict.fromkeys(local_cambios_speeds)) if local_cambios_speeds else "",
-        "stops": ",\n".join(dict.fromkeys(local_cambios_stops)) if local_cambios_stops else ""
+        "stops": ",\n".join(dict.fromkeys(local_cambios_stops)) if local_cambios_stops else "",
+        "delays": ",\n".join(dict.fromkeys(local_cambios_delays)) if local_cambios_delays else ""
         }
 
         if custom_params.get("recalcular_dificultad", False):
@@ -2403,7 +2658,7 @@ def generar_simfiles_hibridos(audio_path, checkpoint_path, song_title, max_level
             rms_saltos=rms_saltos, rms_medio_saltos=rms_medio_saltos, hop_saltos=hop_saltos, lista_rms=lista_rms, 
             rms_medio=rms_medio, lista_centroide=lista_centroide, centroide_medio=centroide_medio, mel_db=mel_db, 
             modelo=modelo, dispositivo=dispositivo, tokenizer=tokenizer, PostProcesadorStepMania=post, 
-            sm_version=False, percent_aditional_time=percent_aditional_time
+            sm_version=False, percent_aditional_time=percent_aditional_time, seed_actual=seed_actual
         )
         log_diff_scc, sincro_diff_scc = datos_scc
 
@@ -2467,6 +2722,7 @@ def generar_simfiles_hibridos(audio_path, checkpoint_path, song_title, max_level
                 sincro_local = sincro_diff_scc[diff]
                 f.write(f"#BPMS:{sincro_local['bpms']};\n")
                 if sincro_local['stops']: f.write(f"#STOPS:{sincro_local['stops']};\n")
+                if sincro_local['delays']: f.write(f"#DELAYS:{sincro_local['delays']};\n")
                 if sincro_local['speeds']: f.write(f"#SPEEDS:{sincro_local['speeds']};\n")
                 
                 f.write(f"#RADARVALUES:0.1,0.1,0.1,0.1,0.1;\n#CREDIT:AI_Engine_GSH;\n#NOTES:\n")
@@ -2868,7 +3124,7 @@ class StepHybridUI(ctk.CTk):
         self.menu_apartados = ctk.CTkOptionMenu(
             self.contenedor_vertical, 
             values=[get_translation("menu_opt_hide"), get_translation("menu_opt_time"), get_translation("menu_opt_bpm"), get_translation("menu_opt_fx"),
-             get_translation("menu_opt_filters"), get_translation("menu_opt_batch")],
+             get_translation("menu_opt_filters"), get_translation("menu_opt_batch"), get_translation("menu_opt_tag_editor")],
             command=self.conmutar_apartados_ui,
             fg_color="#2980b9",
             button_color="#3498db"
@@ -2883,6 +3139,7 @@ class StepHybridUI(ctk.CTk):
         self.apartado_filtros = ctk.CTkFrame(self.contenedor_vertical, fg_color="transparent")
         self.apartado_tiempo = ctk.CTkFrame(self.contenedor_vertical, fg_color="transparent")
         self.apartado_modo_batch = ctk.CTkFrame(self.contenedor_vertical, fg_color="transparent")
+        self.apartado_editor_etiquetas = ctk.CTkFrame(self.contenedor_vertical, fg_color="transparent")
 
         # --- APARTADO: TIEMPO ---
         self.btn_visualizar_grafico = ctk.CTkButton(self.apartado_tiempo, text=get_translation("btn_graph"), fg_color="#8e44ad", hover_color="#9b59b6", font=ctk.CTkFont(weight="bold"), command=self.abrir_visualizador_audio)
@@ -3143,8 +3400,14 @@ class StepHybridUI(ctk.CTk):
         # CONTENEDOR STOPS DINAMICO
         self.label_seccion_adv_stops = ctk.CTkLabel(self.apartado_bpm, text=get_translation("lbl_sec_stops"), font=ctk.CTkFont(size=13, weight="bold", slant="italic"), text_color="#E6CDCF")
         
-        self.checkbox_stops_dinamico = ctk.CTkCheckBox(self.apartado_bpm, text=get_translation("chk_dynamic_stops"), command=self.gestionar_exclusivad_stops)
-        self.checkbox_stops_dinamico.deselect()
+        self.label_modo_stops = ctk.CTkLabel(self.apartado_bpm, text=get_translation("lbl_stops_mode"), font=ctk.CTkFont(weight="bold"))
+        self.menu_modo_stops = ctk.CTkOptionMenu(
+            self.apartado_bpm,
+            values=[get_translation("opt_stop_disabled"), get_translation("opt_stop_only"), get_translation("opt_delay_only"), get_translation("opt_stop_combined")],
+            command=self.gestionar_visibilidad_congelamientos,
+            fg_color="#34495e",
+            button_color="#2c3e50"
+        )
 
         self.frame_stops_dinamico = ctk.CTkFrame(self.apartado_bpm, fg_color="transparent")
 
@@ -3168,7 +3431,7 @@ class StepHybridUI(ctk.CTk):
 
         widgets_bpm = [
             self.label_seccion_adv_bpm, self.label_bpm, self.frame_controles_bpm, self.frame_bpm_botones, self.checkbox_bpm_doble, self.frame_double_bpm, self.checkbox_bpm_dinamico, #self.frame_bpm_dinamico,
-            self.label_seccion_adv_speed, self.checkbox_speeds_dinamico, self.label_seccion_adv_stops, self.checkbox_stops_dinamico
+            self.label_seccion_adv_speed, self.checkbox_speeds_dinamico, self.label_seccion_adv_stops, self.menu_modo_stops
             ]
         for w in widgets_bpm: 
             w.pack(pady=4, padx=20)
@@ -3428,6 +3691,66 @@ class StepHybridUI(ctk.CTk):
         for w in widgets_modo_batch: 
             w.pack(pady=4, padx=20)
 
+
+        # --- APARTADO DE CONFIGURACIÓN E INYECCIÓN DE COMPONENTES DEL EDITOR DE ETIQUETAS ---
+
+        self.label_sec_tag_editor = ctk.CTkLabel(self.apartado_editor_etiquetas, text=get_translation("lbl_tag_editor_title"), font=ctk.CTkFont(size=13, weight="bold", slant="italic"), text_color="#FFCC00")
+        
+        self.label_tag_modo = ctk.CTkLabel(self.apartado_editor_etiquetas, text=get_translation("lbl_mode_selection"), font=ctk.CTkFont(weight="bold"))
+        self.menu_modo_tag = ctk.CTkOptionMenu(
+            self.apartado_editor_etiquetas,
+            values=[get_translation("opt_mode_single"), get_translation("opt_mode_batch")],
+            command=self.conmutar_modo_editor_etiquetas,
+            fg_color="#34495e", button_color="#2c3e50"
+        )
+        
+        self.ruta_tag_objetivo = "" # Almacenará la ruta seleccionada de archivo o carpeta
+        self.btn_seleccionar_destino_tag = ctk.CTkButton(self.apartado_editor_etiquetas, text=get_translation("btn_select_sm_file"), fg_color="#16a085", command=self.buscar_destino_editor_etiquetas)
+        self.label_destino_tag_path = ctk.CTkLabel(self.apartado_editor_etiquetas, text=get_translation("lbl_no_audio"), text_color="gray", wraplength=350)
+        
+        self.label_tag_nombre = ctk.CTkLabel(self.apartado_editor_etiquetas, text=get_translation("lbl_tag_to_edit"), font=ctk.CTkFont(weight="bold"))
+        self.menu_tag_nombre = ctk.CTkOptionMenu(
+            self.apartado_editor_etiquetas,
+            values=["BANNER", "BACKGROUND", "VIDEO", "CDTITLE", "TITLE", "ARTIST", "MUSIC"],
+            fg_color="#2980b9", button_color="#3498db"
+        )
+        
+        self.label_tag_valor = ctk.CTkLabel(self.apartado_editor_etiquetas, text=get_translation("lbl_new_tag_value"), font=ctk.CTkFont(weight="bold"))
+        self.entry_tag_valor = ctk.CTkEntry(self.apartado_editor_etiquetas, placeholder_text="Ej: banner.png", width=340)
+        
+        self.label_tag_valor = ctk.CTkLabel(self.apartado_editor_etiquetas, text=get_translation("lbl_new_tag_value"), font=ctk.CTkFont(weight="bold"))
+        self.entry_tag_valor = ctk.CTkEntry(self.apartado_editor_etiquetas, placeholder_text="Ej: banner.png", width=340)
+        
+        # --- NUEVO COMPONENTE: CHECKBOX DE PROTECCIÓN CONDICIONAL ---
+        self.checkbox_proteger_datos_tag = ctk.CTkCheckBox(
+            self.apartado_editor_etiquetas, 
+            text=get_translation("chk_overwrite_protection"),
+            text_color="#e67e22"
+        )
+        self.checkbox_proteger_datos_tag.select() # Viene activado por defecto por seguridad de tus datos
+
+        self.btn_ejecutar_tags = ctk.CTkButton(self.apartado_editor_etiquetas, text=get_translation("btn_apply_tags"), fg_color="#e67e22", hover_color="#d35400", font=ctk.CTkFont(weight="bold"), command=self.ejecutar_modificacion_etiquetas)
+
+        self.btn_abrir_carpeta_edicion = ctk.CTkButton(
+            self.apartado_editor_etiquetas, 
+            text=get_translation("btn_edited_files"), 
+            fg_color="#27ae60", 
+            hover_color="#219a52", 
+            font=ctk.CTkFont(weight="bold"), 
+            command=self.abrir_carpeta_salida_edicion
+        )
+
+        widgets_tag_editor = [
+            self.label_sec_tag_editor, self.label_tag_modo, self.menu_modo_tag, 
+            self.btn_seleccionar_destino_tag, self.label_destino_tag_path,
+            self.label_tag_nombre, self.menu_tag_nombre, self.label_tag_valor, self.entry_tag_valor,
+            self.checkbox_proteger_datos_tag, 
+            self.btn_ejecutar_tags,
+            self.btn_abrir_carpeta_edicion  # Agregado al flujo lineal
+        ]
+        for w in widgets_tag_editor:
+            w.pack(pady=4, padx=20)
+
         #=====================================================================
         # BLOQUE FINAL E INMUTABLE DE EJECUCIÓN (FUERA)
         # =====================================================================
@@ -3482,6 +3805,7 @@ class StepHybridUI(ctk.CTk):
         self.apartado_efectos.pack_forget()
         self.apartado_filtros.pack_forget()
         self.apartado_modo_batch.pack_forget()
+        self.apartado_editor_etiquetas.pack_forget()
         if seleccion == get_translation("menu_opt_time"):
             self.apartado_tiempo.pack(fill="x", expand=True, before=self.btn_resetear)
         elif seleccion == get_translation("menu_opt_bpm"):
@@ -3492,6 +3816,8 @@ class StepHybridUI(ctk.CTk):
             self.apartado_filtros.pack(fill="x", expand=True, before=self.btn_resetear)
         elif seleccion == get_translation("menu_opt_batch"):
             self.apartado_modo_batch.pack(fill="x", expand=True, before=self.btn_resetear)
+        elif seleccion == get_translation("menu_opt_tag_editor"):
+            self.apartado_editor_etiquetas.pack(fill="x", expand=True, before=self.btn_resetear)
 
     def cambiar_idioma_ui(self, seleccion):
         """Alterna el idioma global y reescribe los textos activos en pantalla."""
@@ -3539,7 +3865,7 @@ class StepHybridUI(ctk.CTk):
          get_translation("preset_4"), get_translation("preset_5"), get_translation("preset_6"), get_translation("preset_7")])
         self.label_menu_apartados.configure(text=get_translation("lbl_adv_settings"))
         self.menu_apartados.configure(values=[get_translation("menu_opt_hide"), get_translation("menu_opt_time"), get_translation("menu_opt_bpm"),
-         get_translation("menu_opt_fx"), get_translation("menu_opt_filters"), get_translation("menu_opt_batch")])
+         get_translation("menu_opt_fx"), get_translation("menu_opt_filters"), get_translation("menu_opt_batch"), get_translation("menu_opt_tag_editor")])
         self.btn_cancelar.configure(text=get_translation("btn_cancel_gen"))
         self.btn_resetear.configure(text=get_translation("btn_reset"))
         self.btn_generar.configure(text=get_translation("btn_generate"))
@@ -3579,7 +3905,7 @@ class StepHybridUI(ctk.CTk):
         self.label_speed_max.configure(text=f"{get_translation("lbl_speed_max")} {self.slider_speed_max.get()}x")
         self.label_speed_trans.configure(text=f"{get_translation("lbl_speed_trans")} {self.slider_speed_trans.get()}")
         self.label_seccion_adv_stops.configure(text=get_translation("lbl_sec_stops"))
-        self.checkbox_stops_dinamico.configure(text=get_translation("chk_dynamic_stops"))
+        self.menu_modo_stops.configure(values=[get_translation("opt_stop_disabled"), get_translation("opt_stop_only"), get_translation("opt_delay_only"), get_translation("opt_stop_combined")])
         self.label_stops_umbral.configure(text=f"{get_translation("lbl_stops_umbral")} {self.slider_stops_umbral.get():.2f}") 
         self.label_stops_duracion.configure(text=f"{get_translation("lbl_stops_duration")} {self.slider_stops_duracion.get():.2f}s") 
 
@@ -3627,6 +3953,17 @@ class StepHybridUI(ctk.CTk):
         self.label_palabra_video.configure(text=get_translation("lbl_palabra_video"))
         self.label_palabra_background.configure(text=get_translation("lbl_palabra_background"))
         self.label_palabra_cdtitle.configure(text=get_translation("lbl_palabra_cdtitle"))
+
+        # 9. Apartado de edición de archivos
+        self.label_sec_tag_editor.configure(text=get_translation("lbl_tag_editor_title"))
+        self.label_tag_modo.configure(text=get_translation("lbl_mode_selection"))
+        self.menu_modo_tag.configure(values=[get_translation("opt_mode_single"), get_translation("opt_mode_batch")])
+        self.label_tag_nombre.configure(text=get_translation("lbl_tag_to_edit"))
+        self.label_tag_valor.configure(text=get_translation("lbl_new_tag_value"))
+        self.btn_ejecutar_tags.configure(text=get_translation("btn_apply_tags"))
+        self.checkbox_proteger_datos_tag.configure(text=get_translation("chk_overwrite_protection"))
+        self.conmutar_modo_editor_etiquetas(self.menu_modo_tag.get())
+        self.btn_abrir_carpeta_edicion.configure(text=get_translation("btn_edited_files"))
 
         # Refrescar los textos calculados por sliders activos
         self.actualizar_texto_offset(self.slider_offset.get())
@@ -3716,9 +4053,7 @@ class StepHybridUI(ctk.CTk):
             self.label_speed_umbral.configure(text=f"{get_translation("lbl_speed_anti_dizzy")} {self.slider_speed_umbral.get():.2f}")
 
             #Aplicando presents de stops
-            if data.get("aplicar_stops_dinamicos", False): self.checkbox_stops_dinamico.select()
-            else: self.checkbox_stops_dinamico.deselect()
-        
+            self.menu_modo_stops.set(data.get("modo_congelamiento", get_translation("opt_stop_disabled")))
             self.slider_stops_umbral.set(data.get("stops_umbral_disparo", 1.50))
             self.label_stops_duracion.configure(text=f"{get_translation("lbl_stops_umbral")} {self.slider_stops_umbral.get():.2f}") 
             self.slider_stops_duracion.set(data.get("stops_duracion", 0.25))
@@ -4070,7 +4405,7 @@ class StepHybridUI(ctk.CTk):
             "speed_umbral_disparo": round(self.slider_speed_umbral.get(), 2),
 
             #Ajustes de Stops
-            "aplicar_stops_dinamicos": self.checkbox_stops_dinamico.get(),
+            "modo_congelamiento": self.menu_modo_stops.get(),
             "stops_umbral_disparo": round(self.slider_stops_umbral.get(), 2),
             "stops_duracion": round(self.slider_stops_duracion.get(), 2),
             
@@ -4221,12 +4556,12 @@ class StepHybridUI(ctk.CTk):
         self.label_speed_umbral.configure(text=f"{get_translation("lbl_speed_anti_dizzy")} 0.50")
 
         # Reset de ui stops
-        self.checkbox_stops_dinamico.deselect()
-        self.checkbox_stops_dinamico.configure(state="normal")
+        self.menu_modo_stops.set(get_translation("opt_stop_disabled"))
         self.slider_stops_umbral.set(1.5)
         self.label_stops_duracion.configure(text=f"{get_translation("lbl_stops_umbral")} {self.slider_stops_umbral.get():.2f}") 
         self.slider_stops_duracion.set(0.25)
         self.label_stops_duracion.configure(text=f"{get_translation("lbl_stops_duration")} {self.slider_stops_duracion.get():.2f}s") 
+        self.frame_stops_dinamico.pack_forget()
 
         # Reset de holds
         self.checkbox_postprocesar.select()
@@ -4351,6 +4686,10 @@ class StepHybridUI(ctk.CTk):
         self.entry_palabra_background.delete(0, "end")
         self.entry_palabra_cdtitle.delete(0, "end")
 
+        #Reseteo Modo Edición
+        self.checkbox_proteger_datos_tag.select()
+        self.entry_tag_valor.delete(0, "end")
+
         self.label_status.configure(text=get_translation("label_status_reset"), text_color="gray")
 
     def actualizar_texto_bpm(self, valor):
@@ -4432,11 +4771,16 @@ class StepHybridUI(ctk.CTk):
             tipo = get_translation("lbl_speed_anti_dizzy_indicator4")
         self.label_speed_umbral.configure(text=f"{get_translation("lbl_speed_anti_dizzy")} {valor:.2f} ({tipo})")
 
-    def gestionar_exclusivad_stops(self):
-        if self.checkbox_stops_dinamico.get():
-            self.frame_stops_dinamico.pack(pady=5, fill="x", padx=20, after=self.checkbox_stops_dinamico)
+    def gestionar_visibilidad_congelamientos(self, seleccion):
+        """Muestra u oculta los sliders rítmicos de congelación visual según la selección del menú."""
+        if seleccion == get_translation("opt_stop_disabled"):
+            self.frame_stops_dinamico.pack_forget()
         else:
-            self.frame_stops_dinamico.forget()
+            self.frame_stops_dinamico.pack(pady=5, fill="x", padx=20, after=self.menu_modo_stops)
+            self.label_stops_umbral.pack(pady=2, padx=5)
+            self.slider_stops_umbral.pack(pady=2, padx=5)
+            self.label_stops_duracion.pack(pady=2, padx=5)
+            self.slider_stops_duracion.pack(pady=2, padx=5)
 
     def gestionar_exclusividad_saltos(self):
         if self.checkbox_secciones_saltos.get():
@@ -4666,6 +5010,73 @@ class StepHybridUI(ctk.CTk):
         else:
             return False
 
+    def conmutar_modo_editor_etiquetas(self, seleccion):
+        """Cambia el texto del botón de búsqueda dependiendo del modo escogido."""
+        self.ruta_tag_objetivo = ""
+        self.label_destino_tag_path.configure(text=get_translation("lbl_no_audio"), text_color="gray")
+        if seleccion == get_translation("opt_mode_single"):
+            self.btn_seleccionar_destino_tag.configure(text=get_translation("btn_select_sm_file"))
+        else:
+            self.btn_seleccionar_destino_tag.configure(text=get_translation("btn_select_sm_folder"))
+
+    def buscar_destino_editor_etiquetas(self):
+        """Abre un explorador de archivos o carpetas según corresponda."""
+        modo = self.menu_modo_tag.get()
+        if modo == get_translation("opt_mode_single"):
+            ruta = filedialog.askopenfilename(filetypes=[("StepMania Simfiles", "*.sm *.ssc")])
+        else:
+            ruta = filedialog.askdirectory(title=get_translation("btn_select_sm_folder"))
+            
+        if ruta:
+            self.ruta_tag_objetivo = ruta
+            self.label_destino_tag_path.configure(text=os.path.basename(ruta) if os.path.isfile(ruta) else ruta, text_color="#1abc9c")
+
+    def ejecutar_modificacion_etiquetas(self):
+        """Valida las entradas, extrae configuraciones del checkbox y ejecuta cambios con reporte de omisiones."""
+        modo = self.menu_modo_tag.get()
+        etiqueta = self.menu_tag_nombre.get()
+        nuevo_valor = self.entry_tag_valor.get().strip()
+        proteger_activos = bool(self.checkbox_proteger_datos_tag.get())
+
+        # Si el checkbox NO está activo y el campo de texto está vacío, bloqueamos por seguridad general del sistema
+        if not nuevo_valor and not proteger_activos:
+            messagebox.showerror("Error", get_translation("msg_tags_error_empty"))
+            return
+
+        if not self.ruta_tag_objetivo:
+            messagebox.showerror("Error", get_translation("msg_tags_error_empty"))
+            return
+
+        # Despachamos al motor adaptativo
+        modificados, omitidos = procesar_etiquetas_lote_o_individual(
+            self.ruta_tag_objetivo, modo, etiqueta, nuevo_valor, proteger_activos
+        )
+            
+        if modificados > 0 or omitidos > 0:
+            # Mostramos un resumen claro de cuántos se actualizaron y cuántos se mantuvieron intactos por tener datos previos
+            messagebox.showinfo("Editor de Etiquetas", get_translation("msg_tags_skipped").format(modificados, omitidos))
+            self.entry_tag_valor.delete(0, "end")
+        else:
+            messagebox.showwarning("Advertencia", get_translation("msg_tags_no_files"))
+
+    def abrir_carpeta_salida_edicion(self):
+        import sys
+        import subprocess
+        if getattr(sys, 'frozen', False):
+            carpeta = os.path.dirname(sys.executable)
+        else:
+            carpeta = os.path.dirname(os.path.abspath(__file__))
+        ruta_final = os.path.join(carpeta, "Simfiles_Editados")
+        os.makedirs(ruta_final, exist_ok=True)
+            
+        # Comando multiplataforma seguro
+        if sys.platform == "win32":
+            os.startfile(ruta_final)
+        elif sys.platform == "darwin":
+            subprocess.Popen(["open", ruta_final])
+        else:
+            subprocess.Popen(["xdg-open", ruta_final])
+
     def solicitar_cancelacion(self):
         """Activa la señal de cancelación y actualiza el texto de advertencia."""
         self.cancelar_generacion.set() # Levanta la bandera de detenerse
@@ -4748,7 +5159,7 @@ class StepHybridUI(ctk.CTk):
             "speed_max_custom": float(self.slider_speed_max.get()),  
             "speed_trans_custom": float(self.slider_speed_trans.get()), # Marea Scroll
             "speed_umbral_disparo": float(self.slider_speed_umbral.get()),
-            "aplicar_stops_dinamicos": bool(self.checkbox_stops_dinamico.get()),
+            "modo_congelamiento": self.menu_modo_stops.get(),
             "stop_umbral_disparo": float(self.slider_stops_umbral.get()),
             "stop_duracion_base": float(self.slider_stops_duracion.get()),
             "aplicar_postprocesamiento": bool(self.checkbox_postprocesar.get()),
@@ -4986,7 +5397,7 @@ class StepHybridUI(ctk.CTk):
                         "speed_max_custom": float(self.slider_speed_max.get()),  
                         "speed_trans_custom": float(self.slider_speed_trans.get()),
                         "speed_umbral_disparo": float(self.slider_speed_umbral.get()),
-                        "aplicar_stops_dinamicos": bool(self.checkbox_stops_dinamico.get()),
+                        "modo_congelamiento": self.menu_modo_stops.get(),
                         "stop_umbral_disparo": float(self.slider_stops_umbral.get()),
                         "stop_duracion_base": float(self.slider_stops_duracion.get()),
                         "aplicar_postprocesamiento": bool(self.checkbox_postprocesar.get()),
