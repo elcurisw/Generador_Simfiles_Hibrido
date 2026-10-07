@@ -205,10 +205,10 @@ Small section for editing data in sm/ssc files; its use is limited.
 
 | # | Field | Type | Description | Key Notes |
 | :---: | :---: | :---: | :---: | :---: |
-| 91 | **Select Edit Mode** | Configures the type of editing by individual file or by batches... | |
-| 92 | **Select File/Folder** | Select File to edit. | Mandatory to use this function. |
-| 93 | **Tag to modify or add** | Select Tag to edit. | Mandatory to select one for this method/mode. |
-| 94 | **New value** | Assigns a word or path you want to add or modify over a previous value. | |
-| 95 | **Protect tags with data if the field is empty** | Protect labels with data if the field is empty or fill in the file (sm/ssc). | |
-| 96 | **Apply Tag Changes** | Apply Changes to Labels. | Initiates the editing process. |
-| 97 | **Open Edited Folder** | Open Edited Folder | |
+| 91 | **Select Edit Mode** | Selector | Configures the type of editing by individual file or by batches... | |
+| 92 | **Select File/Folder** | Button | Select File to edit. | Mandatory to use this function. |
+| 93 | **Tag to modify or add** | Button | Select Tag to edit. | Mandatory to select one for this method/mode. |
+| 94 | **New value** | Text | Assigns a word or path you want to add or modify over a previous value. | |
+| 95 | **Protect tags with data if the field is empty** | Checkbox | Protect labels with data if the field is empty or fill in the file (sm/ssc). | |
+| 96 | **Apply Tag Changes** | Button | Apply Changes to Labels. | Initiates the editing process. |
+| 97 | **Open Edited Folder** | Button | Open Edited Folder | |
