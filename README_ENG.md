@@ -25,7 +25,7 @@ The executable version is available with a separate checkpoint if you only inten
 #### **Version Notes & Compatibility Updates:**
 
 *   **ITGmania Improvements:** The improved version adds the `stops` function starting from version 1.8, and several inconsistencies related to the construction of the `.sm` and `.scc` files have been fixed (this issue no longer occurs).
-    *   **⚠️ Limitation Warning:** However, ITGmania may crash when processing songs longer than two minutes using its `.scc` file. The `.sm` file format remains fully functional. If you require files for more extensive songs, please use an older version (such as [![Old Version Number/Name](https://github.com/elcurisw/Generador_Simfiles_Hibrido/releases/tag/v.1.7.0.1)]).
+    *   **⚠️ Limitation Warning:** However, ITGmania may crash when processing songs longer than two minutes using its `.scc` file. The `.sm` file format remains fully functional. If you require files for more extensive songs, please use an older version ([![Old Version](https://github.com/elcurisw/Generador_Simfiles_Hibrido/releases/tag/v.1.7.0.1)]).
     *   **Outfox Compatibility:** By contrast, Outfox can correctly process the new file formats.
 
 #### **Final Recommendation:**
