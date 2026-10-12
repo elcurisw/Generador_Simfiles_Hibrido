@@ -9,14 +9,27 @@ File Risk: Since the program is designed to create, modify, and rewrite rhythmic
 
 This program is designed to generate dynamic and detailed step files (*.sm and *.ssc), optimized for rhythm games like StepMania. Follow this guide to ensure correct installation and the best possible user experience.
 
-### I. Prerequisites and Technical Installation
+### **I. Prerequisites and Technical Setup**
+*(Or: Requirements and Installation)*
 
-⚠️ Important Recommendations:
+#### ⚠️ Important Recommendations:
+It is strongly recommended to use a virtual environment (`venv`) to isolate your project's dependencies, whether you are testing code or training models. The base test environment is Python 3.12 on WINDOWS 11; however, compatibility is expected with other versions of Python or Windows OS.
 
-It is recommended to use a virtual environment (venv) to isolate project dependencies, whether testing code or training models.
-The base test environment is Python 3.12 on WINDOWS 11, but compatibility with other versions of Python or Windows is expected.
+***
 
-**The executable version (.exe) with a separate checkpoint is available if you only wish to use the generator.**
+#### **[![New Version (.exe)](https://github.com/elcurisw/Generador_Simfiles_Hibrido/releases/tag/v1.8.5)]**
+The executable version is available with a separate checkpoint if you only intend to use the generator function.
+
+***
+
+#### **Version Notes & Compatibility Updates:**
+
+*   **ITGmania Improvements:** The improved version adds the `stops` function starting from version 1.8, and several inconsistencies related to the construction of the `.sm` and `.scc` files have been fixed (this issue no longer occurs).
+    *   **⚠️ Limitation Warning:** However, ITGmania may crash when processing songs longer than two minutes using its `.scc` file. The `.sm` file format remains fully functional. If you require files for more extensive songs, please use an older version (such as [![Old Version Number/Name](https://github.com/elcurisw/Generador_Simfiles_Hibrido/releases/tag/v.1.7.0.1)]).
+    *   **Outfox Compatibility:** By contrast, Outfox can correctly process the new file formats.
+
+#### **Final Recommendation:**
+We recommend using a dedicated editor for final touch-ups and adjustments, such as Arrow Vortex (https://arrowvortex.ddrnl.com/).
 
 #### A. Main Dependencies (Installation via pip)
 
