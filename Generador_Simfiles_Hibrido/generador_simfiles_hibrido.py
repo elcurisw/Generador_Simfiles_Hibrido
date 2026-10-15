@@ -2345,7 +2345,6 @@ def inyectar_trampas_sincronas(paso_elegido, ratio_energia, cfg, custom_params, 
                 
     return paso_elegido
 
-
 def ejecutar_bucle_sincrono(config_dificultad, compases_totales, bpm, val_offset, duracion, total_frames,
                             dinamico_activo, speeds_activo, custom_params, aplicar_post, max_level_chosen,
                             rms_bpm, rms_medio_bpm, hop_bpm, rms_speed, rms_medio_speed, hop_speed,
@@ -2353,19 +2352,21 @@ def ejecutar_bucle_sincrono(config_dificultad, compases_totales, bpm, val_offset
                             centroide_medio, mel_db, modelo, dispositivo, tokenizer, PostProcesadorStepMania,
                             evento_cancelar=None, sm_version=False, percent_aditional_time=0.0, seed_actual=42):
     """
-    Bucle principal reestructurado para la generación híbrida de flechas en tiempo real.
-    CORREGIDO: Sincronización Chart-Specific (Comandos independientes por dificultad dentro de NOTEDATA)
-    para evitar que los niveles bajos se corten o desincronicen.
+    [ARQUITECTURA ARROWVORTEX CON PRE-CALIBRACIÓN DE EVENTOS DISCRETOS]
+    Pre-calcula el consumo exacto de Beats considerando las aceleraciones del BPM dinámico
+    para evitar que el mapa se corte antes de tiempo o se desphase en los silencios.
     """
-    
-    # Estructura maestra para almacenar la sincronización individual de cada dificultad
     sincronizacion_por_dificultad = {}
     mapa_pasos_por_dificultad = {}
     log_metricas_diff = ""
 
-    # Diccionario base de BPM (Solo lectura)
-    dicc_config_bpm = {}
+    # Parámetros base de la interfaz y configuraciones DSP de BPM
+    lineas_challenge = config_dificultad["Challenge"]["lineas_por_compas"]
+    porcentaje_tamano_capa = custom_params.get("porcentaje_tamano", 1.0)
+    extension_final = custom_params.get("extension_final", 0.0) if custom_params else 0.0
 
+    # Inicializar diccionarios de control de BPM idénticos a tu lógica base
+    dicc_config_bpm = {}
     if dinamico_activo:
         min_bpm_dinamico = custom_params.get("min_bpm_dinamico", 0)
         max_bpm_dinamico = custom_params.get("max_bpm_dinamico", 0)
@@ -2375,48 +2376,91 @@ def ejecutar_bucle_sincrono(config_dificultad, compases_totales, bpm, val_offset
         BPM_ESTRATO_BAJO, BPM_ESTRATO_MEDIO, BPM_ESTRATO_ALTO = valores_ordenados[0], valores_ordenados[1], valores_ordenados[2]
         media_baja = BPM_ESTRATO_BAJO + (BPM_ESTRATO_MEDIO - BPM_ESTRATO_BAJO) * 0.75
         media_alta = BPM_ESTRATO_MEDIO + (BPM_ESTRATO_ALTO - BPM_ESTRATO_MEDIO) * 0.75
-        r_min_bpm = custom_params.get("bpm_dinamico_rms_min", 0.5)
-        r_max_bpm = custom_params.get("bpm_dinamico_rms_max", 1.5)
-        r_medio_bpm = r_min_bpm + (r_max_bpm - r_min_bpm) / 2
-        umbral_calma, umbral_drop = r_min_bpm + (r_medio_bpm - r_min_bpm) / 2, r_medio_bpm + (r_max_bpm - r_medio_bpm) / 2
         
         dicc_config_bpm = {
             "bajo": BPM_ESTRATO_BAJO, "medio": BPM_ESTRATO_MEDIO, "alto": BPM_ESTRATO_ALTO,
-            "media_baja": media_baja, "media_alta": media_alta, "r_min": r_min_bpm, 
-            "r_med": r_medio_bpm, "umbral_c": umbral_calma, "umbral_d": umbral_drop,
+            "media_baja": media_baja, "media_alta": media_alta, 
+            "r_min": custom_params.get("bpm_dinamico_rms_min", 0.5), 
+            "r_max": custom_params.get("bpm_dinamico_rms_max", 1.5), 
             "amortiguador_custom": custom_params.get("bpm_amortiguador_custom", 0.12),
-            "umbral_disparo_custom_bpm" : custom_params.get("umbral_disparo_custom_bpm", 4.0)
+            "umbral_disparo_custom_bpm": custom_params.get("umbral_disparo_custom_bpm", 4.0)
         }
+        dicc_config_bpm["r_med"] = dicc_config_bpm["r_min"] + (dicc_config_bpm["r_max"] - dicc_config_bpm["r_min"]) / 2
+        dicc_config_bpm["umbral_c"] = dicc_config_bpm["r_min"] + (dicc_config_bpm["r_med"] - dicc_config_bpm["r_min"]) / 2
+        dicc_config_bpm["umbral_d"] = dicc_config_bpm["r_med"] + (dicc_config_bpm["r_max"] - dicc_config_bpm["r_med"]) / 2
 
-    # Diccionario base de Scroll Speed (Solo lectura)
+    # =====================================================================
+    # 🧠 FASE DE CALIBRACIÓN: PRE-LECTURA TEMPORAL DE BEATS
+    # =====================================================================
+    # Determinamos con precisión cuántos Beats reales se consumen a lo largo
+    # de los segundos físicos de la canción al aplicar las curvas de tempo.
+    duracion_fisica_audio = duracion - (percent_aditional_time * 0.01 * duracion)
+    
+    if dinamico_activo and len(rms_bpm) > 0:
+        sim_segundo = val_offset
+        sim_beat = 0.0
+        sim_bpm = bpm
+        sim_paso = 0
+        
+        # Simulamos el avance rítmico en una resolución estándar de nota negra (1/4 de Beat)
+        # para mapear la marea del BPM antes de generar el Simfile definitivo.
+        sim_lineas = 4 
+        sim_beats_por_paso = 4.0 / sim_lineas
+        
+        while sim_segundo < duracion_fisica_audio:
+            sim_bpm, cambio_str = procesar_ritmo_dinamico(
+                sim_segundo, sim_beat, sim_paso, sim_lineas,
+                rms_bpm, rms_medio_bpm, hop_bpm, sim_bpm, dicc_config_bpm
+            )
+            if cambio_str:
+                sim_bpm = round(float(sim_bpm))
+                
+            segundos_de_este_paso = (sim_beats_por_paso * 60.0) / sim_bpm
+            sim_segundo += segundos_de_este_paso
+            sim_beat += sim_beats_por_paso
+            sim_paso += 1
+            
+        total_beats_reales_calculados = sim_beat
+    else:
+        # Fallback estático si el BPM dinámico no está activo
+        total_beats_reales_calculados = (duracion_fisica_audio * (bpm / 60.0))
+
+    # Aplicamos las capas de escalado (Muestreo Multicapa) y tiempo adicional de inferencia de la interfaz
+    total_beats_base = total_beats_reales_calculados * porcentaje_tamano_capa
+    total_beats_adicionales = total_beats_base * (percent_aditional_time * 0.01)
+    total_beats_objetivo = total_beats_base + total_beats_adicionales
+
+    # Parámetros base de Scroll Speed DSP
     dicc_config_speed = {}
-    # Ahora excluimos esta función de la version sm
     if speeds_activo and not sm_version:
-        VELOCIDAD_MINIMA = custom_params.get("speed_min_custom", 0.70)
-        VELOCIDAD_MAXIMA = custom_params.get("speed_max_custom", 1.40)
         r_min_speed = custom_params.get("speed_rms_min", 0.5)
         r_max_speed = custom_params.get("speed_rms_max", 1.5)
-        r_diff_speed = (r_max_speed - r_min_speed) if (r_max_speed - r_min_speed) != 0 else 1.0
-        
         dicc_config_speed = {
-            "v_min": VELOCIDAD_MINIMA, "v_max": VELOCIDAD_MAXIMA, "trans": 0.0,
-            "r_min": r_min_speed, "r_max": r_max_speed, "r_diff": r_diff_speed,
-            "speed_trans_custom": custom_params.get("speed_trans_custom", 0.05) ,
+            "v_min": custom_params.get("speed_min_custom", 0.70), 
+            "v_max": custom_params.get("speed_max_custom", 1.40), 
+            "r_min": r_min_speed, "r_max": r_max_speed, 
+            "r_diff": (r_max_speed - r_min_speed) if (r_max_speed - r_min_speed) != 0 else 1.0,
+            "speed_trans_custom": custom_params.get("speed_trans_custom", 0.05),
             "umbral_disparo_custom": custom_params.get("speed_umbral_disparo", 0.50)
         }
 
-    lineas_challenge = config_dificultad["Challenge"]["lineas_por_compas"]
-
+    # =====================================================================
+    # BUCLE PRINCIPAL DE GENERACIÓN DE PASOS POR DIFICULTAD
+    # =====================================================================
     for diff, cfg in config_dificultad.items():
+        lineas_objetivo = cfg["lineas_por_compas"]
+        beats_por_linea = 4.0 / lineas_objetivo
+        
+        # Ahora el tamaño del mapa en casillas se calcula a partir del techo de Beats real pre-calibrado
+        total_lineas_mapa = int(total_beats_objetivo / beats_por_linea)
+
         local_cambios_bpm = [f"0.000={bpm:.3f}"]
         local_cambios_speeds = []
         local_cambios_stops = []
-        local_cambios_delays = [] 
-        
+        local_cambios_delays = []
+
         dicc_config_stop = {
-            "estado_fsm": "EVALUANDO",  # <-- Iniciar estado nativo de la FSM
-            "tiempo_fin_congelado": 0.0,
-            "tiempo_fin_inmunidad": 0.0,
+            "estado_fsm": "EVALUANDO", "tiempo_fin_congelado": 0.0, "tiempo_fin_inmunidad": 0.0,
             "modo_congelamiento": custom_params.get("modo_congelamiento", "desactivado"),
             "umbral_disparo_stop": custom_params.get("stop_umbral_disparo", 1.80),
             "duracion_stop_base": custom_params.get("stop_duracion_base", 0.25),
@@ -2424,183 +2468,117 @@ def ejecutar_bucle_sincrono(config_dificultad, compases_totales, bpm, val_offset
             "stop_wait_base": custom_params.get("stop_wait", 0.0)
         }
 
+        beat_ultimo_cambio_bpm = 0.0
+        tiempo_ultimo_cambio_bpm = val_offset  
+        bpm_actual = bpm
+        velocidad_actual = -1.0
+
         pasos_finales_ia = []
-        lineas_objetivo = cfg["lineas_por_compas"]
-        porcentaje_tamano_capa = custom_params.get("porcentaje_tamano", 1.0)
-
-        total_pasos_base = int((compases_totales * lineas_objetivo) * porcentaje_tamano_capa)
-        total_pasos_dinamicos = total_pasos_base
-        total_pasos_adicionales = int(total_pasos_dinamicos * percent_aditional_time)
-
-        segundo_actual = val_offset 
-        beat_actual = 0.0
-        ultimo_bpm_aplicado = bpm
-        ultima_velocidad_aplicada = -1.0
-        cooldown_saltos = 0 
+        cooldown_saltos = 0
         conteo_compas_fx = {"M": 0, "F": 0, "L": 0, "P": 0, "D": 0, "S": 0, "H": 0}
 
-        # --- NUEVAS VARIABLES DE CONTROL DE TIEMPO ABSOLUTO ---
-        tiempo_ultimo_cambio_bpm = val_offset
-        beat_ultimo_cambio_bpm = 0.0
-        
-        paso_idx = 0
-
-        pasos_descontados_acumulados = 0
-        pct_lineas_actual = lineas_objetivo/lineas_challenge
-
-        while paso_idx < total_pasos_dinamicos:
+        for paso_idx in range(total_lineas_mapa):
             if evento_cancelar and evento_cancelar.is_set():
                 raise InterruptedError(get_translation("msg_interrupted_cancel"))
 
-            beats_por_paso = 4.0 / lineas_objetivo
-            
-            if paso_idx % lineas_objetivo == 0:
+            beat_actual = paso_idx * beats_por_linea
+
+            if paso_idx % lineas_objetivo == 0 or math.isclose(beat_actual % 4.0, 0.0, abs_tol=1e-5):
                 conteo_compas_fx = {"M": 0, "F": 0, "L": 0, "P": 0, "D": 0, "S": 0, "H": 0}
 
-            # -----------------------------------------------------------------
-            # FASE 0: EVALUACIÓN Y CONTROL DE STOPS (SISTEMA DE ENFOQUE TRIPLE)
-            # -----------------------------------------------------------------
-            stops_activo = custom_params.get("aplicar_stops_dinamicos", True)
-            stop_omitir_fases = False
-            cambio_stop_str = None
-            duracion_stop_retardo = 0.0
+            # Determinación absoluta de la estampa de tiempo
+            beats_desde_ultimo_anclaje = beat_actual - beat_ultimo_cambio_bpm
+            segundo_actual = tiempo_ultimo_cambio_bpm + (beats_desde_ultimo_anclaje * 60.0) / bpm_actual
 
-            # --- AJUSTADO: Validación mediante el ID de sistema invariable ---
+            # FSM de congelamientos visuales (Stops y Delays)
+            stop_omitir_fases = False
             if dicc_config_stop["modo_congelamiento"] != "desactivado" and not sm_version:
                 cambio_stop_str, duracion_stop_retardo, stop_omitir_fases, tipo_comando = procesar_stops_dinamicos(
-                    segundo_actual, beat_actual, paso_idx, total_pasos_dinamicos,
-                    lineas_objetivo, rms_speed, rms_medio_speed, hop_speed, dicc_config_stop,
-                    seed_actual=seed_actual 
+                    segundo_actual, beat_actual, paso_idx, total_lineas_mapa,
+                    lineas_objetivo, rms_speed, rms_medio_speed, hop_speed, dicc_config_stop, seed_actual=seed_actual
                 )
                 if cambio_stop_str:
                     if tipo_comando == "stop":
                         local_cambios_stops.append(cambio_stop_str)
                     else:
                         local_cambios_delays.append(cambio_stop_str)
-                    
-                    # El tiempo avanza uniformemente para absorber la congelación visual
-                    segundo_actual += duracion_stop_retardo
+
                     tiempo_ultimo_cambio_bpm += duracion_stop_retardo
-                    
-                    # --- DESPACHADOR CON CONSTANTES DE SISTEMA INVARIABLES ---
-                    enfoque_seleccionado = custom_params.get("enfoque_stops", "fijo")
+                    segundo_actual += duracion_stop_retardo
 
-                    if enfoque_seleccionado == "total_dinamico":
-                        segundos_por_un_paso_base = (60.0 / ultimo_bpm_aplicado) * beats_por_paso
-                        if segundos_por_un_paso_base > 0:
-                            
-                            pasos_descontados_acumulados += (duracion_stop_retardo / segundos_por_un_paso_base) * pct_lineas_actual
-                            if pasos_descontados_acumulados >= 1.0:
-                                pasos_descontados = int(pasos_descontados_acumulados)  # El resultado siempre se trunca
-                                pasos_descontados_acumulados = pasos_descontados_acumulados - pasos_descontados # Restamos al acumulado
-                                total_pasos_dinamicos = max(paso_idx + 1, total_pasos_dinamicos - pasos_descontados)
-                                total_pasos_adicionales = int(total_pasos_dinamicos * percent_aditional_time)
-                            
-                    elif enfoque_seleccionado == "recalculo_aproximacion":
-                        segundos_por_un_paso_base = (60.0 / ultimo_bpm_aplicado) * beats_por_paso
-                        if segundos_por_un_paso_base > 0:
-                            factor_sensibilidad_stop = dicc_config_stop.get("umbral_disparo_stop", 1.80)
-                            tiempo_compensado_estimado = duracion_stop_retardo * (1.0 / max(0.1, factor_sensibilidad_stop))
-                            pasos_descontados_acumulados += (tiempo_compensado_estimado / segundos_por_un_paso_base) * pct_lineas_actual
-                            
-                            if pasos_descontados_acumulados >= 1.0:
-                                pasos_descontados = int(pasos_descontados_acumulados)  # El resultado siempre se trunca
-                                pasos_descontados_acumulados = pasos_descontados_acumulados - pasos_descontados # Restamos al acumulado
-
-                                # Filtro protector de truncamiento heredado de tu lógica de Scroll Speeds
-                                if (total_pasos_dinamicos - pasos_descontados) > (paso_idx + lineas_objetivo):
-                                    total_pasos_dinamicos = max(paso_idx + 1, total_pasos_dinamicos - pasos_descontados)
-                                    total_pasos_adicionales = int(total_pasos_dinamicos * percent_aditional_time)
-                                
-                    else: # enfoque_seleccionado == "fijo"
-                        # No se altera total_pasos_dinamicos ni total_pasos_adicionales.
-                        # El conteo de pasos preserva su tamaño simétrico original en todas las capas.
-                        pass
-
-            # -----------------------------------------------------------------
-            # FASE 0.1: VALIDACIÓN DE TEMPO (INTERPOLACIÓN ABSOLUTA DE TIME)
-            # -----------------------------------------------------------------
+            # Cambios rítmicos síncronos cuantizados
             if dinamico_activo and not stop_omitir_fases:
-                bpm_anterior = ultimo_bpm_aplicado
-                ultimo_bpm_aplicado, cambio_bpm_str = procesar_ritmo_dinamico(
-                    segundo_actual, beat_actual, paso_idx, lineas_objetivo, 
-                    rms_bpm, rms_medio_bpm, hop_bpm, ultimo_bpm_aplicado, dicc_config_bpm
-                )
-                if cambio_bpm_str:
-                    local_cambios_bpm.append(cambio_bpm_str)
-                    # Cortamos la línea temporal e integramos el tiempo transcurrido con el BPM viejo
-                    beats_recorridos_en_tramo = beat_actual - beat_ultimo_cambio_bpm
-                    tiempo_ultimo_cambio_bpm += (beats_recorridos_en_tramo * 60.0) / bpm_anterior
-                    beat_ultimo_cambio_bpm = beat_actual
+                if paso_idx % max(1, lineas_objetivo // 4) == 0:
+                    bpm_propuesto, cambio_bpm_str = procesar_ritmo_dinamico(
+                        segundo_actual, beat_actual, paso_idx, lineas_objetivo,
+                        rms_bpm, rms_medio_bpm, hop_bpm, bpm_actual, dicc_config_bpm
+                    )
+                    if cambio_bpm_str:
+                        bpm_cuantizado = round(float(bpm_propuesto))
+                        
+                        if bpm_cuantizado != bpm_actual:
+                            tiempo_ultimo_cambio_bpm += (beats_desde_ultimo_anclaje * 60.0) / bpm_actual
+                            beat_ultimo_cambio_bpm = beat_actual
+                            bpm_actual = bpm_cuantizado
+                            
+                            local_cambios_bpm.append(f"{beat_actual:.3f}={bpm_actual:.3f}")
 
-            # --- FÓRMULA DE INTERPOLACIÓN ABSOLUTA MATEMÁTICA ---
-            # En lugar de sumar flotantes pequeños de forma iterativa, calculamos el segundo exacto
-            # midiendo la distancia en Beats desde el último cambio de tempo registrado.
-            if stop_omitir_fases:
-                beats_por_paso = 0.0
-            else:
-                beats_desde_cambio = (beat_actual + beats_por_paso) - beat_ultimo_cambio_bpm
-                segundo_actual = tiempo_ultimo_cambio_bpm + (beats_desde_cambio * 60.0) / ultimo_bpm_aplicado
-
-            # -----------------------------------------------------------------
-            # EVALUACIÓN DE SCROLL SPEED
-            # -----------------------------------------------------------------
+            # Transiciones nativas de Scroll Speed
             if speeds_activo and not stop_omitir_fases and not sm_version:
-                velocidad_anterior = ultima_velocidad_aplicada if ultima_velocidad_aplicada > 0 else 1.0
-                
-                ultima_velocidad_aplicada, cambio_speed_str = procesar_scroll_dinamico(
-                    segundo_actual, beat_actual, paso_idx, lineas_objetivo, 
-                    rms_speed, rms_medio_speed, hop_speed, ultima_velocidad_aplicada, dicc_config_speed
-                )
+                if paso_idx % max(1, lineas_objetivo // 4) == 0:
+                    velocidad_propuesta, cambio_speed_str = procesar_scroll_dinamico(
+                        segundo_actual, beat_actual, paso_idx, lineas_objetivo,
+                        rms_speed, rms_medio_speed, hop_speed, velocidad_actual, dicc_config_speed)
                 if cambio_speed_str:
                     local_cambios_speeds.append(cambio_speed_str)
-                    
-                    diferencial_velocidad = ultima_velocidad_aplicada - velocidad_anterior
-                    if diferencial_velocidad > 0.15:
-                        segundos_por_un_paso_base = (60.0 / ultimo_bpm_aplicado) * (4.0 / lineas_objetivo)
-                        if segundos_por_un_paso_base > 0:
-                            factor_sensibilidad = custom_params.get("speed_umbral_disparo", 0.50)
-                            tiempo_perdido_estimado = 0.05 * (1.0 / max(0.1, factor_sensibilidad)) * diferencial_velocidad
-                            pasos_adicionales_en_caliente = int(round(tiempo_perdido_estimado / segundos_por_un_paso_base))
-                            
-                            if (total_pasos_dinamicos + pasos_adicionales_en_caliente) < (total_pasos_base * 1.05):
-                                total_pasos_dinamicos += pasos_adicionales_en_caliente
-                                total_pasos_adicionales = int(total_pasos_dinamicos * percent_aditional_time)
-
-            #segundos_por_paso = (60.0 / ultimo_bpm_aplicado) * beats_por_paso
+                    velocidad_actual = velocidad_propuesta
             
             if stop_omitir_fases:
-                segundos_por_paso = 0.0
-                beats_por_paso = 0.0
-            else:
-                segundos_por_paso = (60.0 / ultimo_bpm_aplicado) * beats_por_paso
+                pasos_finales_ia.append("0000")
+                continue
             
             # -----------------------------------------------------------------
-            # FASE 0.5 Y 1: FILTRO DE SILENCIO E INFERENCIA IA
+            # FASE DE ENRUTAMIENTO DE AUDIO Y TRATAMIENTO DE SEÑAL VACÍA
             # -----------------------------------------------------------------
+            # Mapeamos el frame index de forma lineal sobre los segundos de la canción
             frame_idx = min(int((segundo_actual / duracion) * total_frames), total_frames - 1)
-            f_rms_eval = max(0, min(frame_idx, len(lista_rms) - 1))
-            ratio_energia_actual = lista_rms[f_rms_eval] / rms_medio if len(lista_rms) > 0 else 1.0
             
+            # [LÓGICA DE DETECCIÓN DE SEÑAL VACÍA POR EXCESO DE BEATS]
+            # Si el Beat actual superó los Beats base que contiene el audio físico real de la canción,
+            # significa que entramos en la zona de extensión post-canción (Silencio absoluto).
+            
+            es_senal_vacia = beat_actual >= total_beats_base
+
+            if es_senal_vacia:
+                # El audio terminó: Forzamos que la energía espectral sea evaluada como 0 (Silencio total)
+                ratio_energia_actual = 0.0
+                ratio_energia_paso = 0.0
+            else:
+                f_rms_eval = max(0, min(frame_idx, len(lista_rms) - 1))
+                ratio_energia_actual = lista_rms[f_rms_eval] / rms_medio if len(lista_rms) > 0 else 1.0
+                
+                f_idx_saltos = max(0, min(int((segundo_actual * 22050) / hop_saltos), len(rms_saltos) - 1))
+                ratio_energia_paso = rms_saltos[f_idx_saltos] / rms_medio_saltos if rms_medio_saltos > 0 else 1.0
+
             UMBRAL_SILENCIO = custom_params.get("umbral_silencios", 0.05)
             activate_umbral_silencio = custom_params.get("activar_umbral_silencios", False)
             saltos_activos = custom_params.get("activar_secciones_saltos", False)
-            
-            # Verificamos que la función de silencio solo afecte a la cantidad de pasos de audio real y no al porcentaje de inferencia adicional, además adaptamos el sistema a la mecánica dinámica
-            if activate_umbral_silencio == True and ratio_energia_actual < UMBRAL_SILENCIO and paso_idx < abs(total_pasos_dinamicos - total_pasos_adicionales):
+
+            # --- CONTROL DE INFERENCIA DENTRO DE SEÑAL VACÍA ---
+            # Si estamos en la zona de señal vacía (extensión por encima de total_beats_base),
+            # NO queremos activar la función de silencios "0000" del umbral DSP, sino dejar que la IA ruede
+            # libre alimentada por los buffers contextuales remanentes para que cree patrones lógicos de cierre.
+            if activate_umbral_silencio and ratio_energia_actual < UMBRAL_SILENCIO and not es_senal_vacia:
                 paso_elegido = "0000"
-                cooldown_saltos = 0  
+                cooldown_saltos = 0
             elif saltos_activos and cooldown_saltos > 0:
                 paso_elegido = "0000"
                 cooldown_saltos -= 1
             else:
-                cooldown_saltos = 0 
+                cooldown_saltos = 0
                 if paso_idx > 0 and pasos_finales_ia and pasos_finales_ia[-1] != "0000":
                     limite_densidad = {"Easy": 0.40, "Medium": 0.30, "Hard": 0.15, "Challenge": 0.05}
-                    if random.random() < limite_densidad[diff]:
-                        paso_elegido = "0000"
-                    else:
-                        paso_elegido = None
+                    paso_elegido = "0000" if random.random() < limite_densidad[diff] else None
                 else:
                     paso_elegido = None
 
@@ -2609,17 +2587,27 @@ def ejecutar_bucle_sincrono(config_dificultad, compases_totales, bpm, val_offset
                     paso_elegido = "1000"
                 else:
                     bloque_contexto = []
+                    # La IA utiliza los últimos 128 frames. Al entrar en señal vacía, los frames antiguos de música
+                    # real se van desplazando progresivamente hacia atrás en la memoria (LSTM/Transformer Context),
+                    # provocando que la IA detecte el desvanecimiento de la canción y genere un cierre orgánico natural.
                     for offset in range(-127, 1):
                         f_rms_ia = max(0, min(frame_idx + offset, len(lista_rms) - 1))
                         f_centroide = max(0, min(frame_idx + offset, len(lista_centroide) - 1))
-                        r_energia = lista_rms[f_rms_ia] / rms_medio if len(lista_rms) > 0 else 1.0
-                        r_brillo = lista_centroide[f_centroide] / centroide_medio if len(lista_centroide) > 0 else 1.0
                         
-                        if mel_db is not None and mel_db.shape[1] > 0:
-                            f_mel = max(0, min(frame_idx + offset, mel_db.shape[1] - 1))
-                            vector_mel = mel_db[:, f_mel].tolist()
-                        else:
+                        # Si ya cruzamos el límite físico, los vectores contextuales de energía se atenúan a cero
+                        if es_senal_vacia and (frame_idx + offset) >= (total_frames - 1):
+                            r_energia = 0.0
+                            r_brillo = 0.0
                             vector_mel = [0.0] * 64
+                        else:
+                            r_energia = lista_rms[f_rms_ia] / rms_medio if len(lista_rms) > 0 else 1.0
+                            r_brillo = lista_centroide[f_centroide] / centroide_medio if len(lista_centroide) > 0 else 1.0
+                            if mel_db is not None and mel_db.size > 0:
+                                f_mel = max(0, min(frame_idx + offset, mel_db.shape[1] - 1))
+                                vector_mel = mel_db[:, f_mel].tolist()
+                            else:
+                                vector_mel = [0.0] * 64
+                                
                         bloque_contexto.append([r_energia, r_brillo] + vector_mel)
 
                     tensor_in = torch.tensor(bloque_contexto, dtype=torch.float32).unsqueeze(0).to(dispositivo)
@@ -2629,42 +2617,30 @@ def ejecutar_bucle_sincrono(config_dificultad, compases_totales, bpm, val_offset
                         prediccion = torch.multinomial(probabilidades, num_samples=1).item()
                     paso_elegido = "".join(tokenizer.decode_id(prediccion))
 
-            # -----------------------------------------------------------------
-            # FASE 2 & 3: COMPLEMENTOS DSP SÍNCRONOS
-            # -----------------------------------------------------------------
-            f_idx_saltos = max(0, min(int((segundo_actual * 22050) / hop_saltos), len(rms_saltos) - 1))
-            ratio_energia_paso = rms_saltos[f_idx_saltos] / rms_medio_saltos if rms_medio_saltos > 0 else 1.0
-
-            if saltos_activos and not stop_omitir_fases:
+            # --- INYECCIÓN DE MODIFICADORES ESPECTRALES CONDICIONADOS ---
+            # Bloqueamos saltos y trampas síncronas en la zona de señal vacía (ya que no hay energía real de audio)
+            if saltos_activos and not stop_omitir_fases and not es_senal_vacia:
                 paso_elegido, pasos_limpieza = inyectar_saltos_espectrales_paso(
-                    paso_elegido=paso_elegido, 
-                    ratio_energia=ratio_energia_paso, 
-                    bpm=ultimo_bpm_aplicado, 
-                    lineas_por_compas=lineas_objetivo, 
-                    dificultad_tag=diff, 
-                    custom_params=custom_params
+                    paso_elegido=paso_elegido, ratio_energia=ratio_energia_paso, 
+                    bpm=bpm_actual, lineas_por_compas=lineas_objetivo, 
+                    dificultad_tag=diff, custom_params=custom_params
                 )
                 if pasos_limpieza > 0:
                     cooldown_saltos = pasos_limpieza
 
-            if custom_params.get("efectos_por_rms", False) and not stop_omitir_fases:
+            if custom_params.get("efectos_por_rms", False) and not stop_omitir_fases and not es_senal_vacia:
                 paso_elegido = inyectar_trampas_sincronas(
-                    paso_elegido=paso_elegido, 
-                    ratio_energia=ratio_energia_paso, 
-                    cfg=cfg, 
-                    custom_params=custom_params,
-                    conteo_compas_fx=conteo_compas_fx,
-                    sm_version=sm_version 
+                    paso_elegido=paso_elegido, ratio_energia=ratio_energia_paso, 
+                    cfg=cfg, custom_params=custom_params, 
+                    conteo_compas_fx=conteo_compas_fx, sm_version=sm_version
                 )
-
+            
             pasos_finales_ia.append(paso_elegido)
-            #segundo_actual += segundos_por_paso
-            beat_actual += beats_por_paso
-            paso_idx += 1
-        print(f"diff {diff} total {total_pasos_dinamicos} adicionales {total_pasos_adicionales} paso {paso_idx} segundo {segundo_actual} beat {beat_actual}")
+        print(f"diff {diff} total_beats {beat_actual:.2f} pasos_generados {paso_idx} segundo {segundo_actual:.3f}")
         # -----------------------------------------------------------------
-        # FASE 4: EXTENSIÓN ESTÉTICA Y FORMATEO
+        # POSTPROCESAMIENTO SINTÁCTICO DE CERRADO
         # -----------------------------------------------------------------
+
         if aplicar_post:
             pasos_finales_ia = PostProcesadorStepMania.corregir_sintaxis_holds(
                 pasos_finales_ia, 
@@ -2675,7 +2651,7 @@ def ejecutar_bucle_sincrono(config_dificultad, compases_totales, bpm, val_offset
 
         extension_final = custom_params.get("extension_final", 0.0) if custom_params else 0.0
         if extension_final > 0:
-            compases_extras = math.ceil(extension_final / ((60.0 / ultimo_bpm_aplicado) * 4.0))
+            compases_extras = math.ceil(extension_final / ((60.0 / bpm_actual) * 4.0))
             extension_mode_by = custom_params.get("extension_mode_by", False) if custom_params else False
             for l_idx in range(compases_extras * lineas_objetivo):
                 if extension_mode_by == True:
@@ -5928,8 +5904,13 @@ class StepHybridUI(ctk.CTk):
 
         # 5. Función que correrá en un hilo secundario para no congelar CustomTkinter
         def bucle_procesamiento_hilo():
+            import sys
+            from concurrent.futures import ThreadPoolExecutor
+            import traceback
+
             conteo_exitos = 0
             conteo_omitidos = 0
+            conteo_errores = 0
 
             checkpoint_usuario = self.checkpoint_file_path 
 
@@ -5947,7 +5928,10 @@ class StepHybridUI(ctk.CTk):
                 print("No se seleccionó ningún checkpoint ni se encontró un modelo base local.")
                 raise FileNotFoundError(f"{get_translation("msg_error_checkpoint_not_found")} {checkpoint_a_cargar}")
 
-             # --- MAPEO AUTOMATIZADO DEL MODO DE CONGELAMIENTO ---
+            # Preparar archivo de registro de errores en la carpeta raíz del pack
+            ruta_log_errores = os.path.join(carpeta_salida, "AI_Generated_Packs", folder_group_sanitizada, "errores_lote.txt")
+            
+            # --- MAPEO AUTOMATIZADO DEL MODO DE CONGELAMIENTO ---
             modo_seleccionado_stop = self.menu_modo_stops.get()
             
             if modo_seleccionado_stop in obtener_todas_las_traducciones("opt_stop_disabled"):
@@ -5968,11 +5952,15 @@ class StepHybridUI(ctk.CTk):
             else:
                 enfoque_sistema_stop = "recalculo_aproximacion"
 
-            for nombre_carpeta in subcarpetas:
+            # -----------------------------------------------------------------
+            # FUNCIÓN ATÓMICA DE PROCESAMIENTO POR CANCIÓN (TOLERANTE A ERRORES)
+            # -----------------------------------------------------------------
+            def procesar_subcarpeta_individual(nombre_carpeta):
+                nonlocal conteo_exitos, conteo_omitidos, conteo_errores
                 # Verificar si el usuario presionó el botón de cancelar
                 if self.cancelar_generacion.is_set():
                     self.after(0, lambda: self.txt_consola.insert("end", get_translation("lbl_masive_cancel")))
-                    break
+                    return False
 
                 folder_song_sanitizada = "".join([c for c in nombre_carpeta if c.isalnum() or c in [' ', '_', '-']]).strip()
                 carpeta_pack_final = os.path.join(carpeta_raiz_packs, folder_group_sanitizada, folder_song_sanitizada)
@@ -5980,7 +5968,7 @@ class StepHybridUI(ctk.CTk):
                 if os.path.exists(carpeta_pack_final) and modo_duplicados == "omitir":
                     self.after(0, lambda n=nombre_carpeta: [self.txt_consola.insert("end", f"{get_translation("console_masive_msg_omite")} '{n}'\n"), self.txt_consola.see("end")])
                     conteo_omitidos += 1
-                    continue
+                    return True
 
                 ruta_subcarpeta = os.path.join(carpeta_raiz_origen, nombre_carpeta)
                 audio_encontrado = None
@@ -5988,6 +5976,14 @@ class StepHybridUI(ctk.CTk):
                 video_encontrado = None
                 background_encontrado = None
                 cdtitle_encontrado = None
+
+                # Escaneo de la multimedia interna de la subcarpeta
+                try:
+                    archivos_internos = os.listdir(ruta_subcarpeta)
+                except Exception as e:
+                    self.after(0, lambda n=nombre_carpeta: self.txt_consola.insert("end", f"❌ {get_translation("console_masive_msg_error_directory")} '{n}': {e}\n"))
+                    conteo_errores += 1
+                    return False
 
                 for archivo in os.listdir(ruta_subcarpeta):
                     ruta_archivo = os.path.join(ruta_subcarpeta, archivo)
@@ -6072,12 +6068,17 @@ class StepHybridUI(ctk.CTk):
                         "min_notas_compas": int(self.min_notas_compas),
                         "pack_name": pack_name,
                         "activar_muestreo_multicapa": bool(self.checkbox_muestreo.get()),
-                        "usar_multihilo": bool(self.checkbox_multihilo_activo.get()),
+                        #"usar_multihilo": bool(self.checkbox_multihilo_activo.get()),
                         "muestreo_pct_min": float(self.slider_muestreo_min.get()),
                         "muestreo_num_muestras": int(self.slider_muestreo_num.get()),
                         "umbral_silencios": float(self.slider_umbral_silencios.get()),
                         "activar_umbral_silencios": bool(self.checkbox_activar_umbral_silencios.get()),
-                        "seed_value": seed_final
+                        "seed_value": seed_final,
+                        # ---------------------------------------------------------
+                        # [PUNTO 3]: AISLAMIENTO HÍBRIDO CRÍTICO
+                        # Forzamos Monohilo en capas individuales dentro del lote masivo
+                        # ---------------------------------------------------------
+                        "usar_multihilo": False
                     }
 
                     # Notificar en consola el arranque de inferencia
@@ -6103,18 +6104,43 @@ class StepHybridUI(ctk.CTk):
                             evento_cancelar=self.cancelar_generacion
                         )
                         conteo_exitos += 1
+                        return True
                     except Exception as err:
-                        self.after(0, lambda n=nombre_carpeta, e=err: [self.txt_consola.insert("end", f"{get_translation("console_masive_msg_error_directory")} '{n}': {str(e)}"), self.txt_consola.see("end")])
+                        conteo_errores += 1
+                        # Registramos el error de forma asíncrona y física para auditoría posterior del usuario
+                        try:
+                            with open(ruta_log_errores, "a", encoding="utf-8") as log_f:
+                                log_f.write(f"❌ Error en carpeta [{nombre_carpeta}]:\n{str(err)}\n")
+                                log_f.write(f"{traceback.format_exc()}\n{'-'*60}\n")
+                        except:
+                            pass
+                        
+                        self.after(0, lambda n=nombre_carpeta: [self.txt_consola.insert("end", f"❌ Error: '{n}' (log_errores.txt)\n"), self.txt_consola.see("end")])
+                        return False
                 else:
                     self.after(0, lambda n=nombre_carpeta: [self.txt_consola.insert("end", f"{get_translation("console_masive_msg_warning_omite")} '{n}' {get_translation("console_masive_msg_warning_omite_audio")}\n"), self.txt_consola.see("end")])
 
-            # Cierre y restauración de la UI principal tras finalizar el lote
+            # -----------------------------------------------------------------
+            # [PUNTO 3]: POOL DE HILOS JERÁRQUICO (PARALELISMO DE CONTROL)
+            # -----------------------------------------------------------------
+            # Procesamos N canciones en paralelo a nivel de disco, pero cada una
+            # de forma interna se ejecuta secuencialmente en sus remuestreos.
+            # max_workers=3 es el punto de equilibrio óptimo para CPUs de 4-8 núcleos.
+            MAX_TRABAJADORES_LOTE = 3
+            with ThreadPoolExecutor(max_workers=MAX_TRABAJADORES_LOTE) as executor:
+                # El lote mapea y despacha todas las canciones de forma inteligente
+                executor.map(procesar_subcarpeta_individual, subcarpetas)
+
+            # Cierre y restauración de la UI principal tras finalizar el lote completo o cancelarlo
             def finalizar_interfaz():
                 self.txt_consola.insert("end", f"{get_translation("console_masive_msg_status_end")} {conteo_exitos} {get_translation("console_masive_msg_status_songs_num")}")
                 self.txt_consola.configure(state="disabled")
                 self.btn_generar.configure(state="normal", text=get_translation("btn_generate"))
                 self.btn_cancelar.configure(state="disabled", fg_color="#7f8c8d", text=get_translation("btn_cancel_gen"))
-                self.label_status.configure(text=get_translation("console_masive_msg_status_end_succesful"), text_color="#2ecc71")
+                if self.cancelar_generacion.is_set():
+                    self.label_status.configure(text=get_translation("status_cancel"), text_color="gray")
+                else:
+                    self.label_status.configure(text=get_translation("console_masive_msg_status_end_succesful"), text_color="#2ecc71")
                 messagebox.showinfo(get_translation("msg_motor_lotes"), f"{get_translation("msg_motor_lotes_pt_1")} {conteo_exitos} {get_translation("msg_motor_lotes_pt_2")} '{pack_name}'.")
 
             self.after(0, finalizar_interfaz)
