@@ -141,7 +141,8 @@ TEXTOS = {
         "menu_opt_time": "Settings de Tiempo",
         "menu_opt_bpm": "Configuración de BPM y Ritmo",
         "menu_opt_fx": "Efectos, Minas y Trampas",
-        "menu_opt_filters": "Filtros Espectrales y Dificultad",
+        "menu_opt_holders_jumps": "Filtros Para Saltos y Holders",
+        "menu_opt_filters": "Filtros de Muestreo y Dificultad",
         "menu_opt_batch": "Filtros de Modo por Lotes",
         "menu_opt_tag_editor": "Editor de Etiquetas (SM/SSC)",
         "menu_opt_simfile_editor": "Editor de Simfiles (SM/SSC)",
@@ -405,7 +406,8 @@ TEXTOS = {
         "menu_opt_time": "Time Settings",
         "menu_opt_bpm": "BPM & Rhythm Configuration",
         "menu_opt_fx": "Effects, Mines & Traps",
-        "menu_opt_filters": "Spectral Filters & Difficulty",
+        "menu_opt_holders_jumps": "Filters for Jumps and Holders",
+        "menu_opt_filters": "Sampling and Difficulty Filters",
         "menu_opt_batch": "Batch Mode Filters",
         "menu_opt_tag_editor": "Tag Editor (SM/SSC)",
         "menu_opt_simfile_editor": "Simfile Editor (SM/SSC)",
@@ -669,7 +671,8 @@ TEXTOS = {
         "menu_opt_time": "Configurações de Tempo",
         "menu_opt_bpm": "Configuração de BPM e Ritmo",
         "menu_opt_fx": "Efeitos, Minas e Armadilhas",
-        "menu_opt_filters": "Filtros Espectrais e Dificuldade",
+        "menu_opt_holders_jumps": "Filtros para Saltos e Holders",
+        "menu_opt_filters": "Filtros de Amostragem e Dificuldade",
         "menu_opt_batch": "Filtros do Modo em Lote",
         "menu_opt_tag_editor": "Editor de Etiquetas (SM/SSC)",
         "menu_opt_simfile_editor": "Editor de Simfiles (SM/SSC)",
@@ -933,7 +936,8 @@ TEXTOS = {
         "menu_opt_time": "時間設定",
         "menu_opt_bpm": "BPMとリズムの設定",
         "menu_opt_fx": "エフェクト・ボム・トラップ",
-        "menu_opt_filters": "スペクトルフィルタと難易度",
+        "menu_opt_holders_jumps": "ジャンプとホールド用のフィルター",
+        "menu_opt_filters": "サンプリングと難易度のフィルター",
         "menu_opt_batch": "バッチモードフィルター ",
         "menu_opt_tag_editor": "タグエディタ (SM/SSC)",
         "menu_opt_simfile_editor": "Simfileエディタ (SM/SSC)",
@@ -1197,7 +1201,8 @@ TEXTOS = {
         "menu_opt_time": "时间设置",
         "menu_opt_bpm": "BPM 与节奏配置",
         "menu_opt_fx": "特效、地雷与陷阱",
-        "menu_opt_filters": "频谱滤波器与难度",
+        "menu_opt_holders_jumps": "跳跃和保持器的过滤器",
+        "menu_opt_filters": "采样和难度过滤器",
         "menu_opt_batch": "批量模式过滤器",
         "menu_opt_tag_editor": "标签编辑器 (SM/SSC)",
         "menu_opt_simfile_editor": "Simfile 编辑器 (SM/SSC)",
@@ -3497,6 +3502,7 @@ class StepHybridUI(ctk.CTk):
         self.menu_apartados = ctk.CTkOptionMenu(
             self.contenedor_vertical, 
             values=[get_translation("menu_opt_hide"), get_translation("menu_opt_time"), get_translation("menu_opt_bpm"), get_translation("menu_opt_fx"),
+             get_translation("menu_opt_holders_jumps"),
              get_translation("menu_opt_filters"), get_translation("menu_opt_batch"), get_translation("menu_opt_tag_editor"), get_translation("menu_opt_simfile_editor")],
             command=self.conmutar_apartados_ui,
             fg_color="#2980b9",
@@ -3509,6 +3515,7 @@ class StepHybridUI(ctk.CTk):
         # =====================================================================
         self.apartado_bpm = ctk.CTkFrame(self.contenedor_vertical, fg_color="transparent")
         self.apartado_efectos = ctk.CTkFrame(self.contenedor_vertical, fg_color="transparent")
+        self.apartado_filtros_saltos_holders = ctk.CTkFrame(self.contenedor_vertical, fg_color="transparent")
         self.apartado_filtros = ctk.CTkFrame(self.contenedor_vertical, fg_color="transparent")
         self.apartado_tiempo = ctk.CTkFrame(self.contenedor_vertical, fg_color="transparent")
         self.apartado_modo_batch = ctk.CTkFrame(self.contenedor_vertical, fg_color="transparent")
@@ -3581,7 +3588,7 @@ class StepHybridUI(ctk.CTk):
             self.frame_controles_bpm, 
             from_=60, 
             to=300, 
-            number_of_steps=480, 
+            number_of_steps=4800, 
             command=self.actualizar_texto_bpm, 
             width=260
         )
@@ -3703,7 +3710,7 @@ class StepHybridUI(ctk.CTk):
 
         self.label_bpm_umbral = ctk.CTkLabel(self.frame_bpm_dinamico, text=f"{get_translation("lbl_bpm_umbral")} 4.0", font=ctk.CTkFont(weight="bold"), anchor="w")
         self.label_bpm_umbral.pack(pady=2, padx=5)
-        self.slider_bpm_umbral = ctk.CTkSlider(self.frame_bpm_dinamico, from_=1.5, to=30.0, number_of_steps=114, width=320, 
+        self.slider_bpm_umbral = ctk.CTkSlider(self.frame_bpm_dinamico, from_=0.5, to=30.0, number_of_steps=118, width=320, 
                                                 command=lambda v: self.label_bpm_umbral.configure(text=f"{get_translation("lbl_bpm_umbral")} {v:.2f}" if v >= 3.0 else f"{get_translation("lbl_bpm_umbral")} {v:.2f} {get_translation("lbl_warning")}" ))
         self.slider_bpm_umbral.pack(pady=2, padx=5)
         self.slider_bpm_umbral.set(4.0)
@@ -3919,28 +3926,29 @@ class StepHybridUI(ctk.CTk):
         for w in widgets_fx:
             w.pack(pady=4, padx=20)
 
-        # --- APARTADO: FILTROS ESPECTRALES, OFFSETS Y NOTAS ---
-        self.label_seccion_adv_holders = ctk.CTkLabel(self.apartado_filtros, text=get_translation("lbl_sec_holders"), font=ctk.CTkFont(size=13, weight="bold", slant="italic"), text_color="#FFB874")
+        # --- APARTADO: FILTROS DE SALTOS Y HOLDERS ---
+        
+        self.label_seccion_adv_holders = ctk.CTkLabel(self.apartado_filtros_saltos_holders, text=get_translation("lbl_sec_holders"), font=ctk.CTkFont(size=13, weight="bold", slant="italic"), text_color="#FFB874")
 
-        self.label_max_hold = ctk.CTkLabel(self.apartado_filtros, text=f"{get_translation("lbl_max_hold")} 8", font=ctk.CTkFont(weight="bold"))
-        self.slider_max_hold = ctk.CTkSlider(self.apartado_filtros, from_=1, to=32, number_of_steps=31, width=340, command=lambda v: self.label_max_hold.configure(text=f"{get_translation("lbl_max_hold")} {int(v)}"))
+        self.label_max_hold = ctk.CTkLabel(self.apartado_filtros_saltos_holders, text=f"{get_translation("lbl_max_hold")} 8", font=ctk.CTkFont(weight="bold"))
+        self.slider_max_hold = ctk.CTkSlider(self.apartado_filtros_saltos_holders, from_=1, to=32, number_of_steps=31, width=340, command=lambda v: self.label_max_hold.configure(text=f"{get_translation("lbl_max_hold")} {int(v)}"))
         self.slider_max_hold.set(8)
         
-        self.label_holds_sim = ctk.CTkLabel(self.apartado_filtros, text=f"{get_translation("lbl_sim_holds")} 2", font=ctk.CTkFont(weight="bold"))
-        self.slider_holds_sim = ctk.CTkSlider(self.apartado_filtros, from_=0, to=4, number_of_steps=4, width=340, command=lambda v: self.label_holds_sim.configure(text=f"{get_translation("lbl_sim_holds")} {int(v)}"))
+        self.label_holds_sim = ctk.CTkLabel(self.apartado_filtros_saltos_holders, text=f"{get_translation("lbl_sim_holds")} 2", font=ctk.CTkFont(weight="bold"))
+        self.slider_holds_sim = ctk.CTkSlider(self.apartado_filtros_saltos_holders, from_=0, to=4, number_of_steps=4, width=340, command=lambda v: self.label_holds_sim.configure(text=f"{get_translation("lbl_sim_holds")} {int(v)}"))
         self.slider_holds_sim.set(2)
 
-        self.checkbox_postprocesar = ctk.CTkCheckBox(self.apartado_filtros, text=get_translation("chk_postprocess"), command=self.alternar_visibilidad_postprocesamiento)
+        self.checkbox_postprocesar = ctk.CTkCheckBox(self.apartado_filtros_saltos_holders, text=get_translation("chk_postprocess"), command=self.alternar_visibilidad_postprocesamiento)
         self.checkbox_postprocesar.select()
 
         self.checkbox_secciones_saltos = ctk.CTkCheckBox(
-            self.apartado_filtros, 
+            self.apartado_filtros_saltos_holders, 
             text=get_translation("chk_jumps"),
             text_color="#9b59b6",
             command=self.gestionar_exclusividad_saltos
         )
 
-        self.frame_saltos_dinamico = ctk.CTkFrame(self.apartado_filtros, fg_color="transparent")
+        self.frame_saltos_dinamico = ctk.CTkFrame(self.apartado_filtros_saltos_holders, fg_color="transparent")
 
         self.label_rms_min_saltos = ctk.CTkLabel(self.frame_saltos_dinamico, text=f"{get_translation("lbl_rms_min_jumps")} 0.50", font=ctk.CTkFont(weight="bold"))
         self.label_rms_min_saltos.pack(pady=2, padx=5)
@@ -3956,6 +3964,15 @@ class StepHybridUI(ctk.CTk):
         self.slider_rms_max_saltos.pack(pady=2, padx=5)
         self.slider_rms_max_saltos.set(1.50)
 
+        widgets_filtros_saltos_holders = [
+            self.label_seccion_adv_holders,
+            self.label_max_hold, self.slider_max_hold, self.label_holds_sim, self.slider_holds_sim, self.checkbox_postprocesar,
+            self.checkbox_secciones_saltos,
+            ]
+        for w in widgets_filtros_saltos_holders: 
+            w.pack(pady=4, padx=20)
+
+        # --- APARTADO: FILTROS ESPECTRALES, OFFSETS Y NOTAS ---
         self.label_seccion_adv_dificultad = ctk.CTkLabel(self.apartado_filtros, text=get_translation("lbl_sec_diff"), font=ctk.CTkFont(size=13, weight="bold", slant="italic"), text_color="#4B00FF")
         
         self.label_nivel_texto = ctk.CTkLabel(self.apartado_filtros, text=f"{get_translation("lbl_diff_ceiling")} 16/30", font=ctk.CTkFont(size=13, weight="bold"), text_color="#3498db")
@@ -4049,9 +4066,6 @@ class StepHybridUI(ctk.CTk):
         self.slider_muestreo_num.set(6)
 
         widgets_filtros = [
-            self.label_seccion_adv_holders,
-            self.label_max_hold, self.slider_max_hold, self.label_holds_sim, self.slider_holds_sim, self.checkbox_postprocesar,
-            self.checkbox_secciones_saltos,
             self.label_seccion_adv_dificultad,
             self.label_nivel_texto, self.slider_level, self.checkbox_recalcular_diff, 
             self.label_seccion_adv_compas,
@@ -4245,6 +4259,7 @@ class StepHybridUI(ctk.CTk):
         self.apartado_tiempo.pack_forget()
         self.apartado_bpm.pack_forget()
         self.apartado_efectos.pack_forget()
+        self.apartado_filtros_saltos_holders.forget()
         self.apartado_filtros.pack_forget()
         self.apartado_modo_batch.pack_forget()
         self.apartado_editor_etiquetas.pack_forget()
@@ -4255,6 +4270,8 @@ class StepHybridUI(ctk.CTk):
             self.apartado_bpm.pack(fill="x", expand=True, before=self.btn_resetear)
         elif seleccion == get_translation("menu_opt_fx"):
             self.apartado_efectos.pack(fill="x", expand=True, before=self.btn_resetear)
+        elif seleccion == get_translation("menu_opt_holders_jumps"):
+            self.apartado_filtros_saltos_holders.pack(fill="x", expand=True, before=self.btn_resetear)
         elif seleccion == get_translation("menu_opt_filters"):
             self.apartado_filtros.pack(fill="x", expand=True, before=self.btn_resetear)
         elif seleccion == get_translation("menu_opt_batch"):
@@ -4310,7 +4327,8 @@ class StepHybridUI(ctk.CTk):
          get_translation("preset_4"), get_translation("preset_5"), get_translation("preset_6"), get_translation("preset_7")])
         self.label_menu_apartados.configure(text=get_translation("lbl_adv_settings"))
         self.menu_apartados.configure(values=[get_translation("menu_opt_hide"), get_translation("menu_opt_time"), get_translation("menu_opt_bpm"),
-         get_translation("menu_opt_fx"), get_translation("menu_opt_filters"), get_translation("menu_opt_batch"), get_translation("menu_opt_tag_editor"),
+         get_translation("menu_opt_fx"), get_translation("menu_opt_holders_jumps"),
+         get_translation("menu_opt_filters"), get_translation("menu_opt_batch"), get_translation("menu_opt_tag_editor"),
          get_translation("menu_opt_simfile_editor")])
         self.btn_cancelar.configure(text=get_translation("btn_cancel_gen"))
         self.btn_resetear.configure(text=get_translation("btn_reset"))
@@ -5188,10 +5206,12 @@ class StepHybridUI(ctk.CTk):
         self.label_status.configure(text=get_translation("label_status_reset"), text_color="gray")
 
     def actualizar_texto_bpm(self, valor):
-        # Redondeamos al 0.5 más cercano
-        bpm = round(float(valor) * 2) / 2
-        # Formatear para quitar el .0 si es un número entero
-        bpm_texto = int(bpm) if bpm.is_integer() else bpm
+        # Redondeamos al 0.05 más cercano
+        #bpm = round(float(valor) * 2) / 2
+        # Formatear para quitar el .05 si es un número entero
+        #bpm_texto = int(bpm) if bpm.is_integer() else bpm
+        bpm = valor 
+        bpm_texto = round(bpm, 2)
         self.label_bpm.configure(text=f"{get_translation("lbl_bpm_config")} {bpm_texto} BPM (Manual)")
 
     def conmutar_auto_bpm(self):
@@ -5682,9 +5702,9 @@ class StepHybridUI(ctk.CTk):
         max_bpm_dinamico = 0
         if min_bpm_dinamico_text and max_bpm_dinamico_text:
             try:
-                min_bpm_dinamico = int(min_bpm_dinamico_text)
-                max_bpm_dinamico = int(max_bpm_dinamico_text)
-                if min_bpm_dinamico < 30 or max_bpm_dinamico > 300 or max_bpm_dinamico == 0 or min_bpm_dinamico == 0: raise ValueError
+                min_bpm_dinamico = float(min_bpm_dinamico_text)
+                max_bpm_dinamico = float(max_bpm_dinamico_text)
+                if min_bpm_dinamico < 30.0 or max_bpm_dinamico > 300.0 or max_bpm_dinamico == 0.0 or min_bpm_dinamico == 0.0: raise ValueError
             except ValueError:
                 messagebox.showerror("Error", get_translation("msg_error_bpm_range")) 
                 return
@@ -5838,8 +5858,8 @@ class StepHybridUI(ctk.CTk):
         max_bpm_dinamico = 0
         if min_bpm_dinamico_text and max_bpm_dinamico_text:
             try:
-                min_bpm_dinamico = int(min_bpm_dinamico_text)
-                max_bpm_dinamico = int(max_bpm_dinamico_text)
+                min_bpm_dinamico = float(min_bpm_dinamico_text)
+                max_bpm_dinamico = float(max_bpm_dinamico_text)
             except ValueError:
                 pass
 
