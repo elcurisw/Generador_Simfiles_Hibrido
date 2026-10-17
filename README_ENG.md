@@ -17,7 +17,7 @@ It is strongly recommended to use a virtual environment (`venv`) to isolate your
 
 ***
 
-#### **[![New Version (.exe)](https://github.com/elcurisw/Generador_Simfiles_Hibrido/releases/tag/v1.9)]**
+#### **[![New Version (.exe)](https://github.com/elcurisw/Generador_Simfiles_Hibrido/releases/tag/v1.9.1)]**
 The executable version is available with a separate checkpoint if you only intend to use the generator function.
 
 ***
