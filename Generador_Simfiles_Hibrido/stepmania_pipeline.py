@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Pipeline Híbrido de IA para StepMania en PyTorch (Python 3.14)
-INCLUYE: Corrección biomecánica nativa en el dataset de entrenamiento,
-espectrograma Mel, máscara causal, checkpoints y postprocesador blindado.
-"""
 import os
 import random
 import librosa
@@ -12,7 +7,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
-from tqdm import tqdm  # <--- Importación de la barra de estado
+from tqdm import tqdm
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # =====================================================================
@@ -82,18 +77,18 @@ class AudioAugmentationPipeline:
         return y_aug
 
 # =====================================================================
-# 3. PARSER INTEGRADO CON FILTRO BIOMECÁNICO PARA EL ENTRENAMIENTO
+# PARSER HÍBRIDO AVANZADO (PROXIMIDAD TEMPORAL DE GIMMICKS)
 # =====================================================================
 def parsear_simfile_generico(archivo_path, audio_folder_path, n_mels=64, aplicar_augmentation=False):
     """
-    Lee archivos (.sm/.ssc) aplicando un peinado biomecánico estricto 
-    a las notas humanas antes de enviarlas al dataset de la IA.
+    Lee archivos (.sm/.ssc/.sma) procesando los compases de forma aislada e inyectando
+    el estado síncrono local de BPM, Speeds, Stops y Delays en el vector de audio.
     """
     try:
         with open(archivo_path, 'r', encoding='utf-8', errors='ignore') as f:
             contenido = f.read()
     except Exception as e:
-        print(f" Error leyendo archivo ❌ {archivo_path}: {e}")
+        print(f" ❌ Error leyendo archivo: {archivo_path}: {e}")
         return None
 
     bloques = [b.strip() for b in contenido.split(';') if b.strip()]
@@ -104,13 +99,10 @@ def parsear_simfile_generico(archivo_path, audio_folder_path, n_mels=64, aplicar
 
     for b in bloques:
         if b.startswith('#NOTES:'):
-            if es_ssc: 
-                bloque_chart_actual.append(b)
-            else: 
-                charts_raw.append([b])
+            if es_ssc: bloque_chart_actual.append(b)
+            else: charts_raw.append([b])
         elif b.startswith('#NOTEDATA:'):
-            if bloque_chart_actual: 
-                charts_raw.append(bloque_chart_actual)
+            if bloque_chart_actual: charts_raw.append(bloque_chart_actual)
             bloque_chart_actual = [b]
         elif es_ssc and bloque_chart_actual:
             bloque_chart_actual.append(b)
@@ -123,16 +115,52 @@ def parsear_simfile_generico(archivo_path, audio_folder_path, n_mels=64, aplicar
         charts_raw.append(bloque_chart_actual)
 
     audio_name = metadata_global.get('#MUSIC', '').replace(';', '').strip()
-    if not audio_name: 
-        return None
+    if not audio_name: return None
     audio_path = os.path.join(audio_folder_path, audio_name)
-    if not os.path.exists(audio_path): 
-        return None
+    if not os.path.exists(audio_path): return None
 
+    # --- EXTRACCIÓN Y MAPEO DISCRETO DE GIMMICKS ---
+    def parsear_tabla_gimmick(tag_name):
+        tabla = []
+        if tag_name in metadata_global:
+            raw_data = metadata_global[tag_name].replace(f'{tag_name}:', '').replace(';', '').strip()
+            for par in raw_data.split(','):
+                if '=' in par:
+                    try:
+                        partes = par.split('=')
+                        # Estructura básica: Beat=Valor (o Beat=Valor=Duración... en SSC)
+                        tabla.append((float(partes[0].strip()), float(partes[1].strip())))
+                    except: pass
+        return tabla
+
+    mapa_bpms = parsear_tabla_gimmick('#BPMS')
+    mapa_speeds = parsear_tabla_gimmick('#SPEEDS')
+    mapa_stops = parsear_tabla_gimmick('#STOPS')
+    mapa_delays = parsear_tabla_gimmick('#DELAYS')
+
+    # Fallbacks de seguridad si las tablas vienen vacías
+    if not mapa_bpms: mapa_bpms.append((0.0, 120.0))
+    if not mapa_speeds: mapa_speeds.append((0.0, 1.0))
+
+    # Buscadores de estado síncrono por proximidad rítmica (Beat actual)
+    def buscar_valor_gimmick(tabla, beat_actual, valor_defecto=0.0):
+        valor_local = valor_defecto
+        for b_beat, b_val in tabla:
+            if beat_actual >= b_beat: valor_local = b_val
+            else: break
+        return valor_local
+
+    def verificar_congelamiento_activo(tabla, beat_actual):
+        # En StepMania, Stops/Delays se listan como Beat=SegundosDeCongelamiento
+        for b_beat, b_segundos in tabla:
+            # Si el beat coincide exactamente o estamos en el rango inmediato del impacto del gimmick
+            if abs(beat_actual - b_beat) < 0.001 and b_segundos > 0:
+                return b_segundos
+        return 0.0
+
+    # Carga y análisis DSP de la canción
     try:
         y, sr = librosa.load(audio_path, sr=22050)
-        if aplicar_augmentation:
-            y = AudioAugmentationPipeline.aplicar_aumento_aleatorio(y, sr, probabilidad=0.6)
         lista_rms = librosa.feature.rms(y=y).flatten()
         lista_centroide = librosa.feature.spectral_centroid(y=y, sr=sr).flatten()
         mel_spectrogram = librosa.feature.melspectrogram(y=y, sr=sr, n_mels=n_mels)
@@ -140,29 +168,19 @@ def parsear_simfile_generico(archivo_path, audio_folder_path, n_mels=64, aplicar
         rms_medio = np.mean(lista_rms) if len(lista_rms) > 0 else 1.0
         centroide_medio = np.mean(lista_centroide) if len(lista_centroide) > 0 else 1.0
     except Exception as e:
-        print(f" Error en análisis de audio ( ❌ {audio_name}): {e}")
+        print(f" ❌ Error en análisis de audio ({audio_name}): {e}")
         return None
 
-    bpm_base = 120.0
-    if '#BPMS' in metadata_global:
-        try: 
-            bpm_base = float(metadata_global['#BPMS'].split('=')[1].replace(';', '').strip())
-        except Exception: 
-            pass
-
     dataset_de_este_archivo = []
-    total_frames_audio = len(lista_rms)
 
     for sub_bloques in charts_raw:
-        dificultad, nivel, cuerpo_notas = "Challenge", "10", ""
+        cuerpo_notas = ""
+        dificultad, nivel = "Challenge", "10"
         if es_ssc:
             for sub_b in sub_bloques:
-                if sub_b.startswith('#DIFFICULTY:'): 
-                    dificultad = sub_b.split(':', 1)[1].strip()
-                elif sub_b.startswith('#METER:'): 
-                    nivel = sub_b.split(':', 1)[1].strip()
-                elif sub_b.startswith('#NOTES:'): 
-                    cuerpo_notas = sub_b.split(':', 1)[1].strip()
+                if sub_b.startswith('#DIFFICULTY:'): dificultad = sub_b.split(':', 1)[1].strip()
+                elif sub_b.startswith('#METER:'): nivel = sub_b.split(':', 1)[1].strip()
+                elif sub_b.startswith('#NOTES:'): cuerpo_notas = sub_b.split(':', 1)[1].strip()
         else:
             partes_sm = sub_bloques[0].split(':')
             if len(partes_sm) >= 7:
@@ -170,65 +188,88 @@ def parsear_simfile_generico(archivo_path, audio_folder_path, n_mels=64, aplicar
                 nivel = partes_sm[4].strip()
                 cuerpo_notas = partes_sm[6].strip()
 
-        if not cuerpo_notas: 
-            continue
+        if not cuerpo_notas: continue
 
-        compases = [c.strip() for c in cuerpo_notas.split(',')]
-        lineas_totales = []
-        for compas in compases:
-            lineas = [l.strip() for l in compas.split('\n') if l.strip() and not l.strip().startswith('//')]
-            lineas_totales.extend(lineas)
-
-        total_pasos = len(lineas_totales)
-        if total_pasos == 0: 
-            continue
-
-        # --- FILTRO PRE-ENTRENAMIENTO BIOMECÁNICO ---
+        compases_raw = [c.strip() for c in cuerpo_notas.split(',')]
         secuencia_datos = []
+        
+        beat_acumulado = 0.0
+        segundo_acumulado = 0.0
         ultima_col_simple = -1
 
-        for idx, linea in enumerate(lineas_totales):
-            idx_audio = min(int((idx / total_pasos) * total_frames_audio), total_frames_audio - 1)
-            flechas_token = [char for char in linea[:4]]
-            if len(flechas_token) < 4: 
-                flechas_token = ["0", "0", "0", "0"]
-            activas = [i for i, c in enumerate(flechas_token) if c in ['1', '2']]
+        for idx_compas, compas in enumerate(compases_raw):
+            lineas_compas = [l.strip() for l in compas.split('\n') if l.strip() and not l.strip().startswith('//')]
+            lineas_en_este_compas = len(lineas_compas)
+            
+            if lineas_en_este_compas == 0:
+                beat_acumulado += 4.0
+                bpm_local = buscar_valor_gimmick(mapa_bpms, beat_acumulado, 120.0)
+                segundo_acumulado += (4.0 * 60.0) / bpm_local
+                continue
 
-            if len(activas) >= 3: 
-                flechas_token = ["0", "0", "0", "0"]
-                col_elegida = random.choice([0, 1, 2, 3])
-                flechas_token[col_elegida] = "1"
-                activas = [col_elegida]
+            beats_por_linea = 4.0 / lineas_en_este_compas
 
-            if len(activas) == 1 and flechas_token[activas[0]] == '1':
-                if activas[0] == ultima_col_simple:
-                    columnas_libres = [c for c in range(4) if c != ultima_col_simple]
+            for idx_linea, linea in enumerate(lineas_compas):
+                # 📡 LECTURA DINÁMICA SÍNCRONA DE TELEMETRÍA DE GIMMICKS
+                bpm_local = buscar_valor_gimmick(mapa_bpms, beat_acumulado, 120.0)
+                scroll_local = buscar_valor_gimmick(mapa_speeds, beat_acumulado, 1.0)
+                stop_segundos = verificar_congelamiento_activo(mapa_stops, beat_acumulado)
+                delay_segundos = verificar_congelamiento_activo(mapa_delays, beat_acumulado)
+
+                duracion_linea_segundos = (beats_por_linea * 60.0) / bpm_local
+                
+                idx_audio = min(int((segundo_acumulado / (len(lista_rms) * (512/22050))) * len(lista_rms)), len(lista_rms) - 1)
+                idx_audio = max(0, idx_audio)
+
+                flechas_token = [char for char in linea[:4]]
+                if len(flechas_token) < 4: flechas_token = ["0", "0", "0", "0"]
+                
+                # Filtro biomecánico de limpieza pasivo
+                activas = [i for i, c in enumerate(flechas_token) if c in ['1', '2']]
+                if len(activas) >= 3:
                     flechas_token = ["0", "0", "0", "0"]
-                    col_nueva = random.choice(columnas_libres)
-                    flechas_token[col_nueva] = "1"
-                    ultima_col_simple = col_nueva
-                else:
-                    ultima_col_simple = activas[0]
+                    col_elegida = random.choice([0, 1, 2, 3])
+                    flechas_token[col_elegida] = "1"
+                    activas = [col_elegida]
 
-            secuencia_datos.append({
-                "energia_ratio": round(lista_rms[idx_audio] / rms_medio, 3),
-                "brillo_ratio": round(lista_centroide[idx_audio] / centroide_medio, 3),
-                "vector_mel": mel_db[:, idx_audio].tolist(),
-                "patron_humano": flechas_token
-            })
+                if len(activas) == 1 and flechas_token[activas[0]] == '1':
+                    if activas[0] == ultima_col_simple:
+                        columnas_libres = [c for c in range(4) if c != ultima_col_simple]
+                        flechas_token = ["0", "0", "0", "0"]
+                        col_nueva = random.choice(columnas_libres)
+                        flechas_token[col_nueva] = "1"
+                        ultima_col_simple = col_nueva
+                    else:
+                        ultima_col_simple = activas[0]
+
+                # Consolidación del diccionario intermedio de empaquetado
+                secuencia_datos.append({
+                    "energia_ratio": round(lista_rms[idx_audio] / rms_medio, 3),
+                    "brillo_ratio": round(lista_centroide[idx_audio] / centroide_medio, 3),
+                    "vector_mel": mel_db[:, idx_audio].tolist(),
+                    "patron_humano": flechas_token,
+                    # --- NUEVOS CAMPOS DEL MOTOR MULTI-CANAL ---
+                    "contexto_lineas": lineas_en_este_compas,
+                    "g_bpm": bpm_local,
+                    "g_scroll": scroll_local,
+                    "g_stop_delay": max(stop_segundos, delay_segundos) # Combina congelamientos activos
+                })
+
+                beat_acumulado += beats_por_linea
+                # Si ocurrió un Stop/Delay físico en esta casilla, el tiempo de audio se desplaza hacia adelante
+                segundo_acumulado += (duracion_linea_segundos + stop_segundos + delay_segundos)
 
         dataset_de_este_archivo.append({
             "cancion": metadata_global.get('#TITLE', 'Unknown').replace(';', '').strip(),
             "dificultad": dificultad,
             "nivel": nivel,
-            "bpm": bpm_base,
             "secuencia": secuencia_datos
         })
 
     return dataset_de_este_archivo
 
 # =====================================================================
-# 4. NATIVE PYTORCH DATASET MULTICANAL
+# PYTORCH DATASET CON COMPOSICIÓN EXPANDIDA DE CANALES (INPUT_DIMS = 70)
 # =====================================================================
 class StepManiaTorchDataset(Dataset):
     def __init__(self, datos_crudos, seq_len=128, n_mels=64, tokenizer=None):
@@ -242,27 +283,50 @@ class StepManiaTorchDataset(Dataset):
     def _procesar_y_segmentar(self, datos_crudos):
         for item in datos_crudos:
             secuencia = item["secuencia"]
+            if len(secuencia) < self.seq_len: continue
+
             energia = [p["energia_ratio"] for p in secuencia]
             brillo = [p["brillo_ratio"] for p in secuencia]
+            # --- NORMALIZACIÓN DE CARACTERÍSTICAS BIOMECÁNICAS/GIMMICKS ---
+            lineas_contexto = [p["contexto_lineas"] / 192.0 for p in secuencia]
+            telemetria_bpm = [min(300.0, p["g_bpm"]) / 300.0 for p in secuencia]      # Escalado estricto a base 300
+            telemetria_scroll = [min(4.0, p["g_scroll"]) / 4.0 for p in secuencia]    # Escalado estricto a base 4x
+            telemetria_congelado = [min(2.0, p["g_stop_delay"]) / 2.0 for p in secuencia] # Escalado estricto a base 2s
+
             espectro_mel = [p["vector_mel"] for p in secuencia]
             tokens = [self.tokenizer.encode_linea(p["patron_humano"]) for p in secuencia]
+            
             total_pasos = len(tokens)
 
             if total_pasos < self.seq_len: 
                 continue
 
+            # Segmentación de ventanas móviles
             for i in range(0, total_pasos - self.seq_len + 1, self.seq_len // 2):
                 fin = i + self.seq_len
-                base_features = np.stack([energia[i:fin], brillo[i:fin]], axis=-1)
+                
+                # Stack de variables base expandidas. Dimensiones estructurales: (seq_len, 6)
+                base_features = np.stack([
+                energia[i:fin],
+                brillo[i:fin],
+                lineas_contexto[i:fin],
+                telemetria_bpm[i:fin],
+                telemetria_scroll[i:fin],
+                telemetria_congelado[i:fin]
+                ], axis=-1)
+
                 mel_block = np.array(espectro_mel[i:fin])
+                
+                # Ensamblado Final: 6 Canales Gimmick/DSP + 64 Canales Mel = 70 Dimensiones de Entrada Únicas
                 self.features_audio.append(np.concatenate([base_features, mel_block], axis=-1))
                 self.target_tokens.append(tokens[i:fin])
-
+        
         if self.features_audio:
             self.features_audio = torch.tensor(np.array(self.features_audio), dtype=torch.float32)
             self.target_tokens = torch.tensor(np.array(self.target_tokens), dtype=torch.long)
         else:
-            self.features_audio = torch.empty((0, self.seq_len, 2 + self.n_mels), dtype=torch.float32)
+            # Fallback seguro
+            self.features_audio = torch.empty((0, self.seq_len, ADITIONAL_CHANNELS + self.n_mels), dtype=torch.float32)
             self.target_tokens = torch.empty((0, self.seq_len), dtype=torch.long)
 
     def __len__(self): 
@@ -289,12 +353,13 @@ class StepManiaDataOrchestrator:
         """
         carpetas_canciones = []
         for raiz, dirnames, archivos in os.walk(self.canciones_dir):
-            if any(f.lower().endswith(('.sm', '.ssc')) for f in archivos):
+            # Se actualiza la tupla de extensiones permitidas para incluir .sma
+            if any(f.lower().endswith(('.sm', '.ssc', '.sma')) for f in archivos):
                 # Guardamos una tupla con la ruta y sus subcarpetas
                 carpetas_canciones.append((raiz, dirnames))
 
         if not carpetas_canciones:
-            print(" ❌ No se encontraron canciones válidas (.sm o .ssc) en las subcarpetas.")
+            print(" ❌ No se encontraron canciones válidas (.sm, .ssc o .sma) en las subcarpetas.")
             return None, None
 
         random.seed(42)
@@ -315,9 +380,9 @@ class StepManiaDataOrchestrator:
                 carpeta, subcarpetas = tupla_carpeta
                 resultados_locales = []
                 
-                # Escaneo interno de la carpeta asignada al hilo
+                # Escaneo interno incluyendo archivos .sma
                 for archivo in os.listdir(carpeta):
-                    if archivo.lower().endswith(('.sm', '.ssc')):
+                    if archivo.lower().endswith(('.sm', '.ssc', '.sma')):
                         res = parsear_simfile_generico(
                             os.path.join(carpeta, archivo), 
                             carpeta,
@@ -372,7 +437,7 @@ class StepManiaDataOrchestrator:
 # 6. ARQUITECTURA DEL TRANSFORMER MULTICANAL CAUSAL
 # =====================================================================
 class StepTransformerMulticanalCausal(nn.Module):
-    def __init__(self, vocab_size, seq_len, input_dims=66, d_model=128, nhead=4, num_layers=4, dim_feedforward=256):
+    def __init__(self, vocab_size, seq_len, input_dims=70, d_model=128, nhead=4, num_layers=4, dim_feedforward=256):
         super().__init__()
         self.seq_len = seq_len
         self.proyeccion_audio = nn.Linear(input_dims, d_model)
@@ -423,7 +488,7 @@ class VisualStepValidator:
         print("=================================================================")
 
 # =====================================================================
-# 8. GESTOR DE PUNTOS DE CONTROL (MODEL CHECKPOINTS) - SOLUCIÓN AL FINAL
+# 8. GESTOR DE PUNTOS DE CONTROL (MODEL CHECKPOINTS)
 # =====================================================================
 class StepManiaCheckpointManager:
     def __init__(self, checkpoint_dir="./checkpoints", model_name="step_transformer_best.pt"):
@@ -432,11 +497,8 @@ class StepManiaCheckpointManager:
         self.worse_checkpoint_path = os.path.join(checkpoint_dir, "step_transformer_worse.pt")
         os.makedirs(checkpoint_dir, exist_ok=True)
         
-        # Variables de control de estado
         self.se_uso_checkpoint_existente = False
         self.hubo_mejora_en_esta_sesion = False
-        
-        # Almacén temporal en memoria para el último estado registrado de la IA
         self.ultimo_estado_memoria = None
 
     def guardar_mejor_modelo(self, modelo, optimizador, epoch, loss_actual, mejor_loss):
@@ -446,8 +508,6 @@ class StepManiaCheckpointManager:
             'optimizer_state_dict': optimizador.state_dict(),
             'loss': loss_actual
         }
-        
-        # Respaldamos siempre el último estado en la memoria RAM (sin escribir en disco duro aún)
         self.ultimo_estado_memoria = state
 
         if loss_actual < mejor_loss:
@@ -458,7 +518,6 @@ class StepManiaCheckpointManager:
         return mejor_loss
 
     def guardar_worse_al_finalizar(self):
-        """Este método se invoca estrictamente al salir del bucle de entrenamiento."""
         if self.se_uso_checkpoint_existente and not self.hubo_mejora_en_esta_sesion:
             if self.ultimo_estado_memoria is not None:
                 print(f"\n🛑 Entrenamiento concluido sin mejoras sobre el checkpoint base.")
@@ -486,7 +545,6 @@ class StepManiaCheckpointManager:
         self.se_uso_checkpoint_existente = False
         return 0, float('inf')
 
-
 # =====================================================================
 # 9. BUCLE EJECUTABLE PRINCIPAL (ENTRENAMIENTO Y EVALUACIÓN VISUAL)
 # =====================================================================
@@ -494,12 +552,12 @@ if __name__ == "__main__":
     DIRECTORIO_PACKS = "./StepMania_Songs_Pack/"
     SEQ_LEN = 128
     N_MELS = 64
-    INPUT_DIMS = 2 + N_MELS
+    ADITIONAL_CHANNELS = 6
+    INPUT_DIMS = ADITIONAL_CHANNELS + N_MELS
     VOCAB_SIZE = 628
     
-    # --- CONFIGURACIÓN CRUCIAL PARA 4GB DE VRAM ---
-    BATCH_SIZE = 8               # Tamaño físico seguro para evitar el error "Out of Memory"
-    PASOS_ACUMULACION = 2         # Procesa 2 lotes antes de actualizar pesos (Simula un lote efectivo de 16)
+    BATCH_SIZE = 8               
+    PASOS_ACUMULACION = 2         
     EPOCHS = 10
 
     os.makedirs(DIRECTORIO_PACKS, exist_ok=True)
@@ -510,7 +568,7 @@ if __name__ == "__main__":
         torch.backends.cudnn.benchmark = True  
         num_workers_loader = 2                 
         pin_memory_loader = True               
-        max_hilos_carga = 6                    # Bajado ligeramente a 6 para dejar RAM libre para el sistema
+        max_hilos_carga = 6                    
         print("🚀 Pipeline en ejecución: Utilizando NVIDIA GPU (CUDA) calibrada para 4GB VRAM.")
     elif torch.backends.mps.is_available():
         dispositivo = torch.device('mps')
@@ -568,8 +626,6 @@ if __name__ == "__main__":
         for epoch in pbar_epochs:
             modelo.train()
             loss_total = 0.0
-            
-            # Limpieza inicial de gradientes
             optimizador.zero_grad()
             
             pbar_batches = tqdm(loader_train, desc=f"Época {epoch+1}/{EPOCHS}", leave=False, unit="batch")
@@ -577,14 +633,11 @@ if __name__ == "__main__":
                 X_b, Y_b = X_b.to(dispositivo, non_blocking=pin_memory_loader), Y_b.to(dispositivo, non_blocking=pin_memory_loader)
                 
                 outputs = modelo(X_b)
-                
-                # Escalamos la pérdida dividiéndola por los pasos de acumulación
                 loss = criterio(outputs.view(-1, VOCAB_SIZE), Y_b.view(-1))
                 loss_escalada = loss / PASOS_ACUMULACION
                 
                 loss_escalada.backward()
                 
-                # Solo actualizamos los pesos del Transformer cuando se cumple la ventana de acumulación
                 if (idx_b + 1) % PASOS_ACUMULACION == 0 or (idx_b + 1) == len(loader_train):
                     optimizador.step()
                     optimizador.zero_grad()
@@ -615,4 +668,4 @@ if __name__ == "__main__":
             lista_pred = [tokenizer.decode_id(token_id) for token_id in preds_sample]
             VisualStepValidator.imprimir_comparativa(lista_real, lista_pred, max_pasos=20)
     else:
-        print(f"[!] Sistema listo. Añade archivos .sm/.ssc y música en '{DIRECTORIO_PACKS}' para poblar los subconjuntos.")
+        print(f"[!] Sistema listo. Añade archivos .sm/.ssc/.sma y música en '{DIRECTORIO_PACKS}' para poblar los subconjuntos.")
