@@ -119,6 +119,7 @@ TEXTOS = {
         "chk_rename": "Renombrar archivos (Título de la Canción)",
         "lbl_sec_adv": "--- Parámetros del Motor de Pasos (Originalidad) ---",
         "lbl_temp": "Temperatura IA (Caos):",
+        "chk_temp_dinamica": "Activar Temperatura Dinámica por Volumen (RMS)", 
         "lbl_pack_name": "Nombre del Pack (Grupo):",
         "lbl_seed": "Semilla de Generación (Vacío = Aleatorio):",
         "lbl_presets": "🧪 Plantillas (Presets):",
@@ -183,6 +184,7 @@ TEXTOS = {
         "lbl_palabra_video": "Palabra Clave Para Ubicar Video (Modo por Lotes)",
         "lbl_palabra_background": "Palabra Clave Para Ubicar Background (Modo por Lotes)",
         "lbl_palabra_cdtitle": "Palabra Clave Para Ubicar CdTitle (Modo por Lotes)",
+        "chk_batch_duplicar_recursos": "Duplicar Recursos Disponibles (Banner o Background) ",
         "btn_graph": "Ajustar Límites en Gráfica Interactiva 📊",
         "lbl_duration": "Duración Máxima (Segundos / 0=Full):",
         "lbl_sec_time": "--- Parámetros Adicionales de la Canción ---",
@@ -384,6 +386,7 @@ TEXTOS = {
         "chk_rename": "Rename files (Song Title)",
         "lbl_sec_adv": "--- Step Engine Parameters (Originality) ---",
         "lbl_temp": "AI Temperature (Chaos):",
+        "chk_temp_dinamica": "Enable Dynamic Temperature by Volume (RMS)",
         "lbl_pack_name": "Pack Name (Group):",
         "lbl_seed": "Generation Seed (Empty = Random):",
         "lbl_presets": "🧪 Presets Template:",
@@ -448,6 +451,7 @@ TEXTOS = {
         "lbl_palabra_video": "Keyword to Locate Video (Batch Mode)",
         "lbl_palabra_background": "Keyword to Locate Background (Batch Mode)",
         "lbl_palabra_cdtitle": "Keyword to Locate CD Title (Batch Mode)",
+        "chk_batch_duplicar_recursos": "Duplicate Available Resources (Banner o Background) ",
         "btn_graph": "Adjust Limits in Interactive Graph 📊",
         "lbl_duration": "Maximum Duration (Seconds / 0=Full):",
         "lbl_sec_time": "--- Additional Song Parameters ---",
@@ -649,6 +653,7 @@ TEXTOS = {
         "chk_rename": "Renomear arquivos (Título da Música)",
         "lbl_sec_adv": "--- Parâmetros do Motor de Passos (Originalidade) ---",
         "lbl_temp": "Temperatura IA (Caos):",
+	    "chk_temp_dinamica": "Ativar Temperatura Dinâmica por Volume (RMS)",
         "lbl_pack_name": "Nome do Pack (Grupo):",
         "lbl_seed": "Semente de Geração (Vazio = Aleatório):",
         "lbl_presets": "🧪 Modelos (Presets):",
@@ -713,6 +718,7 @@ TEXTOS = {
         "lbl_palabra_video": "Palavra-chave para localizar o Vídeo (Modo em Lote)",
         "lbl_palabra_background": "Palavra-chave para localizar o Fundo/Background (Modo em Lote)",
         "lbl_palabra_cdtitle": "Palavra-chave para localizar o Título do Álbum (Modo em Lote)",
+        "chk_batch_duplicar_recursos": "Duplicar Recursos Disponíveis (Banner ou Background)",
         "btn_graph": "Ajustar Limites no Gráfico Interativo 📊",
         "lbl_duration": "Duração Máxima (Segundos / 0=Full):",
         "lbl_sec_time": "--- Parámetros Adicionais da Música ---",
@@ -914,6 +920,7 @@ TEXTOS = {
         "chk_rename": "ファイルをリネーム (曲名)",
         "lbl_sec_adv": "--- ステップエンジンパラメータ (オリジナル性) ---",
         "lbl_temp": "AI温度 (カオス度):",
+        "chk_temp_dinamica": "音量(RMS)による動的AI温度の有効化",
         "lbl_pack_name": "パック名 (グループ):",
         "lbl_seed": "生成シード (空欄 = ランダム):",
         "lbl_presets": "🧪 プリセットテンプレート:",
@@ -978,6 +985,7 @@ TEXTOS = {
         "lbl_palabra_video": "ビデオを検出するためのキーワード（バッチモード）",
         "lbl_palabra_background": "バックグラウンドを検出するためのキーワード（バッチモード）",
         "lbl_palabra_cdtitle": "CDタイトルを検出するためのキーワード（バッチモード）",
+        "chk_batch_duplicar_recursos": "利用可能なリソースを複製する（バナーまたは背景）",
         "btn_graph": "インタラクティブグラフで制限を調整 📊",
         "lbl_duration": "最大再生時間 (秒 / 0=フル):",
         "lbl_sec_time": "--- 楽曲の追加パラメータ ---",
@@ -1179,6 +1187,7 @@ TEXTOS = {
         "chk_rename": "重命名文件 (歌曲标题)",
         "lbl_sec_adv": "--- 步法引擎参数 (原创性) ---",
         "lbl_temp": "AI 温度 (混沌度):",
+        "chk_temp_dinamica": "启用基于音量(RMS)的动态AI温度",
         "lbl_pack_name": "打包包名称 (组):",
         "lbl_seed": "生成种子 (留空 = 随机):",
         "lbl_presets": "🧪 模板 (预设):",
@@ -1243,6 +1252,7 @@ TEXTOS = {
         "lbl_palabra_video": "定位视频关键字（批量模式）",
         "lbl_palabra_background": "定位背景关键字（批量模式）",
         "lbl_palabra_cdtitle": "定位专辑名称关键字（批量模式）",
+        "chk_batch_duplicar_recursos": "复制可用资源 （横幅/背景）",
         "btn_graph": "在交互式图表中调整限制 📊",
         "lbl_duration": "最大时长 (秒 / 0=完整):",
         "lbl_sec_time": "--- 歌曲附加参数 ---",
@@ -2355,7 +2365,8 @@ def ejecutar_bucle_sincrono(config_dificultad, compases_totales, bpm, val_offset
                             rms_bpm, rms_medio_bpm, hop_bpm, rms_speed, rms_medio_speed, hop_speed,
                             rms_saltos, rms_medio_saltos, hop_saltos, lista_rms, rms_medio, lista_centroide,
                             centroide_medio, mel_db, modelo, dispositivo, tokenizer, PostProcesadorStepMania,
-                            evento_cancelar=None, sm_version=False, percent_aditional_time=0.0, seed_actual=42):
+                            evento_cancelar=None, sm_version=False, percent_aditional_time=0.0, seed_actual=42, 
+                            dimensiones_entrada=70):
     """
     [ARQUITECTURA ARROWVORTEX CON PRE-CALIBRACIÓN DE EVENTOS DISCRETOS]
     Pre-calcula el consumo exacto de Beats considerando las aceleraciones del BPM dinámico
@@ -2592,6 +2603,11 @@ def ejecutar_bucle_sincrono(config_dificultad, compases_totales, bpm, val_offset
                     paso_elegido = "1000"
                 else:
                     bloque_contexto = []
+
+                    # 🔍 Leer la dimensión exacta de entrada con la que el cargador configuró el modelo .pt
+                    # "dimensiones_entrada" viene determinado automáticamente por el state_dict del archivo
+                    num_canales_objetivo = dimensiones_entrada 
+
                     # La IA utiliza los últimos 128 frames. Al entrar en señal vacía, los frames antiguos de música
                     # real se van desplazando progresivamente hacia atrás en la memoria (LSTM/Transformer Context),
                     # provocando que la IA detecte el desvanecimiento de la canción y genere un cierre orgánico natural.
@@ -2599,27 +2615,84 @@ def ejecutar_bucle_sincrono(config_dificultad, compases_totales, bpm, val_offset
                         f_rms_ia = max(0, min(frame_idx + offset, len(lista_rms) - 1))
                         f_centroide = max(0, min(frame_idx + offset, len(lista_centroide) - 1))
                         
-                        # Si ya cruzamos el límite físico, los vectores contextuales de energía se atenúan a cero
+                        # 1. Extraer los datos base del audio físico e histograma Mel
                         if es_senal_vacia and (frame_idx + offset) >= (total_frames - 1):
                             r_energia = 0.0
                             r_brillo = 0.0
+                            r_contexto_lineas = lineas_objetivo / 192.0
+                            r_bpm_telemetria = bpm_actual / 300.0
+                            r_scroll_telemetria = max(0.0, velocidad_actual) / 4.0
+                            r_stop_telemetria = 0.0
                             vector_mel = [0.0] * 64
                         else:
                             r_energia = lista_rms[f_rms_ia] / rms_medio if len(lista_rms) > 0 else 1.0
                             r_brillo = lista_centroide[f_centroide] / centroide_medio if len(lista_centroide) > 0 else 1.0
+                            r_contexto_lineas = lineas_objetivo / 192.0
+                            r_bpm_telemetria = min(300.0, bpm_actual) / 300.0
+                            r_scroll_telemetria = min(4.0, max(0.0, velocidad_actual)) / 4.0
+                            r_stop_telemetria = 1.0 / 2.0 if dicc_config_stop.get("estado_fsm") == "CONGELADO_ABSOLUTO" else 0.0
+
                             if mel_db is not None and mel_db.size > 0:
                                 f_mel = max(0, min(frame_idx + offset, mel_db.shape[1] - 1))
                                 vector_mel = mel_db[:, f_mel].tolist()
                             else:
                                 vector_mel = [0.0] * 64
-                                
-                        bloque_contexto.append([r_energia, r_brillo] + vector_mel)
+
+                        # 2. 🧱 CONSTRUCCIÓN DE LA PILA DE TELEMETRÍA POR PRIORIDAD ORDENADA
+                        # Estructura expandible: si en el futuro agregas más canales en el entrenamiento,
+                        # simplemente añádelos al final de esta lista 'gimmicks_disponibles'.
+                        gimmicks_disponibles = [
+                            r_contexto_lineas,     # Canal 3 (Índice 2)
+                            r_bpm_telemetria,      # Canal 4 (Índice 3)
+                            r_scroll_telemetria,   # Canal 5 (Índice 4)
+                            r_stop_telemetria      # Canal 6 (Índice 5)
+                            # 💡 Ejemplo futuro: probabilidad_minas, presencia_jumps, etc.
+                        ]
+
+                        # 3. 🎯 MOTOR DE RECORTE Y RELLENO DINÁMICO (PADDING / SLICE)
+                        # Calculamos cuántas dimensiones extras nos pide el modelo más allá de los 2 canales base + 64 Mel
+                        canales_gimmick_requeridos = num_canales_objetivo - 2 - 64
+
+                        if canales_gimmick_requeridos <= 0:
+                            # Modelo clásico de 66 canales o inferior: ignorar gimmicks por completo
+                            gimmicks_finales = []
+                        elif canales_gimmick_requeridos <= len(gimmicks_disponibles):
+                            # El modelo pide una cantidad intermedia (ej: 67 o 70 canales). Recortar la lista exacta.
+                            gimmicks_finales = gimmicks_disponibles[:canales_gimmick_requeridos]
+                        else:
+                            # 🛡️ Blindaje total: El modelo pide MÁS canales de los que este script conoce (ej: 75 canales).
+                            # Se inyectan los conocidos y el resto se rellena automáticamente con ceros (Padding pasivo).
+                            ceros_relleno = [0.0] * (canales_gimmick_requeridos - len(gimmicks_disponibles))
+                            gimmicks_finales = gimmicks_disponibles + ceros_relleno
+
+                        # 4. Ensamble matemático perfecto adaptado al archivo .pt cargado
+                        vector_linea = [r_energia, r_brillo] + gimmicks_finales + vector_mel
+                        bloque_contexto.append(vector_linea)
 
                     tensor_in = torch.tensor(bloque_contexto, dtype=torch.float32).unsqueeze(0).to(dispositivo)
                     with torch.no_grad():
                         logits = modelo(tensor_in)[:, -1, :]
-                        probabilidades = torch.softmax(logits / cfg["temperatura"], dim=-1)
+                        
+                        # --- EVALUACIÓN DE TEMPERATURA DINÁMICA SEGURO POR RMS ---
+                        if custom_params.get("temperatura_dinamica_rms", True):
+                            # Mapeamos la energía del frame actual limitándola a un techo de 2.0x
+                            # Si es_senal_vacia es True (zona de pasos adicionales), ratio_energia_actual ya es 0.0 automáticamente
+                            factor_rms = max(0.0, min(ratio_energia_actual, 2.0))
+                            
+                            # Curva de marea: escala proporcionalmente la temperatura base seleccionada en la UI
+                            # Calma absoluta = 60% de la temp base. Volumen alto = hasta 140% de la temp base.
+                            temp_ejecucion = cfg["temperatura"] * (0.6 + 0.4 * factor_rms)
+                            
+                            # Blindaje matemático para evitar divisiones por cero en Softmax
+                            temp_ejecucion = max(0.2, min(temp_ejecucion, 1.8))
+                        else:
+                            # Si el checkbox se desactiva, se hereda de forma estrictamente fija el slider/config base
+                            temp_ejecucion = cfg["temperatura"]
+
+                        # Aplicación final del hiperparámetro en la distribución de probabilidades
+                        probabilidades = torch.softmax(logits / temp_ejecucion, dim=-1)
                         prediccion = torch.multinomial(probabilidades, num_samples=1).item()
+
                     paso_elegido = "".join(tokenizer.decode_id(prediccion))
 
             # --- INYECCIÓN DE MODIFICADORES ESPECTRALES CONDICIONADOS ---
@@ -2865,11 +2938,29 @@ def generar_simfiles_hibridos(audio_path, checkpoint_path, song_title, max_level
 
     tokenizer = StepTokenizer()
     dispositivo = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    modelo = StepTransformerMulticanalCausal(vocab_size=628, seq_len=128, input_dims=66).to(dispositivo)
+    
+    # 1. Intento de lectura base según lo seleccionado en la interfaz
+    dimensiones_entrada = 70 
+
+    modelo = StepTransformerMulticanalCausal(vocab_size=628, seq_len=128, input_dims=dimensiones_entrada).to(dispositivo)
     
     if os.path.exists(checkpoint_path):
         checkpoint = torch.load(checkpoint_path, map_location=dispositivo)
-        modelo.load_state_dict(checkpoint['model_state_dict'])
+        state_dict = checkpoint['model_state_dict']
+        
+        # 🛡️ PARCHE ANTICRASH: Validar el tamaño real del tensor guardado en el archivo .pt
+        peso_proyeccion = state_dict.get('proyeccion_audio.weight', None)
+        if peso_proyeccion is not None:
+            # peso_proyeccion.shape[1] nos da las dimensiones exactas de entrada originales del modelo
+            dimensiones_reales_pt = peso_proyeccion.shape[1]
+            
+            if dimensiones_reales_pt != dimensiones_entrada:
+                print(f"⚠️ Advertencia: Forzando cambio de arquitectura. GUI configurada en {dimensiones_entrada} canales, pero el archivo .pt usa {dimensiones_reales_pt} canales.")
+                # Re-instanciar el modelo con las dimensiones verdaderas del archivo para evitar el RuntimeError
+                dimensiones_entrada = dimensiones_reales_pt
+                modelo = StepTransformerMulticanalCausal(vocab_size=628, seq_len=128, input_dims=dimensiones_entrada).to(dispositivo)
+
+        modelo.load_state_dict(state_dict)
     else:
         raise FileNotFoundError(f"{get_translation("msg_error_checkpoint_not_found")} {checkpoint_path}")
     modelo.eval()
@@ -3038,7 +3129,8 @@ def generar_simfiles_hibridos(audio_path, checkpoint_path, song_title, max_level
             rms_saltos=rms_saltos, rms_medio_saltos=rms_medio_saltos, hop_saltos=hop_saltos, lista_rms=lista_rms, 
             rms_medio=rms_medio, lista_centroide=lista_centroide, centroide_medio=centroide_medio, mel_db=mel_db, 
             modelo=modelo, dispositivo=dispositivo, tokenizer=tokenizer, PostProcesadorStepMania=post, 
-            sm_version=False, percent_aditional_time=percent_aditional_time, seed_actual=seed_actual
+            sm_version=False, percent_aditional_time=percent_aditional_time, seed_actual=seed_actual, 
+            dimensiones_entrada=dimensiones_entrada
         )
         log_diff_scc, sincro_diff_scc = datos_scc
 
@@ -3052,7 +3144,8 @@ def generar_simfiles_hibridos(audio_path, checkpoint_path, song_title, max_level
             rms_saltos=rms_saltos, rms_medio_saltos=rms_medio_saltos, hop_saltos=hop_saltos, lista_rms=lista_rms, 
             rms_medio=rms_medio, lista_centroide=lista_centroide, centroide_medio=centroide_medio, mel_db=mel_db, 
             modelo=modelo, dispositivo=dispositivo, tokenizer=tokenizer, PostProcesadorStepMania=post, 
-            sm_version=True, percent_aditional_time=percent_aditional_time
+            sm_version=True, percent_aditional_time=percent_aditional_time,
+            dimensiones_entrada=dimensiones_entrada
         )
 
         # 5. ASIGNACIÓN DE NOMBRES Y SUFIJOS ESPECÍFICOS DE LA CAPA
@@ -3425,6 +3518,9 @@ class StepHybridUI(ctk.CTk):
         self.slider_temp = ctk.CTkSlider(self.contenedor_vertical, from_=0.5, to=1.5, number_of_steps=20, width=340, command=lambda v: self.label_temp.configure(text=f"{get_translation("lbl_temp")} {v:.2f}"))
         self.slider_temp.set(1.3)
 
+        self.checkbox_temp_dinamica = ctk.CTkCheckBox(self.contenedor_vertical, text=get_translation("chk_temp_dinamica"), text_color="#1abc9c")
+        self.checkbox_temp_dinamica.select()
+
         # Selección de umbral de silencios
         self.label_umbral_silencios = ctk.CTkLabel(self.contenedor_vertical, text=f"{get_translation("lbl_umbral_silencio")} 0.0", font=ctk.CTkFont(weight="bold"))
         self.slider_umbral_silencios = ctk.CTkSlider(self.contenedor_vertical, from_=0, to=0.5, number_of_steps=50, width=340, 
@@ -3447,7 +3543,8 @@ class StepHybridUI(ctk.CTk):
             self.label_name, self.entry_title, self.label_artist_name, self.entry_artist_name, self.btn_banner, self.label_banner_path,
             self.btn_video, self.label_video_path, self.btn_background, self.label_background_path, self.btn_cdtitle, self.label_cdtitle_path,
             self.checkbox_rename, 
-            self.label_seccion_adv, self.label_temp, self.slider_temp, self.label_umbral_silencios, self.slider_umbral_silencios, self.checkbox_activar_umbral_silencios,
+            self.label_seccion_adv, self.label_temp, self.slider_temp, self.checkbox_temp_dinamica, 
+            self.label_umbral_silencios, self.slider_umbral_silencios, self.checkbox_activar_umbral_silencios,
             self.label_pack_name, self.entry_pack_name,
             self.label_seed, self.entry_seed
         ]
@@ -4089,10 +4186,16 @@ class StepHybridUI(ctk.CTk):
         self.label_palabra_cdtitle = ctk.CTkLabel(self.apartado_modo_batch, text=get_translation("lbl_palabra_cdtitle"), font=ctk.CTkFont(weight="bold"))
         self.entry_palabra_cdtitle = ctk.CTkEntry(self.apartado_modo_batch, placeholder_text="Ex: cdtitle", width=340)
 
+        self.checkbox_batch_duplicar_recursos = ctk.CTkCheckBox(
+            self.apartado_modo_batch,
+            text=get_translation("chk_batch_duplicar_recursos"),
+            text_color="#00FFCC"
+        )
+
         widgets_modo_batch = [
             self.label_seccion_adv_modo_batch, self.label_palabra_banner, self.entry_palabra_banner,
             self.label_palabra_video, self.entry_palabra_video, self.label_palabra_background, self.entry_palabra_background,
-            self.label_palabra_cdtitle, self.entry_palabra_cdtitle
+            self.label_palabra_cdtitle, self.entry_palabra_cdtitle, self.checkbox_batch_duplicar_recursos
             ]
         for w in widgets_modo_batch: 
             w.pack(pady=4, padx=20)
@@ -4322,6 +4425,7 @@ class StepHybridUI(ctk.CTk):
         self.label_seed.configure(text=get_translation("lbl_seed"))
         
         # 3. Menús y Botones de acción inferior
+        self.checkbox_temp_dinamica.configure(text=get_translation("chk_temp_dinamica"))
         self.label_presets.configure(text=get_translation("lbl_presets"))
         self.menu_presets.configure(values=[get_translation("preset_0"), get_translation("preset_1"), get_translation("preset_2"), get_translation("preset_3"),
          get_translation("preset_4"), get_translation("preset_5"), get_translation("preset_6"), get_translation("preset_7")])
@@ -4437,6 +4541,7 @@ class StepHybridUI(ctk.CTk):
         self.label_palabra_video.configure(text=get_translation("lbl_palabra_video"))
         self.label_palabra_background.configure(text=get_translation("lbl_palabra_background"))
         self.label_palabra_cdtitle.configure(text=get_translation("lbl_palabra_cdtitle"))
+        self.checkbox_batch_duplicar_recursos.configure(text=get_translation("chk_batch_duplicar_recursos"))
 
         # 9. Apartado de edición de archivos (metadatos)
         self.label_sec_tag_editor.configure(text=get_translation("lbl_tag_editor_title"))
@@ -4496,6 +4601,10 @@ class StepHybridUI(ctk.CTk):
             
             self.slider_temp.set(data.get("temperatura", 1.3))
             self.label_temp.configure(text=f"{get_translation("lbl_temp")} {self.slider_temp.get()}")
+
+            if data.get("temperatura_dinamica", False): self.checkbox_temp_dinamica.select()
+            else: self.checkbox_temp_dinamica.deselect()
+
             self.slider_umbral_silencios.set(data.get("umbral_silencios", 0.0))
             self.label_umbral_silencios.configure(text=f"{get_translation("lbl_umbral_silencio")} {self.slider_umbral_silencios.get():.2f}")
             
@@ -4879,6 +4988,7 @@ class StepHybridUI(ctk.CTk):
         config_actual = {
             "renombrar": self.checkbox_rename.get(),
             "temperatura": round(self.slider_temp.get(), 2),
+            "temperatura_dinamica": self.checkbox_temp_dinamica.get(),
             "umbral_silencios": round(self.slider_umbral_silencios.get(), 2),
             "activar_umbral_silencios": self.checkbox_activar_umbral_silencios.get(),
             "bpm_automatico": self.check_auto_bpm.get(),
@@ -5002,6 +5112,7 @@ class StepHybridUI(ctk.CTk):
         self.entry_duracion.delete(0, "end")
         self.entry_seed.delete(0, "end")
 
+        self.checkbox_temp_dinamica.select()
         # Resetear Sincronización Básica
         self.checkbox_multihilo_activo.select()
         self.checkbox_rename.deselect()
@@ -5189,6 +5300,7 @@ class StepHybridUI(ctk.CTk):
         self.entry_palabra_video.delete(0, "end")
         self.entry_palabra_background.delete(0, "end")
         self.entry_palabra_cdtitle.delete(0, "end")
+        self.checkbox_batch_duplicar_recursos.deselect()
 
         #Reseteo Modo Edición (Metadatos)
         self.checkbox_proteger_datos_tag.select()
@@ -5762,6 +5874,7 @@ class StepHybridUI(ctk.CTk):
             "extension_final": float(self.slider_extension.get()),
             "extension_mode_by": bool(self.checkbox_extension_mode.get()),
             "temperatura": float(self.slider_temp.get()),
+            "temperatura_dinamica_rms": bool(self.checkbox_temp_dinamica.get()), 
             "max_hold": int(self.slider_max_hold.get()),
             "holds_simultaneos": int(self.slider_holds_sim.get()),
             "activar_secciones_saltos": bool(self.checkbox_secciones_saltos.get()),
@@ -5863,6 +5976,7 @@ class StepHybridUI(ctk.CTk):
             except ValueError:
                 pass
 
+        duplicar_recursos = bool(self.checkbox_batch_duplicar_recursos.get())
 
         palabra_banner = self.entry_palabra_banner.get().strip() 
         if not palabra_banner: palabra_banner = ""
@@ -6021,6 +6135,12 @@ class StepHybridUI(ctk.CTk):
                     elif archivo_lowercase.endswith(EXT_CDTITLE) and not cdtitle_encontrado and self.buscar_palabra_en_rutas(ruta_archivo, palabra_cdtitle):
                         cdtitle_encontrado = ruta_archivo 
 
+                if duplicar_recursos is True:
+                    if background_encontrado == None:
+                        background_encontrado = banner_encontrado
+                    elif banner_encontrado == None:
+                        banner_encontrado = background_encontrado
+
                 if audio_encontrado:
                     # Generar una semilla aleatoria única y estable para cada canción del lote
                     seed_final = random.randint(100000, 999999)
@@ -6059,6 +6179,7 @@ class StepHybridUI(ctk.CTk):
                         "extension_final": float(self.slider_extension.get()),
                         "extension_mode_by": bool(self.checkbox_extension_mode.get()),
                         "temperatura": float(self.slider_temp.get()),
+                        "temperatura_dinamica_rms": bool(self.checkbox_temp_dinamica.get()), 
                         "max_hold": int(self.slider_max_hold.get()),
                         "holds_simultaneos": int(self.slider_holds_sim.get()),
                         "activar_secciones_saltos": bool(self.checkbox_secciones_saltos.get()),
